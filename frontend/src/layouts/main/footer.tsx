@@ -1,0 +1,201 @@
+import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Unstable_Grid2';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { alpha, styled } from '@mui/material/styles';
+
+// import { paths } from 'src/routes/paths';
+import { usePathname } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
+
+import { _socials } from 'src/_mock';
+import { bgBlur } from 'src/theme/css';
+
+import Logo from 'src/components/logo';
+import Iconify from 'src/components/iconify';
+
+// ----------------------------------------------------------------------
+
+const LINKS = [
+  {
+    headline: 'Contact',
+    children: [{ name: 'support@Marcos.cc', href: '#' }],
+  },
+];
+
+// ----------------------------------------------------------------------
+
+type StyledPolygonProps = {
+  opacity?: number;
+  anchor?: 'left' | 'right';
+};
+
+const StyledPolygon = styled('div')<StyledPolygonProps>(
+  ({ opacity = 1, anchor = 'left', theme }) => ({
+    ...bgBlur({
+      opacity,
+      color: theme.palette.background.default,
+    }),
+    zIndex: 9,
+    bottom: 0,
+    height: 80,
+    width: '50%',
+    position: 'absolute',
+    clipPath: 'polygon(0% 0%, 100% 100%, 0% 100%)',
+    ...(anchor === 'left' && {
+      left: 0,
+      ...(theme.direction === 'rtl' && {
+        transform: 'scale(-1, 1)',
+      }),
+    }),
+    ...(anchor === 'right' && {
+      right: 0,
+      transform: 'scaleX(-1)',
+      ...(theme.direction === 'rtl' && {
+        transform: 'scaleX(1)',
+      }),
+    }),
+  })
+);
+
+export default function Footer() {
+  const pathname = usePathname();
+
+  const homePage = pathname === '/';
+
+  const renderPolygons = (
+    <>
+      <StyledPolygon />
+      <StyledPolygon anchor="right" opacity={0.48} />
+      <StyledPolygon anchor="right" opacity={0.48} sx={{ height: 48, zIndex: 10 }} />
+      <StyledPolygon anchor="right" sx={{ zIndex: 11, height: 24 }} />
+    </>
+  );
+
+  const simpleFooter = (
+    <Box
+      component="footer"
+      sx={{
+        // py: 5,
+        textAlign: 'center',
+        position: 'relative',
+        // bgcolor: "background.default",
+      }}
+    >
+      {renderPolygons}
+      {/* <Container>
+        <Logo sx={{ mb: 1, mx: "auto" }} />
+
+        <Typography variant="caption" component="div">
+          © All rights reserved
+          <br /> made by
+          <Link href="https://artem.sorokin/"> A.S. </Link>
+        </Typography>
+      </Container> */}
+    </Box>
+  );
+
+  const mainFooter = (
+    <Box
+      component="footer"
+      sx={{
+        position: 'relative',
+        bgcolor: 'background.default',
+      }}
+    >
+      <Divider />
+
+      <Container
+        sx={{
+          pt: 10,
+          pb: 5,
+          textAlign: { xs: 'center', md: 'unset' },
+        }}
+      >
+        <Logo sx={{ mb: 3 }} />
+
+        <Grid
+          container
+          justifyContent={{
+            xs: 'center',
+            md: 'space-between',
+          }}
+        >
+          <Grid xs={8} md={3}>
+            <Typography
+              variant="body2"
+              sx={{
+                maxWidth: 270,
+                mx: { xs: 'auto', md: 'unset' },
+              }}
+            >
+              The starting point for your next project with Marco UI Kit, built on the newest
+              version of Material-UI ©, ready to be customized to your style.
+            </Typography>
+
+            <Stack
+              direction="row"
+              justifyContent={{ xs: 'center', md: 'flex-start' }}
+              sx={{
+                mt: 3,
+                mb: { xs: 5, md: 0 },
+              }}
+            >
+              {_socials.map((social) => (
+                <IconButton
+                  key={social.name}
+                  sx={{
+                    '&:hover': {
+                      bgcolor: alpha(social.color, 0.08),
+                    },
+                  }}
+                >
+                  <Iconify color={social.color} icon={social.icon} />
+                </IconButton>
+              ))}
+            </Stack>
+          </Grid>
+
+          <Grid xs={12} md={6}>
+            <Stack spacing={5} direction={{ xs: 'column', md: 'row' }}>
+              {LINKS.map((list) => (
+                <Stack
+                  key={list.headline}
+                  spacing={2}
+                  alignItems={{ xs: 'center', md: 'flex-start' }}
+                  sx={{ width: 1 }}
+                >
+                  <Typography component="div" variant="overline">
+                    {list.headline}
+                  </Typography>
+
+                  {list.children.map((link) => (
+                    <Link
+                      key={link.name}
+                      component={RouterLink}
+                      href={link.href}
+                      color="inherit"
+                      variant="body2"
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+                </Stack>
+              ))}
+            </Stack>
+          </Grid>
+        </Grid>
+
+        <Typography variant="body2" sx={{ mt: 10 }}>
+          © 2021. All rights reserved
+        </Typography>
+      </Container>
+    </Box>
+  );
+
+  return homePage ? simpleFooter : mainFooter;
+}
