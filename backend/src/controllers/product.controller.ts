@@ -1,15 +1,19 @@
-import { sendResponse } from '../utils/response.utils';
-import { Request, Response } from 'express';
 import { ClientSession } from 'mongoose';
+import { Request, Response } from 'express';
+
+import { sendResponse } from '../utils/response.utils';
 import { RequestError } from '../utils/globalErrorHandler';
+
 import {
-  handleProductCreation,
   handleGetProducts,
-  handleGetProductsByUser,
-  handleUpdateProducts,
   handleDeleteProduct,
+  handleUpdateProducts,
+  handleProductCreation,
+  handleGetProductsByUser,
 } from '../services/product.services';
+
 import { BranchesModel } from '../models/branch.model';
+
 import { DecodedToken } from '../types/req.type';
 
 export const create = async (

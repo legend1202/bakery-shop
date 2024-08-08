@@ -1,11 +1,11 @@
-import { Document, model, Schema } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
+import { Document, model, Schema } from 'mongoose';
 
 export interface Attendances extends Document {
   id: string;
-  salesperson: string;
-  description: string;
-  attendanceTime: string;
+  userId: string;
+  bio: string;
+  attendanceTime?: string;
   createdAt: Date;
   updateAt: Date;
 }
@@ -18,11 +18,11 @@ const AttendancesSchema = new Schema<Attendances>(
       required: true,
       unique: true,
     },
-    salesperson: {
+    userId: {
       type: String,
-      ref: 'Products',
+      ref: 'Users',
     },
-    description: {
+    bio: {
       type: String,
     },
     attendanceTime: { type: String },
@@ -32,4 +32,7 @@ const AttendancesSchema = new Schema<Attendances>(
   }
 );
 
-export const AttendancesModel = model<Attendances>('Attendances', AttendancesSchema);
+export const AttendancesModel = model<Attendances>(
+  'Attendances',
+  AttendancesSchema
+);

@@ -1,14 +1,16 @@
 import express from 'express';
 import verifyToken from '../middleware/auth.middleware';
+import { verifyAdmin } from '../middleware/role.middleware';
+
 import {
   create,
   getBranches,
   updateBranch,
   deleteBranch,
 } from '../controllers/branch.controller';
+
 import { errorWrap } from '../utils/error.utils';
 import { withTransaction } from '../utils/transactionHelper';
-import { verifyAdmin } from '../middleware/role.middleware';
 
 const router = express.Router();
 

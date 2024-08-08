@@ -7,29 +7,35 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { createProduct } from 'src/api/product';
+import { createSale } from 'src/api/sale';
+import { useGetProductListsByUser } from 'src/api/product';
 
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-import { IProduct } from 'src/types/product';
+import { ISale } from 'src/types/sale';
 
 type Props = {
-  afterSavebranch: (newProduct: IProduct) => void;
+  afterSavebranch: (newProduct: ISale) => void;
 };
-export default function ProductNewEditForm({ afterSavebranch }: Props) {
+export default function MngProductNewEditForm({ afterSavebranch }: Props) {
   const [errorMsg, setErrorMsg] = useState('');
 
+  const { products } = useGetProductListsByUser();
+
   const NewProductSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
+    productId: Yup.string().required('Name is required'),
+    quantity: Yup.number().required('Location is required'),
     price: Yup.number().required('Location is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
-      name: '',
+      productId: '',
+      quantity: 0,
       price: 0,
       bio: '',
     }),
@@ -54,11 +60,10 @@ export default function ProductNewEditForm({ afterSavebranch }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const saveData = { ...values };
-      const saveResults: any = await createProduct(saveData);
-
+      const saveResults: any = await createSale(saveData);
       if (saveResults.data?.success) {
-        setValue('name', '');
-        setValue('price', 0);
+        setValue('productId', '');
+        setValue('quantity', 0);
         reset();
         afterSavebranch(saveResults.data.result);
       } else {
@@ -80,10 +85,26 @@ export default function ProductNewEditForm({ afterSavebranch }: Props) {
             display="grid"
             gridTemplateColumns={{
               xs: 'repeat(1, 1fr)',
-              sm: 'repeat(4, 1fr)',
+              sm: 'repeat(5, 1fr)',
             }}
           >
-            <RHFTextField name="name" label="Name" />
+            {products && (
+              <RHFSelect
+                name="productId"
+                label="Product"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {products.map((option) => (
+                  <MenuItem key={option.id} value={option?.id}>
+                    {option?.name}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+            )}
+
+            <RHFTextField name="quantity" label="Quantity" />
 
             <RHFTextField name="price" label="Price" />
 

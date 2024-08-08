@@ -1,12 +1,14 @@
 import { Document } from 'mongoose';
 import {
-  ClientSession,
   FilterQuery,
-  ProjectionType,
-  QueryOptions,
   UpdateQuery,
+  QueryOptions,
+  ClientSession,
+  ProjectionType,
 } from 'mongoose';
+
 import { RequestError } from '../utils/globalErrorHandler';
+
 import { Branches, BranchesModel } from '../models/branch.model';
 
 export const handleBranchCreation = async (

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import { MngProductListView } from 'src/sections/mng/product/view';
+import { MngProductListView } from 'src/sections/product/view';
 
 // ----------------------------------------------------------------------
 

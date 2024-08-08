@@ -1,12 +1,14 @@
-import { sendResponse } from '../utils/response.utils';
-import { Request, Response } from 'express';
 import { ClientSession } from 'mongoose';
+import { Request, Response } from 'express';
+
+import { sendResponse } from '../utils/response.utils';
 import { RequestError } from '../utils/globalErrorHandler';
+
 import {
-  handleBranchCreation,
   handleGetBranches,
-  handleUpdateBranches,
   handleDeleteBranch,
+  handleBranchCreation,
+  handleUpdateBranches,
 } from '../services/branch.services';
 
 export const create = async (req: Request, res: Response) => {

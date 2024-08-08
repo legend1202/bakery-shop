@@ -3,11 +3,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 export interface Sales extends Document {
   id: string;
-  salesperson: string;
+  userId: string;
   productId: string;
-  description: string;
+  branchId: string;
   quantity: number;
-  saleDate: string;
+  price: number;
+  bio: string;
   createdAt: Date;
   updateAt: Date;
 }
@@ -20,19 +21,23 @@ const SalesSchema = new Schema<Sales>(
       required: true,
       unique: true,
     },
-    salesperson: {
+    userId: {
       type: String,
-      ref: 'Products',
+      ref: 'users',
     },
     productId: {
       type: String,
       ref: 'Products',
     },
-    description: {
+    branchId: {
       type: String,
+      ref: 'Branches',
+    },
+    price: {
+      type: Number,
     },
     quantity: { type: Number },
-    saleDate: { type: String },
+    bio: { type: String },
   },
   {
     timestamps: true,

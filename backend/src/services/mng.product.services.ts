@@ -1,9 +1,11 @@
 import { Document, QueryOptions } from 'mongoose';
 import { ClientSession } from 'mongoose';
+
 import { RequestError } from '../utils/globalErrorHandler';
+
 import { UsersModel } from '../models/user.model';
-import { MngProducts, MngProductsModel } from '../models/mng.product.model';
 import { ProductsModel } from '../models/product.model';
+import { MngProducts, MngProductsModel } from '../models/mng.product.model';
 
 export const handleMngProductCreation = async (
   product: Partial<MngProducts> & Document,

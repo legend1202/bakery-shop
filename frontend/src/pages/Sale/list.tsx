@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { MngSupplyListView } from 'src/sections/mng/supply/view';
+import { SaleMngView } from 'src/sections/sale/view';
 
 // ----------------------------------------------------------------------
 
-export default function SupplyListPage() {
+export default function SaleMngPage() {
   return (
     <>
       <Helmet>
-        <title> Management: Supply</title>
+        <title> Management: Sales</title>
       </Helmet>
 
-      <MngSupplyListView />
+      <SaleMngView />
     </>
   );
 }

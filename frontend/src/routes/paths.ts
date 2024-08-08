@@ -1,21 +1,23 @@
 const ROOTS = {
-  AUTH: "/auth",
-  AUTH_DEMO: "/auth-demo",
-  DASHBOARD: "/dashboard",
-  ADMIN: "/admin",
-  BRANCH: "/branch",
-  PRODUCT: "/product",
-  SUPPLY: "/supply",
-  MNG: "/mng",
+  AUTH: '/auth',
+  AUTH_DEMO: '/auth-demo',
+  DASHBOARD: '/dashboard',
+  ADMIN: '/admin',
+  BRANCH: '/branch',
+  PRODUCT: '/product',
+  SUPPLY: '/supply',
+  SALE: '/sale',
+  ATTENDANCE: '/attendance',
+  MNG: '/mng',
 };
 
 // ----------------------------------------------------------------------
 
 export const paths = {
-  home: "/",
-  page403: "/403",
-  page404: "/404",
-  page500: "/500",
+  home: '/',
+  page403: '/403',
+  page404: '/404',
+  page500: '/500',
 
   // AUTH
   auth: {
@@ -64,5 +66,15 @@ export const paths = {
       create: `${ROOTS.MNG}/supply/create`,
       list: `${ROOTS.SUPPLY}/supply/list`,
     },
+  },
+  sale: {
+    root: `${ROOTS.SALE}`,
+    create: `${ROOTS.SALE}/create`,
+    list: `${ROOTS.SALE}/list`,
+  },
+  attendance: {
+    root: `${ROOTS.ATTENDANCE}`,
+    create: `${ROOTS.ATTENDANCE}/create`,
+    list: `${ROOTS.ATTENDANCE}/list`,
   },
 };

@@ -1,15 +1,17 @@
 import express from 'express';
 import verifyToken from '../middleware/auth.middleware';
+import { verifyAdmin } from '../middleware/role.middleware';
+
 import {
-  assignRole,
-  userDelete,
+  login,
   create,
   getUsers,
-  login,
+  assignRole,
+  userDelete,
 } from '../controllers/auth.controller';
+
 import { errorWrap } from '../utils/error.utils';
 import { withTransaction } from '../utils/transactionHelper';
-import { verifyAdmin } from '../middleware/role.middleware';
 
 const router = express.Router();
 

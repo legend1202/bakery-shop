@@ -1,15 +1,17 @@
 import { Document } from 'mongoose';
 import {
-  ClientSession,
   FilterQuery,
-  ProjectionType,
-  QueryOptions,
   UpdateQuery,
+  QueryOptions,
+  ProjectionType,
+  ClientSession,
 } from 'mongoose';
+
 import { RequestError } from '../utils/globalErrorHandler';
+
+import { UsersModel } from '../models/user.model';
 import { BranchesModel } from '../models/branch.model';
 import { Supplies, SuppliesModel } from '../models/supply.model';
-import { UsersModel } from '../models/user.model';
 
 export const handleSupplyCreation = async (
   product: Partial<Supplies> & Document,

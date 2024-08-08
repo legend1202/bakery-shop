@@ -1,13 +1,15 @@
-import { sendResponse } from '../utils/response.utils';
-import { Request, Response } from 'express';
 import { ClientSession } from 'mongoose';
+import { Request, Response } from 'express';
+
+import { sendResponse } from '../utils/response.utils';
 import { RequestError } from '../utils/globalErrorHandler';
+
 import {
+  handleGetUsers,
+  handleUserLogin,
   handleAssignRole,
   handleUserDelete,
-  handleGetUsers,
   handleUserCreation,
-  handleUserLogin,
 } from '../services/user.services';
 
 export const create = async (req: Request, res: Response) => {

@@ -70,4 +70,14 @@ export const endpoints = {
       delete: '/api/mng/supply/delete',
     },
   },
+  sale: {
+    create: '/api/sale/register',
+    listByUser: '/api/sale/get-sale-by-user',
+    delete: '/api/sale/delete',
+  },
+  attendance: {
+    create: '/api/attendance/register',
+    listByUser: '/api/attendance/get-attendance-by-user',
+    delete: '/api/attendance/delete',
+  },
 };

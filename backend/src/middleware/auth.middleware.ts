@@ -1,7 +1,9 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { AuthenticationError, RequestError } from '../utils/globalErrorHandler';
+
 import { DecodedToken } from '../types/req.type';
+
+import { AuthenticationError } from '../utils/globalErrorHandler';
 
 const verifyToken = (
   req: Request & { userId?: DecodedToken['userId'] },

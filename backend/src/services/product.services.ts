@@ -1,15 +1,17 @@
 import { Document } from 'mongoose';
 import {
-  ClientSession,
-  FilterQuery,
-  ProjectionType,
-  QueryOptions,
   UpdateQuery,
+  FilterQuery,
+  QueryOptions,
+  ClientSession,
+  ProjectionType,
 } from 'mongoose';
+
 import { RequestError } from '../utils/globalErrorHandler';
+
+import { UsersModel } from '../models/user.model';
 import { Branches, BranchesModel } from '../models/branch.model';
 import { Products, ProductsModel } from '../models/product.model';
-import { UsersModel } from '../models/user.model';
 
 export const handleProductCreation = async (
   product: Partial<Products> & Document,

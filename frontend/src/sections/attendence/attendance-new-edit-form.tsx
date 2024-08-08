@@ -7,37 +7,25 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import { createAttendance } from 'src/api/attendance';
 
-import { createMngProduct, useGetProductListsByUser } from 'src/api/product';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
-
-import { IMProduct } from 'src/types/product';
+import { IAttendance } from 'src/types/attendance';
 
 type Props = {
-  afterSavebranch: (newProduct: IMProduct) => void;
+  afterSavebranch: (newProduct: IAttendance) => void;
 };
 export default function MngProductNewEditForm({ afterSavebranch }: Props) {
   const [errorMsg, setErrorMsg] = useState('');
-  const router = useRouter();
 
-  const { products } = useGetProductListsByUser();
-
-  const NewProductSchema = Yup.object().shape({
-    productId: Yup.string().required('Name is required'),
-    amount: Yup.number().required('Location is required'),
-  });
+  const NewProductSchema = Yup.object().shape({});
 
   const defaultValues = useMemo(
     () => ({
-      productId: '',
-      amount: 0,
       bio: '',
     }),
     []
@@ -51,7 +39,6 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
   const {
     reset,
     watch,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -61,16 +48,13 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const saveData = { ...values };
-      const saveResults: any = await createMngProduct(saveData);
+      const saveResults: any = await createAttendance(saveData);
       if (saveResults.data?.success) {
-        setValue('productId', '');
-        setValue('amount', 0);
         reset();
         afterSavebranch(saveResults.data.result);
       } else {
         setErrorMsg(saveResults?.message);
       }
-      router.push(paths.product.list);
     } catch (error) {
       setErrorMsg(error?.message);
       console.error(error);
@@ -81,33 +65,7 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
     <Grid xs={12} md={12}>
       <Card>
         <Stack spacing={3} sx={{ p: 3 }}>
-          <Box
-            rowGap={3}
-            columnGap={2}
-            display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(4, 1fr)',
-            }}
-          >
-            {products && (
-              <RHFSelect
-                name="productId"
-                label="Product"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {products.map((option) => (
-                  <MenuItem key={option.id} value={option?.id}>
-                    {option?.name}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-            )}
-
-            <RHFTextField name="amount" label="Amount" />
-
+          <Box rowGap={3} columnGap={2} display="flex">
             <RHFTextField name="bio" label="Bio" />
 
             <LoadingButton
@@ -120,7 +78,7 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
                 justifyContent: 'flex-end',
               }}
             >
-              Save
+              Attend
             </LoadingButton>
           </Box>
         </Stack>

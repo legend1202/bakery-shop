@@ -93,7 +93,7 @@ export function useNavData() {
         ],
       },
       {
-        subheader: t('Management'),
+        subheader: t('Inventory'),
         roles: ['SALESPERSON'],
         items: [
           // product
@@ -107,6 +107,26 @@ export function useNavData() {
           {
             title: t('Supply'),
             path: paths.mng.supply.list,
+            icon: ICONS.user,
+            roles: ['SALESPERSON'],
+          },
+        ],
+      },
+      {
+        subheader: t('Management'),
+        roles: ['SALESPERSON'],
+        items: [
+          // sale
+          {
+            title: t('Sale'),
+            path: paths.sale.list,
+            icon: ICONS.user,
+            roles: ['SALESPERSON'],
+          },
+          // attendance
+          {
+            title: t('Attendance'),
+            path: paths.attendance.list,
             icon: ICONS.user,
             roles: ['SALESPERSON'],
           },

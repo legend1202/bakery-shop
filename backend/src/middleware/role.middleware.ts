@@ -1,7 +1,9 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { AuthenticationError, RequestError } from '../utils/globalErrorHandler';
+
 import { findOneUser } from '../services/user.services';
+
+import { AuthenticationError, RequestError } from '../utils/globalErrorHandler';
 
 interface DecodedToken extends JwtPayload {
   userId: string;

@@ -2,16 +2,18 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Document } from 'mongoose';
 import {
-  ClientSession,
   FilterQuery,
-  ProjectionType,
-  QueryOptions,
   UpdateQuery,
+  QueryOptions,
+  ClientSession,
+  ProjectionType,
 } from 'mongoose';
+
 import { RequestError, AuthenticationError } from '../utils/globalErrorHandler';
-import { Users, UsersModel } from '../models/user.model';
-import { BranchesModel } from '../models/branch.model';
+
 import { Roles } from '../utils/constants';
+import { BranchesModel } from '../models/branch.model';
+import { Users, UsersModel } from '../models/user.model';
 
 export const handleUserCreation = async (
   user: Partial<Users> & Document,
