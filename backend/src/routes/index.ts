@@ -1,4 +1,5 @@
 import express from 'express';
+import mngRoutes from './mng.routes';
 import authRoutes from './auth.routes';
 import branchRoutes from './branch.routes';
 import productRoutes from './product.routes';
@@ -12,5 +13,6 @@ router.use('/api/auth', authRoutes);
 router.use('/api/branch', branchRoutes);
 router.use('/api/product', productRoutes);
 router.use('/api/supply', supplyRoutes);
+router.use('/api/mng', mngRoutes);
 
 export default router;

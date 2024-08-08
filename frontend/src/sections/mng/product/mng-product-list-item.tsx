@@ -1,33 +1,33 @@
-import { GridCellParams } from "@mui/x-data-grid";
-import ListItemText from "@mui/material/ListItemText";
+import { GridCellParams } from '@mui/x-data-grid';
+import ListItemText from '@mui/material/ListItemText';
 
 type ParamsProps = {
   params: GridCellParams;
 };
 
-export function RenderCellBranch({ params }: ParamsProps) {
+export function RenderCellProduct({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.branchDetails.name}
-      primaryTypographyProps={{ typography: "body2", noWrap: true }}
+      primary={params.row.productDetails.name}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
-        component: "span",
-        typography: "caption",
+        component: 'span',
+        typography: 'caption',
       }}
     />
   );
 }
 
-export function RenderCellName({ params }: ParamsProps) {
+export function RenderCellAmount({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.name}
-      primaryTypographyProps={{ typography: "body2", noWrap: true }}
+      primary={params.row.amount}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
-        component: "span",
-        typography: "caption",
+        component: 'span',
+        typography: 'caption',
       }}
     />
   );
@@ -36,12 +36,12 @@ export function RenderCellName({ params }: ParamsProps) {
 export function RenderCellPrice({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.price}
-      primaryTypographyProps={{ typography: "body2", noWrap: true }}
+      primary={params.row.productDetails.price}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
-        component: "span",
-        typography: "caption",
+        component: 'span',
+        typography: 'caption',
       }}
     />
   );
@@ -51,11 +51,11 @@ export function RenderCellBio({ params }: ParamsProps) {
   return (
     <ListItemText
       primary={params.row.bio}
-      primaryTypographyProps={{ typography: "body2", noWrap: true }}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
-        component: "span",
-        typography: "caption",
+        component: 'span',
+        typography: 'caption',
       }}
     />
   );

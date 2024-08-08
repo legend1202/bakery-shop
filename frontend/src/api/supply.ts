@@ -3,8 +3,8 @@ import { useMemo } from 'react';
 
 import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
-import { ISupply } from 'src/types/supply';
 import { IBranchDelete } from 'src/types/branch';
+import { ISupply, IMSupply } from 'src/types/supply';
 
 export function useGetSupplyLists() {
   const URL = endpoints.supply.list;
@@ -40,8 +40,37 @@ export function useGetSupplyListsByUsers() {
   return memoizedValue;
 }
 
+export function useGetMngSupplyListsByUsers() {
+  const URL = endpoints.mng.supply.listByUser;
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      supplies: data?.result.products as IMSupply[],
+      suppliesLoading: isLoading,
+      suppliesError: error,
+      suppliesValidating: isValidating,
+    }),
+    [data?.result, error, isLoading, isValidating]
+  );
+  return memoizedValue;
+}
+
 export const createSupply = async (query: ISupply) => {
   const res = await axiosInstance.post(endpoints.supply.create, {
+    supply: query,
+  });
+
+  const memoizedValue = {
+    data: res?.data || [],
+  };
+
+  return memoizedValue;
+};
+
+export const createMngSupply = async (query: IMSupply) => {
+  const res = await axiosInstance.post(endpoints.mng.supply.create, {
     supply: query,
   });
 
@@ -55,6 +84,18 @@ export const createSupply = async (query: ISupply) => {
 export const SupplyDelete = async (query: IBranchDelete) => {
   const res = await axiosInstance.post(endpoints.supply.delete, {
     supply: query,
+  });
+
+  const memoizedValue = {
+    data: res?.data || [],
+  };
+
+  return memoizedValue;
+};
+
+export const MngSupplyDelete = async (query: IBranchDelete) => {
+  const res = await axiosInstance.post(endpoints.mng.supply.delete, {
+    product: query,
   });
 
   const memoizedValue = {

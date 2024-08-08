@@ -61,8 +61,13 @@ export const endpoints = {
   mng: {
     product: {
       create: '/api/mng/product/register',
-      list: '/api/mng/product/get-products',
+      listByUser: '/api/mng/product/get-products-by-user',
       delete: '/api/mng/product/delete',
+    },
+    supply: {
+      create: '/api/mng/supply/register',
+      listByUser: '/api/mng/supply/get-supply-by-user',
+      delete: '/api/mng/supply/delete',
     },
   },
 };

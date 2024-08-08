@@ -14,20 +14,20 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { createMngProduct, useGetProductLists } from 'src/api/product';
+import { createMngProduct, useGetProductListsByUser } from 'src/api/product';
 
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-import { IProduct } from 'src/types/product';
+import { IMProduct } from 'src/types/product';
 
 type Props = {
-  afterSavebranch: (newProduct: IProduct) => void;
+  afterSavebranch: (newProduct: IMProduct) => void;
 };
 export default function MngProductNewEditForm({ afterSavebranch }: Props) {
   const [errorMsg, setErrorMsg] = useState('');
   const router = useRouter();
 
-  const { products } = useGetProductLists();
+  const { products } = useGetProductListsByUser();
 
   const NewProductSchema = Yup.object().shape({
     productId: Yup.string().required('Name is required'),
@@ -62,7 +62,6 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
     try {
       const saveData = { ...values };
       const saveResults: any = await createMngProduct(saveData);
-
       if (saveResults.data?.success) {
         setValue('productId', '');
         setValue('amount', 0);

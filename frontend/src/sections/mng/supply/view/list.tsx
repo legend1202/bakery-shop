@@ -10,17 +10,17 @@ import {
 } from '@mui/x-data-grid';
 
 import { useTranslate } from 'src/locales';
-import { SupplyDelete, useGetSupplyLists } from 'src/api/supply';
+import { MngSupplyDelete, useGetMngSupplyListsByUsers } from 'src/api/supply';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 
-import { ISupply } from 'src/types/supply';
+import { IMSupply } from 'src/types/supply';
 
-import SupplyNewEditForm from '../mng-supply-new-edit-form';
-import { RenderCellBio, RenderCellName, RenderCellBranch } from '../mng-supply-list-item';
+import MngSupplyNewEditForm from '../mng-supply-new-edit-form';
+import { RenderCellBio, RenderCellAmount, RenderCellProduct } from '../mng-supply-list-item';
 
 const HIDE_COLUMNS = {
   category: false,
@@ -37,9 +37,9 @@ export default function MngSupplyListView() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { supplies, suppliesLoading } = useGetSupplyLists();
+  const { supplies, suppliesLoading } = useGetMngSupplyListsByUsers();
 
-  const [tableData, setTableData] = useState<ISupply[]>([]);
+  const [tableData, setTableData] = useState<IMSupply[]>([]);
 
   const [reset, setReset] = useState(false);
 
@@ -52,14 +52,14 @@ export default function MngSupplyListView() {
     }
   }, [supplies]);
 
-  const afterSavebranch = async (newProduct: ISupply) => {
+  const afterSavebranch = async (newProduct: IMSupply) => {
     enqueueSnackbar('Created Successfully');
     setTableData([...tableData, newProduct]);
   };
 
   const handleDeleteRow = async (id: string) => {
     const updateData = { id };
-    const result = await SupplyDelete(updateData);
+    const result = await MngSupplyDelete(updateData);
     if (result.data.success) {
       enqueueSnackbar(t('Deleted'));
       const updatedProducts = tableData.filter((product) => product.id !== result.data.result.id);
@@ -72,18 +72,18 @@ export default function MngSupplyListView() {
 
   const columns: GridColDef[] = [
     {
-      field: 'branchId',
-      headerName: 'Branch',
+      field: 'supplyId',
+      headerName: 'Supply',
       flex: 1,
-      minWidth: 280,
+      minWidth: 180,
       hideable: false,
-      renderCell: (params) => <RenderCellBranch params={params} />,
+      renderCell: (params) => <RenderCellProduct params={params} />,
     },
     {
-      field: 'name',
-      headerName: 'Product Name',
-      minWidth: 280,
-      renderCell: (params) => <RenderCellName params={params} />,
+      field: 'amount',
+      headerName: 'Amount',
+      minWidth: 100,
+      renderCell: (params) => <RenderCellAmount params={params} />,
     },
     {
       field: 'bio',
@@ -126,7 +126,7 @@ export default function MngSupplyListView() {
         flexDirection: 'column',
       }}
     >
-      <SupplyNewEditForm afterSavebranch={afterSavebranch} />
+      <MngSupplyNewEditForm afterSavebranch={afterSavebranch} />
 
       <Card
         sx={{

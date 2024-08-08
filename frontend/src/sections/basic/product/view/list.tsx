@@ -10,7 +10,7 @@ import {
 } from '@mui/x-data-grid';
 
 import { useTranslate } from 'src/locales';
-import { ProductDelete, useGetProductLists } from 'src/api/product';
+import { ProductDelete, useGetProductListsByUser } from 'src/api/product';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -37,7 +37,7 @@ export default function ProductListView() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { products, productsLoading } = useGetProductLists();
+  const { products, productsLoading } = useGetProductListsByUser();
 
   const [tableData, setTableData] = useState<IProduct[]>([]);
 

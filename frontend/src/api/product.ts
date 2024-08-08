@@ -40,17 +40,22 @@ export function useGetProductListsByUser() {
   return memoizedValue;
 }
 
-export const createMngProduct = async (query: IMProduct) => {
-  const res = await axiosInstance.post(endpoints.product.create, {
-    product: query,
-  });
+export function useGetMngProductListsByUser() {
+  const URL = endpoints.mng.product.listByUser;
 
-  const memoizedValue = {
-    data: res?.data || [],
-  };
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
+  const memoizedValue = useMemo(
+    () => ({
+      products: data?.result.products as IMProduct[],
+      productsLoading: isLoading,
+      productsError: error,
+      productsValidating: isValidating,
+    }),
+    [data?.result, error, isLoading, isValidating]
+  );
   return memoizedValue;
-};
+}
 
 export const createProduct = async (query: IProduct) => {
   const res = await axiosInstance.post(endpoints.product.create, {
@@ -64,8 +69,32 @@ export const createProduct = async (query: IProduct) => {
   return memoizedValue;
 };
 
+export const createMngProduct = async (query: IMProduct) => {
+  const res = await axiosInstance.post(endpoints.mng.product.create, {
+    product: query,
+  });
+
+  const memoizedValue = {
+    data: res?.data || [],
+  };
+
+  return memoizedValue;
+};
+
 export const ProductDelete = async (query: IBranchDelete) => {
   const res = await axiosInstance.post(endpoints.product.delete, {
+    product: query,
+  });
+
+  const memoizedValue = {
+    data: res?.data || [],
+  };
+
+  return memoizedValue;
+};
+
+export const MngProductDelete = async (query: IBranchDelete) => {
+  const res = await axiosInstance.post(endpoints.mng.product.delete, {
     product: query,
   });
 

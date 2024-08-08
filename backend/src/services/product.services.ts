@@ -10,7 +10,6 @@ import { RequestError } from '../utils/globalErrorHandler';
 import { Branches, BranchesModel } from '../models/branch.model';
 import { Products, ProductsModel } from '../models/product.model';
 import { UsersModel } from '../models/user.model';
-import { findOneUser } from './user.services';
 
 export const handleProductCreation = async (
   product: Partial<Products> & Document,

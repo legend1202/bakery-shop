@@ -10,7 +10,7 @@ import {
 } from 'mongoose';
 import { RequestError, AuthenticationError } from '../utils/globalErrorHandler';
 import { Users, UsersModel } from '../models/user.model';
-import { Branches, BranchesModel } from '../models/branch.model';
+import { BranchesModel } from '../models/branch.model';
 import { Roles } from '../utils/constants';
 
 export const handleUserCreation = async (

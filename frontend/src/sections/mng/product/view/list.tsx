@@ -10,21 +10,21 @@ import {
 } from '@mui/x-data-grid';
 
 import { useTranslate } from 'src/locales';
-import { ProductDelete, useGetProductLists } from 'src/api/product';
+import { MngProductDelete, useGetMngProductListsByUser } from 'src/api/product';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 
-import { IProduct } from 'src/types/product';
+import { IMProduct } from 'src/types/product';
 
 import MngProductNewEditForm from '../mng-product-new-edit-form';
 import {
   RenderCellBio,
-  RenderCellName,
   RenderCellPrice,
-  RenderCellBranch,
+  RenderCellAmount,
+  RenderCellProduct,
 } from '../mng-product-list-item';
 
 const HIDE_COLUMNS = {
@@ -42,9 +42,9 @@ export default function MngProductListView() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { products, productsLoading } = useGetProductLists();
+  const { products, productsLoading } = useGetMngProductListsByUser();
 
-  const [tableData, setTableData] = useState<IProduct[]>([]);
+  const [tableData, setTableData] = useState<IMProduct[]>([]);
 
   const [reset, setReset] = useState(false);
 
@@ -57,14 +57,14 @@ export default function MngProductListView() {
     }
   }, [products]);
 
-  const afterSavebranch = async (newProduct: IProduct) => {
+  const afterSavebranch = async (newProduct: IMProduct) => {
     enqueueSnackbar('Created Successfully');
     setTableData([...tableData, newProduct]);
   };
 
   const handleDeleteRow = async (id: string) => {
     const updateData = { id };
-    const result = await ProductDelete(updateData);
+    const result = await MngProductDelete(updateData);
     if (result.data.success) {
       enqueueSnackbar(t('Deleted'));
       const updatedProducts = tableData.filter((product) => product.id !== result.data.result.id);
@@ -82,19 +82,19 @@ export default function MngProductListView() {
       flex: 1,
       minWidth: 180,
       hideable: false,
-      renderCell: (params) => <RenderCellBranch params={params} />,
+      renderCell: (params) => <RenderCellProduct params={params} />,
     },
     {
       field: 'price',
       headerName: 'Price',
       minWidth: 100,
-      renderCell: (params) => <RenderCellName params={params} />,
+      renderCell: (params) => <RenderCellPrice params={params} />,
     },
     {
       field: 'amount',
       headerName: 'Amount',
       minWidth: 100,
-      renderCell: (params) => <RenderCellPrice params={params} />,
+      renderCell: (params) => <RenderCellAmount params={params} />,
     },
     {
       field: 'bio',

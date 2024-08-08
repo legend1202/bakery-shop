@@ -12,6 +12,7 @@ export type IProduct = {
 export type IMProduct = {
   id?: string;
   productId: string;
+  productDetails?: IProduct;
   amount: number;
   bio?: string;
 };

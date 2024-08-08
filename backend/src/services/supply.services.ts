@@ -7,8 +7,7 @@ import {
   UpdateQuery,
 } from 'mongoose';
 import { RequestError } from '../utils/globalErrorHandler';
-import { Branches, BranchesModel } from '../models/branch.model';
-import { Products, ProductsModel } from '../models/product.model';
+import { BranchesModel } from '../models/branch.model';
 import { Supplies, SuppliesModel } from '../models/supply.model';
 import { UsersModel } from '../models/user.model';
 
