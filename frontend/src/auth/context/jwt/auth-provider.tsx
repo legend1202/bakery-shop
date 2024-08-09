@@ -145,6 +145,8 @@ export function AuthProvider({ children }: Props) {
 
     const res = await axios.post(endpoints.auth.login, data);
 
+    console.log('-----login response----', res)
+
     const { success, result } = res.data;
 
     if (success) {
