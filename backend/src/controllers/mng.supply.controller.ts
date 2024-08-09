@@ -14,6 +14,7 @@ import {
 import { DecodedToken } from '../types/req.type';
 
 import { SuppliesModel } from '../models/supply.model';
+import { BranchesModel } from '../models/branch.model';
 
 export const mngcreateSupply = async (
   req: Request & { userId?: DecodedToken['userId'] },
@@ -31,10 +32,15 @@ export const mngcreateSupply = async (
     const productData = await SuppliesModel.findOne({
       id: newProduct.supplyId,
     });
+    const branchData = await BranchesModel.findOne({
+      id: newProduct.branchId,
+    });
     return sendResponse(res, 201, 'Created Branch Successfully', {
       id: newProduct.id,
       supplyDetails: productData,
-      amount: newProduct.amount,
+      branchDetails: branchData,
+      quantity: newProduct.quantity,
+      status: newProduct.status,
       bio: newProduct.bio,
     });
   } catch (error) {

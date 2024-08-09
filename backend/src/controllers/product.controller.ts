@@ -42,11 +42,13 @@ export const create = async (
   }
 };
 
-export const getProducts = async (req: Request, res: Response) => {
+export const getProducts = async (
+  req: Request & { userId?: DecodedToken['userId'] },
+  res: Response
+) => {
   const session: ClientSession = req.session!;
-
   try {
-    const products = await handleGetProducts(session);
+    const products = await handleGetProducts(req.userId, session);
     return sendResponse(res, 200, 'Get Products', {
       products,
     });
@@ -60,6 +62,13 @@ export const getProductsByUser = async (
   res: Response
 ) => {
   const session: ClientSession = req.session!;
+
+  if (!req.userId) {
+    throw new RequestError(
+      `Can't register this Product. this user is  existed.`,
+      500
+    );
+  }
 
   try {
     const products = await handleGetProductsByUser(req.userId, session);

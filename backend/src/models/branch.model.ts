@@ -5,7 +5,8 @@ export interface Branches extends Document {
   id: string;
   name: string;
   location: string;
-  bio: string;
+  bio?: string;
+  userId: string; // Admin - Branch Owner
   createdAt: Date;
   updateAt: Date;
 }
@@ -21,6 +22,7 @@ const BranchesSchema = new Schema<Branches>(
     name: { type: String },
     location: { type: String },
     bio: { type: String },
+    userId: { type: String },
   },
   {
     timestamps: true,

@@ -21,12 +21,11 @@ export const create = async (
   res: Response
 ) => {
   const session: ClientSession = req.session!;
-
   try {
     const { supply } = req.body;
     const newSupply = await handleSupplyCreation(supply, req.userId, session);
     const branchData = await BranchesModel.findOne({ id: newSupply.branchId });
-    return sendResponse(res, 201, 'Created Branch Successfully', {
+    return sendResponse(res, 201, 'Created Supply Successfully', {
       id: newSupply.id,
       branchDetails: branchData,
       name: newSupply.name,
@@ -37,11 +36,14 @@ export const create = async (
   }
 };
 
-export const getSupply = async (req: Request, res: Response) => {
+export const getSupply = async (
+  req: Request & { userId?: DecodedToken['userId'] },
+  res: Response
+) => {
   const session: ClientSession = req.session!;
 
   try {
-    const supplies = await handleGetSupplies(session);
+    const supplies = await handleGetSupplies(req.userId, session);
     return sendResponse(res, 200, 'Get Products', {
       supplies,
     });
@@ -58,7 +60,7 @@ export const getSupplyByUser = async (
 
   try {
     const supply = await handleGetSupplyByUser(req.userId, session);
-    return sendResponse(res, 200, 'Get Products', {
+    return sendResponse(res, 200, 'Get Suuply', {
       supply,
     });
   } catch (error) {

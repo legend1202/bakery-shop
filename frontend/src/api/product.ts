@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
 import { IBranchDelete } from 'src/types/branch';
-import { IProduct, IMProduct } from 'src/types/product';
+import { IProduct, IMProduct, IMTProduct } from 'src/types/product';
 
 export function useGetProductLists() {
   const URL = endpoints.product.list;
@@ -57,6 +57,23 @@ export function useGetMngProductListsByUser() {
   return memoizedValue;
 }
 
+export function useGetMngProductLists() {
+  const URL = endpoints.mng.product.list;
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      products: data?.result.products as IMProduct[],
+      productsLoading: isLoading,
+      productsError: error,
+      productsValidating: isValidating,
+    }),
+    [data?.result, error, isLoading, isValidating]
+  );
+  return memoizedValue;
+}
+
 export const createProduct = async (query: IProduct) => {
   const res = await axiosInstance.post(endpoints.product.create, {
     product: query,
@@ -69,7 +86,7 @@ export const createProduct = async (query: IProduct) => {
   return memoizedValue;
 };
 
-export const createMngProduct = async (query: IMProduct) => {
+export const createMngProduct = async (query: IMTProduct) => {
   const res = await axiosInstance.post(endpoints.mng.product.create, {
     product: query,
   });

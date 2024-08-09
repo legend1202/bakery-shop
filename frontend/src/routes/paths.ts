@@ -9,6 +9,7 @@ const ROOTS = {
   SALE: '/sale',
   ATTENDANCE: '/attendance',
   MNG: '/mng',
+  REPORT: '/report',
 };
 
 // ----------------------------------------------------------------------
@@ -76,5 +77,12 @@ export const paths = {
     root: `${ROOTS.ATTENDANCE}`,
     create: `${ROOTS.ATTENDANCE}/create`,
     list: `${ROOTS.ATTENDANCE}/list`,
+  },
+  report: {
+    root: `${ROOTS.REPORT}`,
+    product: `${ROOTS.REPORT}/product`,
+    supply: `${ROOTS.REPORT}/supply`,
+    sale: `${ROOTS.REPORT}/sale`,
+    attendance: `${ROOTS.REPORT}/attendance`,
   },
 };

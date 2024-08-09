@@ -12,6 +12,8 @@ import {
   handleUserCreation,
 } from '../services/user.services';
 
+import { DecodedToken } from '../types/req.type';
+
 export const create = async (req: Request, res: Response) => {
   const session: ClientSession = req.session!;
 
@@ -43,11 +45,14 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const getUsers = async (req: Request, res: Response) => {
+export const getUsers = async (
+  req: Request & { userId?: DecodedToken['userId'] },
+  res: Response
+) => {
   const session: ClientSession = req.session!;
 
   try {
-    const users = await handleGetUsers(session);
+    const users = await handleGetUsers(req.userId, session);
     return sendResponse(res, 200, 'Get Users', {
       users,
     });

@@ -47,7 +47,7 @@ export function RenderCellPassword({ params }: ParamsProps) {
   );
 }
 
-export function RenderCellBranch({ params }: ParamsProps) {
+/* export function RenderCellBranch({ params }: ParamsProps) {
   return (
     <ListItemText
       primary={params.row.branchDetails.name}
@@ -60,7 +60,7 @@ export function RenderCellBranch({ params }: ParamsProps) {
     />
   );
 }
-
+ */
 export function RenderCellRole({ params }: ParamsProps) {
   return (
     <ListItemText

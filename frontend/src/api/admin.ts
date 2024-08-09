@@ -1,14 +1,9 @@
-import useSWR from "swr";
-import { useMemo } from "react";
+import useSWR from 'swr';
+import { useMemo } from 'react';
 
-import axiosInstance, { fetcher, endpoints } from "src/utils/axios";
+import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
-import {
-  IUserItem,
-  ITUserItem,
-  IUserDelete,
-  IUserRoleUpdate,
-} from "src/types/user";
+import { IUserItem, IUserDelete, IUserRoleUpdate } from 'src/types/user';
 
 export const createUser = async (query: IUserItem) => {
   const res = await axiosInstance.post(endpoints.admin.create, {
@@ -29,12 +24,12 @@ export function useGetUserLists() {
 
   const memoizedValue = useMemo(
     () => ({
-      users: data?.result.users as ITUserItem[],
+      users: data?.result.users as IUserItem[],
       usersLoading: isLoading,
       usersError: error,
       usersValidating: isValidating,
     }),
-    [data?.result, error, isLoading, isValidating],
+    [data?.result, error, isLoading, isValidating]
   );
   return memoizedValue;
 }

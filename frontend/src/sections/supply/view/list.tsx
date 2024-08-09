@@ -20,7 +20,13 @@ import { useSettingsContext } from 'src/components/settings';
 import { IMSupply } from 'src/types/supply';
 
 import MngSupplyNewEditForm from '../mng-supply-new-edit-form';
-import { RenderCellBio, RenderCellAmount, RenderCellProduct } from '../mng-supply-list-item';
+import {
+  RenderCellBio,
+  RenderCellAmount,
+  RenderCellBranch,
+  RenderCellStatus,
+  RenderCellProduct,
+} from '../mng-supply-list-item';
 
 const HIDE_COLUMNS = {
   category: false,
@@ -72,6 +78,14 @@ export default function MngSupplyListView() {
 
   const columns: GridColDef[] = [
     {
+      field: 'branchId',
+      headerName: 'Branch',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      renderCell: (params) => <RenderCellBranch params={params} />,
+    },
+    {
       field: 'supplyId',
       headerName: 'Supply',
       flex: 1,
@@ -80,8 +94,8 @@ export default function MngSupplyListView() {
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
     {
-      field: 'amount',
-      headerName: 'Amount',
+      field: 'quantity',
+      headerName: 'Quantity',
       minWidth: 100,
       renderCell: (params) => <RenderCellAmount params={params} />,
     },
@@ -90,6 +104,12 @@ export default function MngSupplyListView() {
       headerName: 'Bio',
       minWidth: 280,
       renderCell: (params) => <RenderCellBio params={params} />,
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      minWidth: 100,
+      renderCell: (params) => <RenderCellStatus params={params} />,
     },
     {
       type: 'actions',

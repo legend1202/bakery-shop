@@ -11,12 +11,18 @@ import {
   handleUpdateBranches,
 } from '../services/branch.services';
 
-export const create = async (req: Request, res: Response) => {
+import { DecodedToken } from '../types/req.type';
+
+export const create = async (
+  req: Request & { userId?: DecodedToken['userId'] },
+  res: Response
+) => {
   const session: ClientSession = req.session!;
+  if (!req.userId) throw new RequestError('Owner must not be empty', 400);
 
   try {
     const { branch } = req.body;
-    const newBranch = await handleBranchCreation(branch, session);
+    const newBranch = await handleBranchCreation(branch, req.userId, session);
     return sendResponse(res, 201, 'Created Branch Successfully', {
       id: newBranch.id,
       name: newBranch.name,
@@ -28,11 +34,13 @@ export const create = async (req: Request, res: Response) => {
   }
 };
 
-export const getBranches = async (req: Request, res: Response) => {
+export const getBranches = async (
+  req: Request & { userId?: DecodedToken['userId'] },
+  res: Response
+) => {
   const session: ClientSession = req.session!;
-
   try {
-    const branches = await handleGetBranches(session);
+    const branches = await handleGetBranches(req.userId, session);
     return sendResponse(res, 200, 'Get Branches', {
       branches,
     });

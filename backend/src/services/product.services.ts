@@ -18,78 +18,100 @@ export const handleProductCreation = async (
   userId?: string,
   session?: ClientSession
 ): Promise<Products> => {
-  const { name, price, bio } = product;
+  const { branchId, name, price, bio } = product;
 
+  if (!userId) throw new RequestError('Creator name must not be empty', 400);
+  if (!branchId) throw new RequestError('Branch name must not be empty', 400);
   if (!name) throw new RequestError('Proudct name must not be empty', 400);
-  if (!price) throw new RequestError('Price must not be empty', 400);
 
-  const existingUser = await UsersModel.findOne({ id: userId });
+  const existingProduct = await ProductsModel.findOne({
+    userId,
+    branchId,
+    name,
+    price,
+  });
 
-  const branchId = existingUser?.branchId;
-
-  if (!branchId) {
+  if (existingProduct) {
     throw new RequestError(
-      `Can't register this branch. this branch is not existed.`,
+      `Can't register this Product. this product is  existed.`,
       500
     );
   } else {
-    const existingBranch = await findOneProduct({ name, branchId, price });
+    const newProduct = await createNewProduct(
+      branchId,
+      userId,
+      name,
+      price,
+      bio,
+      session
+    );
 
-    if (existingBranch) {
-      throw new RequestError(
-        `Can't register this branch. this branch has already created.`,
-        500
-      );
-    } else {
-      const newBranch = await createNewProduct(
-        branchId,
-        name,
-        price,
-        bio,
-        session
-      );
-
-      return newBranch;
-    }
+    return newProduct;
   }
 };
 
 export const handleGetProductsByUser = async (
-  userId?: string,
+  userId: string,
   session?: ClientSession
 ): Promise<Products[]> => {
   const existingUser = await UsersModel.findOne({ id: userId });
 
-  const branchId = existingUser?.branchId;
-
-  if (!branchId) {
-    throw new RequestError(
-      `Can't register this branch. this branch is not existed.`,
-      500
-    );
-  } else {
-    const products = await ProductsModel.find({ branchId });
+  if (existingUser?.role === 'ADMIN') {
+    const products = await handleGetProducts(userId, session);
 
     return products;
+  } else {
+    const branchId = existingUser?.branchId;
+
+    if (!branchId) {
+      throw new RequestError(
+        `Can't register this branch. this branch is not existed.`,
+        500
+      );
+    } else {
+      const products = await ProductsModel.find({ branchId });
+
+      return products;
+    }
   }
 };
 
 export const handleGetProducts = async (
+  userId?: string,
   session?: ClientSession
 ): Promise<Products[]> => {
-  const products = await ProductsModel.aggregate([
-    {
-      $lookup: {
-        from: BranchesModel.collection.name,
-        localField: 'branchId',
-        foreignField: 'id',
-        as: 'branchDetails',
+  if (userId) {
+    const products = await ProductsModel.aggregate([
+      {
+        $match: { userId: userId },
       },
-    },
-    { $unwind: '$branchDetails' },
-  ]);
+      {
+        $lookup: {
+          from: BranchesModel.collection.name,
+          localField: 'branchId',
+          foreignField: 'id',
+          as: 'branchDetails',
+        },
+      },
+      { $unwind: '$branchDetails' },
+    ]);
 
-  return products;
+    return products;
+  } else {
+    const products = await ProductsModel.aggregate([
+      {
+        $lookup: {
+          from: BranchesModel.collection.name,
+          localField: 'branchId',
+          foreignField: 'id',
+          as: 'branchDetails',
+        },
+      },
+      { $unwind: '$branchDetails' },
+    ]);
+
+    return products;
+  }
 };
 
 export const handleUpdateProducts = async (
@@ -125,13 +147,15 @@ export async function findOneProduct(
 
 export const createNewProduct = async (
   branchId: string,
+  userId: string,
   name: string,
-  price: number,
+  price?: number,
   bio?: string,
   session?: ClientSession
 ): Promise<Products> => {
   const newProduct = new ProductsModel({
     branchId,
+    userId,
     name,
     price,
     bio,

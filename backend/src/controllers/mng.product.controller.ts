@@ -5,6 +5,7 @@ import { sendResponse } from '../utils/response.utils';
 import { RequestError } from '../utils/globalErrorHandler';
 
 import {
+  handleGetMngProducts,
   handleMngProductCreation,
   handleGetMngProductsByUser,
   handleDeleteMngProduct,
@@ -13,6 +14,7 @@ import {
 import { DecodedToken } from '../types/req.type';
 
 import { ProductsModel } from '../models/product.model';
+import { BranchesModel } from '../models/branch.model';
 
 export const mngcreateProduct = async (
   req: Request & { userId?: DecodedToken['userId'] },
@@ -30,10 +32,15 @@ export const mngcreateProduct = async (
     const productData = await ProductsModel.findOne({
       id: newProduct.productId,
     });
+    const branchData = await BranchesModel.findOne({
+      id: newProduct.branchId,
+    });
     return sendResponse(res, 201, 'Created Branch Successfully', {
       id: newProduct.id,
       productDetails: productData,
-      amount: newProduct.amount,
+      branchDetails: branchData,
+      quantity: newProduct.quantity,
+      status: newProduct.status,
       bio: newProduct.bio,
     });
   } catch (error) {
@@ -49,6 +56,19 @@ export const getMngProductsByUser = async (
 
   try {
     const products = await handleGetMngProductsByUser(req.userId, session);
+    return sendResponse(res, 200, 'Get Products', {
+      products,
+    });
+  } catch (error) {
+    throw new RequestError(`${error}`, 500);
+  }
+};
+
+export const getMngProducts = async (req: Request, res: Response) => {
+  const session: ClientSession = req.session!;
+
+  try {
+    const products = await handleGetMngProducts(session);
     return sendResponse(res, 200, 'Get Products', {
       products,
     });

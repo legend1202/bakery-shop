@@ -102,21 +102,29 @@ export const handleUserLogin = async (
 };
 
 export const handleGetUsers = async (
+  userId?: string,
   session?: ClientSession
 ): Promise<Users[]> => {
-  const users = await UsersModel.aggregate([
-    {
-      $lookup: {
-        from: BranchesModel.collection.name,
-        localField: 'branchId',
-        foreignField: 'id',
-        as: 'branchDetails',
-      },
-    },
-    { $unwind: '$branchDetails' },
-  ]);
+  const userData = await findOneUser({ id: userId });
 
-  return users;
+  if (userData?.role === 'SUPERADMIN') {
+    const users = await UsersModel.find();
+
+    return users;
+  } else {
+    const users = await UsersModel.aggregate([
+      {
+        $lookup: {
+          from: BranchesModel.collection.name,
+          localField: 'branchId',
+          foreignField: 'id',
+          as: 'branchDetails',
+        },
+      },
+      { $unwind: '$branchDetails' },
+    ]);
+    return users;
+  }
 };
 
 export const handleAssignRole = async (

@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -11,33 +11,36 @@ import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
+import { useGetBranchLists } from 'src/api/branch';
 import { createMngSupply, useGetSupplyListsByUsers } from 'src/api/supply';
 
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-import { IMSupply } from 'src/types/supply';
+import { ISupply, IMSupply } from 'src/types/supply';
 
 type Props = {
   afterSavebranch: (newProduct: IMSupply) => void;
 };
 export default function MngSupplyNewEditForm({ afterSavebranch }: Props) {
   const [errorMsg, setErrorMsg] = useState('');
-  const router = useRouter();
 
   const { supplies } = useGetSupplyListsByUsers();
 
+  const { branches } = useGetBranchLists();
+
+  const [supplyForBranch, setSupplyForBranch] = useState<ISupply[]>([]);
+
   const NewProductSchema = Yup.object().shape({
-    supplyId: Yup.string().required('Name is required'),
-    amount: Yup.number().required('Location is required'),
+    branchId: Yup.string().required('Branch is required'),
+    supplyId: Yup.string().required('Supply is required'),
+    quantity: Yup.number().required('Quantity is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
+      branchId: '',
       supplyId: '',
-      amount: 0,
+      quantity: 0,
       bio: '',
     }),
     []
@@ -51,26 +54,30 @@ export default function MngSupplyNewEditForm({ afterSavebranch }: Props) {
   const {
     reset,
     watch,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
   const values = watch();
 
+  useEffect(() => {
+    if (values.branchId) {
+      const updatedProducts = supplies.filter((product) => product.branchId === values.branchId);
+      setSupplyForBranch(updatedProducts);
+    }
+  }, [values.branchId, supplies]);
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       const saveData = { ...values };
       const saveResults: any = await createMngSupply(saveData);
       if (saveResults.data?.success) {
-        setValue('supplyId', '');
-        setValue('amount', 0);
         reset();
         afterSavebranch(saveResults.data.result);
+        setErrorMsg('');
       } else {
         setErrorMsg(saveResults?.message);
       }
-      router.push(paths.product.list);
     } catch (error) {
       setErrorMsg(error?.message);
       console.error(error);
@@ -87,10 +94,25 @@ export default function MngSupplyNewEditForm({ afterSavebranch }: Props) {
             display="grid"
             gridTemplateColumns={{
               xs: 'repeat(1, 1fr)',
-              sm: 'repeat(4, 1fr)',
+              sm: 'repeat(5, 1fr)',
             }}
           >
-            {supplies && (
+            {branches && (
+              <RHFSelect
+                name="branchId"
+                label="Branch"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {branches.map((option) => (
+                  <MenuItem key={option.id} value={option?.id}>
+                    {option?.name}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+            )}
+            {supplyForBranch && (
               <RHFSelect
                 name="supplyId"
                 label="Supply"
@@ -98,7 +120,7 @@ export default function MngSupplyNewEditForm({ afterSavebranch }: Props) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {supplies.map((option) => (
+                {supplyForBranch.map((option) => (
                   <MenuItem key={option.id} value={option?.id}>
                     {option?.name}
                   </MenuItem>
@@ -106,7 +128,7 @@ export default function MngSupplyNewEditForm({ afterSavebranch }: Props) {
               </RHFSelect>
             )}
 
-            <RHFTextField name="amount" label="Amount" />
+            <RHFTextField name="quantity" label="Quantity" />
 
             <RHFTextField name="bio" label="Bio" />
 

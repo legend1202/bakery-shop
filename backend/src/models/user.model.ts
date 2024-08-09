@@ -9,7 +9,7 @@ export interface Users extends Document {
   passwordStr: string;
   password: string;
   branchId?: string;
-  role: 'ADMIN' | 'SALESPERSON';
+  role: 'ADMIN' | 'SALESPERSON' | 'SUPERADMIN';
   bio?: string;
   createdAt: Date;
   updateAt: Date;

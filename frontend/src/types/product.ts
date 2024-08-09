@@ -5,14 +5,28 @@ export type IProduct = {
   branchDetails?: IBranch;
   branchId?: string;
   name: string;
-  price: number;
+  price?: number;
   bio?: string;
 };
 
 export type IMProduct = {
-  id?: string;
+  id: string;
   productId: string;
+  branchId: string;
+  branchDetails?: IBranch;
   productDetails?: IProduct;
-  amount: number;
+  quantity: number;
   bio?: string;
+  status?: string;
+  createdAt?: string;
+};
+
+export type IMTProduct = {
+  branchId: string;
+  productId: string;
+  branchDetails?: IBranch;
+  productDetails?: IProduct;
+  quantity: number;
+  bio?: string;
+  createdAt?: string;
 };

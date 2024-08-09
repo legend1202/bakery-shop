@@ -5,13 +5,18 @@ export type ISupply = {
   branchDetails?: IBranch;
   branchId?: string;
   name: string;
+  price?: number;
   bio?: string;
 };
 
 export type IMSupply = {
   id?: string;
   supplyId: string;
-  supplytDetails?: ISupply;
-  amount: number;
+  branchId: string;
+  branchDetails?: IBranch;
+  supplyDetails?: ISupply;
+  quantity: number;
   bio?: string;
+  status?: string;
+  createdAt?: string;
 };

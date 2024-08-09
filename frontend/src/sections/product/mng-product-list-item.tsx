@@ -5,6 +5,19 @@ type ParamsProps = {
   params: GridCellParams;
 };
 
+export function RenderCellBranch({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.branchDetails.name}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
 export function RenderCellProduct({ params }: ParamsProps) {
   return (
     <ListItemText
@@ -22,7 +35,7 @@ export function RenderCellProduct({ params }: ParamsProps) {
 export function RenderCellAmount({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.amount}
+      primary={params.row.quantity}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
@@ -33,10 +46,10 @@ export function RenderCellAmount({ params }: ParamsProps) {
   );
 }
 
-export function RenderCellPrice({ params }: ParamsProps) {
+export function RenderCellStatus({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.productDetails.price}
+      primary={params.row.status ? 'Confirmed' : 'Pending'}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

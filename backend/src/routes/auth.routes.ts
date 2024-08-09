@@ -36,7 +36,7 @@ router.put(
 router.get(
   '/get-users',
   errorWrap(verifyToken, 'Could not verify JWT token'),
-  errorWrap(verifyAdmin, `Admin can get users only. This user can't get users`),
+  /* errorWrap(verifyAdmin, `Admin can get users only. This user can't get users`), */
   withTransaction(errorWrap(getUsers, 'Could not get users'))
 );
 

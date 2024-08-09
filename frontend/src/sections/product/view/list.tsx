@@ -22,8 +22,9 @@ import { IMProduct } from 'src/types/product';
 import MngProductNewEditForm from '../mng-product-new-edit-form';
 import {
   RenderCellBio,
-  RenderCellPrice,
+  RenderCellStatus,
   RenderCellAmount,
+  RenderCellBranch,
   RenderCellProduct,
 } from '../mng-product-list-item';
 
@@ -53,6 +54,7 @@ export default function MngProductListView() {
 
   useEffect(() => {
     if (products) {
+      console.log(products);
       setTableData(products);
     }
   }, [products]);
@@ -85,22 +87,30 @@ export default function MngProductListView() {
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
     {
-      field: 'price',
-      headerName: 'Price',
-      minWidth: 100,
-      renderCell: (params) => <RenderCellPrice params={params} />,
+      field: 'branchId',
+      headerName: 'Branch',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      renderCell: (params) => <RenderCellBranch params={params} />,
     },
     {
-      field: 'amount',
-      headerName: 'Amount',
+      field: 'quantity',
+      headerName: 'Quantity',
       minWidth: 100,
       renderCell: (params) => <RenderCellAmount params={params} />,
     },
     {
       field: 'bio',
       headerName: 'Bio',
-      minWidth: 280,
+      minWidth: 180,
       renderCell: (params) => <RenderCellBio params={params} />,
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      minWidth: 100,
+      renderCell: (params) => <RenderCellStatus params={params} />,
     },
     {
       type: 'actions',

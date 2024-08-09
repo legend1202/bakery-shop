@@ -18,10 +18,9 @@ import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 
 import { ISupply } from 'src/types/supply';
-import { IProduct } from 'src/types/product';
 
 import SupplyNewEditForm from '../supply-new-edit-form';
-import { RenderCellBio, RenderCellName } from '../supply-list-item';
+import { RenderCellBio, RenderCellName, RenderCellBranch } from '../supply-list-item';
 
 const HIDE_COLUMNS = {
   category: false,
@@ -49,12 +48,11 @@ export default function SupplyListView() {
 
   useEffect(() => {
     if (supplies) {
-      console.log(supplies);
       setTableData(supplies);
     }
   }, [supplies]);
 
-  const afterSavebranch = async (newProduct: IProduct) => {
+  const afterSavebranch = async (newProduct: ISupply) => {
     enqueueSnackbar('Created Successfully');
     setTableData([...tableData, newProduct]);
   };
@@ -74,15 +72,27 @@ export default function SupplyListView() {
 
   const columns: GridColDef[] = [
     {
-      field: 'name',
-      headerName: 'Name',
-      minWidth: 520,
+      field: 'supply',
+      headerName: 'Supply',
+      minWidth: 320,
       renderCell: (params) => <RenderCellName params={params} />,
     },
     {
+      field: 'branch',
+      headerName: 'Branch',
+      minWidth: 320,
+      renderCell: (params) => <RenderCellBranch params={params} />,
+    },
+    /* {
+      field: 'price',
+      headerName: 'Price',
+      minWidth: 200,
+      renderCell: (params) => <RenderCellPrice params={params} />,
+    }, */
+    {
       field: 'bio',
       headerName: 'Bio',
-      minWidth: 520,
+      minWidth: 300,
       renderCell: (params) => <RenderCellBio params={params} />,
     },
     {

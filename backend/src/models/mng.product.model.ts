@@ -5,7 +5,9 @@ export interface MngProducts extends Document {
   id: string;
   productId: string;
   branchId: string;
-  amount: number;
+  userId: string;
+  quantity: number;
+  status: boolean; // true: confirmed,  false: created or pending.
   bio: string;
   createdAt: Date;
   updateAt: Date;
@@ -25,7 +27,9 @@ const MngProductsSchema = new Schema<MngProducts>(
     branchId: {
       type: String,
     },
-    amount: { type: Number },
+    userId: { type: String },
+    quantity: { type: Number },
+    status: { type: Boolean },
     bio: { type: String },
   },
   {

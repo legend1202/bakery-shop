@@ -13,6 +13,7 @@ import { Branches, BranchesModel } from '../models/branch.model';
 
 export const handleBranchCreation = async (
   branch: Partial<Branches> & Document,
+  userId: string,
   session?: ClientSession
 ): Promise<Branches> => {
   const { name, location, bio } = branch;
@@ -20,7 +21,7 @@ export const handleBranchCreation = async (
   if (!name) throw new RequestError('Branch name must not be empty', 400);
   if (!location) throw new RequestError('Location must not be empty', 400);
 
-  const existingBranch = await findOneBranch({ name });
+  const existingBranch = await findOneBranch({ name, location });
 
   if (existingBranch) {
     throw new RequestError(
@@ -29,15 +30,16 @@ export const handleBranchCreation = async (
     );
   }
 
-  const newBranch = await createNewBranch(name, location, bio, session);
+  const newBranch = await createNewBranch(name, location, bio, userId, session);
 
   return newBranch;
 };
 
 export const handleGetBranches = async (
+  userId?: string,
   session?: ClientSession
 ): Promise<Branches[]> => {
-  const branches = await BranchesModel.find();
+  const branches = await BranchesModel.find({ userId });
 
   return branches;
 };
@@ -78,12 +80,14 @@ export const createNewBranch = async (
   name: string,
   location: string,
   bio?: string,
+  userId?: string,
   session?: ClientSession
 ): Promise<Branches> => {
   const newBranch = new BranchesModel({
     name,
     location,
     bio,
+    userId,
   });
 
   await newBranch.save({ session });

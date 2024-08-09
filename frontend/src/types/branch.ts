@@ -6,5 +6,5 @@ export type IBranch = {
 };
 
 export type IBranchDelete = {
-  id: string;
+  id: string | null;
 };

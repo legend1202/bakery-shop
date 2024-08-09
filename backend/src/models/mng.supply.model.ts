@@ -5,8 +5,10 @@ export interface MngSupplies extends Document {
   id: string;
   supplyId: string;
   branchId: string;
-  amount: number;
+  userId: string;
+  quantity: number;
   bio: string;
+  status: boolean;
   createdAt: Date;
   updateAt: Date;
 }
@@ -25,7 +27,9 @@ const MngSuppliesSchema = new Schema<MngSupplies>(
     branchId: {
       type: String,
     },
-    amount: { type: Number },
+    userId: { type: String },
+    quantity: { type: Number },
+    status: { type: Boolean },
     bio: { type: String },
   },
   {

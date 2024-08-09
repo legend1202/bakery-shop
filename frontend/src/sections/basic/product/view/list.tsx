@@ -20,7 +20,7 @@ import { useSettingsContext } from 'src/components/settings';
 import { IProduct } from 'src/types/product';
 
 import ProductNewEditForm from '../product-new-edit-form';
-import { RenderCellBio, RenderCellName, RenderCellPrice } from '../product-list-item';
+import { RenderCellBio, RenderCellName, RenderCellBranch } from '../product-list-item';
 
 const HIDE_COLUMNS = {
   category: false,
@@ -72,21 +72,27 @@ export default function ProductListView() {
 
   const columns: GridColDef[] = [
     {
-      field: 'name',
-      headerName: 'Product Name',
-      minWidth: 360,
+      field: 'product',
+      headerName: 'Product',
+      minWidth: 320,
       renderCell: (params) => <RenderCellName params={params} />,
     },
     {
+      field: 'branch',
+      headerName: 'Branch',
+      minWidth: 320,
+      renderCell: (params) => <RenderCellBranch params={params} />,
+    },
+    /* {
       field: 'price',
       headerName: 'Price',
-      minWidth: 320,
+      minWidth: 200,
       renderCell: (params) => <RenderCellPrice params={params} />,
-    },
+    }, */
     {
       field: 'bio',
       headerName: 'Bio',
-      minWidth: 360,
+      minWidth: 300,
       renderCell: (params) => <RenderCellBio params={params} />,
     },
     {

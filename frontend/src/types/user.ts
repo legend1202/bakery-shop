@@ -1,4 +1,4 @@
-import { CustomFile } from "src/components/upload";
+import { CustomFile } from 'src/components/upload';
 
 // ----------------------------------------------------------------------
 
@@ -98,7 +98,7 @@ export type IUserItem = {
   lastName: string;
   email: string;
   password: string;
-  branchId: string;
+  branchId?: string;
   role: string;
   bio?: string;
 };

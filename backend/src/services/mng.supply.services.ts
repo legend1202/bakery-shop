@@ -1,55 +1,55 @@
-import { Document, QueryOptions } from 'mongoose';
-import { ClientSession } from 'mongoose';
+import {
+  Document,
+  FilterQuery,
+  QueryOptions,
+  ClientSession,
+  ProjectionType,
+} from 'mongoose';
 
 import { RequestError } from '../utils/globalErrorHandler';
 
-import { UsersModel } from '../models/user.model';
 import { SuppliesModel } from '../models/supply.model';
 import { MngSuppiesModel, MngSupplies } from '../models/mng.supply.model';
+import { BranchesModel } from '../models/branch.model';
 
 export const handleMngSupplyCreation = async (
   product: Partial<MngSupplies> & Document,
   userId?: string,
   session?: ClientSession
 ): Promise<MngSupplies> => {
-  const { supplyId, amount, bio } = product;
+  const { supplyId, branchId, quantity, bio } = product;
 
+  if (!userId) throw new RequestError('User must not be empty', 400);
+  if (!branchId) throw new RequestError('Branch name must not be empty', 400);
   if (!supplyId) throw new RequestError('Proudct name must not be empty', 400);
-  if (!amount) throw new RequestError('Price must not be empty', 400);
+  if (!quantity) throw new RequestError('Price must not be empty', 400);
 
-  const existingUser = await UsersModel.findOne({ id: userId });
+  const newproduct = await createNewMngSupply(
+    supplyId,
+    branchId,
+    userId,
+    quantity,
+    bio,
+    session
+  );
 
-  const branchId = existingUser?.branchId;
-
-  if (!branchId) {
-    throw new RequestError(
-      `Can't register this branch. this branch is not existed.`,
-      500
-    );
-  } else {
-    const newproduct = await createNewMngSupply(
-      supplyId,
-      branchId,
-      amount,
-      bio,
-      session
-    );
-
-    return newproduct;
-  }
+  return newproduct;
 };
 
 export const createNewMngSupply = async (
   supplyId: string,
   branchId: string,
-  amount: number,
+  userId: string,
+  quantity: number,
   bio?: string,
   session?: ClientSession
 ): Promise<MngSupplies> => {
   const newProduct = new MngSuppiesModel({
     supplyId,
     branchId,
-    amount,
+    userId,
+    quantity,
+    status: false,
     bio,
   });
 
@@ -61,11 +61,7 @@ export const handleGetMngSupplyByUser = async (
   userId?: string,
   session?: ClientSession
 ): Promise<MngSupplies[]> => {
-  const existingUser = await UsersModel.findOne({ id: userId });
-
-  const branchId = existingUser?.branchId;
-
-  if (!branchId) {
+  if (!userId) {
     throw new RequestError(
       `Can't register this branch. this branch is not existed.`,
       500
@@ -73,17 +69,26 @@ export const handleGetMngSupplyByUser = async (
   } else {
     const products = await MngSuppiesModel.aggregate([
       {
-        $match: { branchId: branchId },
+        $match: { userId: userId },
       },
       {
         $lookup: {
           from: SuppliesModel.collection.name,
           localField: 'supplyId',
           foreignField: 'id',
-          as: 'suppliesDetails',
+          as: 'supplyDetails',
         },
       },
-      { $unwind: '$suppliesDetails' },
+      { $unwind: '$supplyDetails' },
+      {
+        $lookup: {
+          from: BranchesModel.collection.name,
+          localField: 'branchId',
+          foreignField: 'id',
+          as: 'branchDetails',
+        },
+      },
+      { $unwind: '$branchDetails' },
     ]);
     return products;
   }
@@ -93,5 +98,18 @@ export const handleDeleteMngSupply = async (
   id: string,
   options?: QueryOptions<MngSupplies>
 ) => {
-  return await MngSuppiesModel.deleteOne({ id: id });
+  const product = await findOneMngSupply({ id });
+  if (product?.status) {
+    throw new RequestError('This Order could not be deleted', 400);
+  } else {
+    return await MngSuppiesModel.deleteOne({ id: id });
+  }
 };
+
+export async function findOneMngSupply(
+  filter?: FilterQuery<MngSupplies>,
+  projection?: ProjectionType<MngSupplies>,
+  options?: QueryOptions<MngSupplies>
+): Promise<MngSupplies | null> {
+  return await MngSuppiesModel.findOne(filter, projection, options);
+}

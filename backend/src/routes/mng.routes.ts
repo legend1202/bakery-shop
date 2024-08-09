@@ -1,7 +1,9 @@
 import express from 'express';
 import verifyToken from '../middleware/auth.middleware';
+import { verifyAdmin } from '../middleware/role.middleware';
 
 import {
+  getMngProducts,
   mngcreateProduct,
   deleteMngProduct,
   getMngProductsByUser,
@@ -34,6 +36,16 @@ router.get(
   '/product/get-products-by-user',
   errorWrap(verifyToken, 'Could not verify JWT token'),
   withTransaction(errorWrap(getMngProductsByUser, 'Could not get Products'))
+);
+
+router.get(
+  '/product/get-products',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  errorWrap(
+    verifyAdmin,
+    `Admin can create branches only. This user can't get branches`
+  ),
+  withTransaction(errorWrap(getMngProducts, 'Could not get Products'))
 );
 
 router.get(
