@@ -81,6 +81,7 @@ export const endpoints = {
   attendance: {
     create: '/api/attendance/register',
     listByUser: '/api/attendance/get-attendance-by-user',
+    list: '/api/attendance/get-attendance',
     delete: '/api/attendance/delete',
   },
 };

@@ -10,7 +10,7 @@ import {
 import { RequestError } from '../utils/globalErrorHandler';
 
 import { UsersModel } from '../models/user.model';
-import { Branches } from '../models/branch.model';
+import { Branches, BranchesModel } from '../models/branch.model';
 import { Sales, SalesModel } from '../models/sale.model';
 import { Products, ProductsModel } from '../models/product.model';
 
@@ -20,17 +20,13 @@ export const handleGetSaleByUser = async (
 ): Promise<Sales[]> => {
   const existingUser = await UsersModel.findOne({ id: userId });
 
-  const branchId = existingUser?.branchId;
+  if (existingUser?.role === 'ADMIN') {
+    const branches = await BranchesModel.find({ userId }, 'id');
+    const branchIds = await branches.map((branch) => branch.id);
 
-  if (!branchId) {
-    throw new RequestError(
-      `Can't register this branch. this branch is not existed.`,
-      500
-    );
-  } else {
     const sales = await SalesModel.aggregate([
       {
-        $match: { branchId: branchId },
+        $match: { branchId: { $in: branchIds } },
       },
       {
         $lookup: {
@@ -41,6 +37,41 @@ export const handleGetSaleByUser = async (
         },
       },
       { $unwind: '$productDetails' },
+      {
+        $lookup: {
+          from: BranchesModel.collection.name,
+          localField: 'branchId',
+          foreignField: 'id',
+          as: 'branchDetails',
+        },
+      },
+      { $unwind: '$branchDetails' },
+    ]);
+
+    return sales;
+  } else {
+    const sales = await SalesModel.aggregate([
+      {
+        $match: { userId },
+      },
+      {
+        $lookup: {
+          from: ProductsModel.collection.name,
+          localField: 'productId',
+          foreignField: 'id',
+          as: 'productDetails',
+        },
+      },
+      { $unwind: '$productDetails' },
+      {
+        $lookup: {
+          from: BranchesModel.collection.name,
+          localField: 'branchId',
+          foreignField: 'id',
+          as: 'branchDetails',
+        },
+      },
+      { $unwind: '$branchDetails' },
     ]);
 
     return sales;

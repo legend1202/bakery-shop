@@ -5,6 +5,7 @@ import { sendResponse } from '../utils/response.utils';
 import { RequestError } from '../utils/globalErrorHandler';
 
 import {
+  handleAttendance,
   handleAttendanceByUser,
   handleDeleteAttendance,
   handleAttendanceCreation,
@@ -43,6 +44,22 @@ export const getAttendanceByUser = async (
     const products = await handleAttendanceByUser(req.userId, session);
     return sendResponse(res, 200, 'Get Products', {
       products,
+    });
+  } catch (error) {
+    throw new RequestError(`${error}`, 500);
+  }
+};
+
+export const getAttendance = async (
+  req: Request & { userId?: DecodedToken['userId'] },
+  res: Response
+) => {
+  const session: ClientSession = req.session!;
+
+  try {
+    const results = await handleAttendance(req.userId, session);
+    return sendResponse(res, 200, 'Get Products', {
+      results,
     });
   } catch (error) {
     throw new RequestError(`${error}`, 500);

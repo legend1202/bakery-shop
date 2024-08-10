@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
-import { ISale } from 'src/types/sale';
+import { ISale, IMSale } from 'src/types/sale';
 import { IBranchDelete } from 'src/types/branch';
 
 export function useGetSaleListsByUser() {
@@ -13,7 +13,7 @@ export function useGetSaleListsByUser() {
 
   const memoizedValue = useMemo(
     () => ({
-      sales: data?.result.sales as ISale[],
+      sales: data?.result.sales as IMSale[],
       salesLoading: isLoading,
       salesError: error,
       salesValidating: isValidating,

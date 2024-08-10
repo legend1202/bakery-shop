@@ -139,7 +139,7 @@ export default function ProductListView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Inventory - Product"
+        heading="Report - Product"
         links={[
           {
             name: 'Dashboard',

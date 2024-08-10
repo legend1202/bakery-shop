@@ -4,6 +4,7 @@ import { Document, model, Schema } from 'mongoose';
 export interface Attendances extends Document {
   id: string;
   userId: string;
+  branchId: string;
   bio: string;
   attendanceTime?: string;
   createdAt: Date;
@@ -22,6 +23,7 @@ const AttendancesSchema = new Schema<Attendances>(
       type: String,
       ref: 'Users',
     },
+    branchId: { typs: String },
     bio: {
       type: String,
     },

@@ -17,7 +17,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 
 import { useGetBranchLists } from 'src/api/branch';
-import { useGetMngSupplyListsByUsers } from 'src/api/supply';
+import { useGetSaleListsByUser } from 'src/api/sale';
 
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
@@ -32,10 +32,10 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { IMSupply } from 'src/types/supply';
+import { IMSale } from 'src/types/sale';
 
-import SupplyAnalytic from '../supply-analytic';
-import SupplyTableRow from '../supply-table-row';
+import SaleTableRow from '../sale-table-row';
+import SupplyAnalytic from '../sale-analytic';
 
 // ----------------------------------------------------------------------
 
@@ -49,18 +49,18 @@ const TABLE_HEAD = [
 ];
 // ----------------------------------------------------------------------
 
-export default function ReportSupplyView() {
+export default function ReportSaleView() {
   const theme = useTheme();
 
   const settings = useSettingsContext();
 
   const { branches } = useGetBranchLists();
 
-  const { supplies } = useGetMngSupplyListsByUsers();
+  const { sales } = useGetSaleListsByUser();
 
   const table = useTable({ defaultOrderBy: 'createDate' });
 
-  const [tableData, setTableData] = useState<IMSupply[]>([]);
+  const [tableData, setTableData] = useState<IMSale[]>([]);
 
   const denseHeight = table.dense ? 56 : 56 + 20;
 
@@ -87,35 +87,34 @@ export default function ReportSupplyView() {
   const values = watch();
 
   useEffect(() => {
-    if (supplies) {
-      console.log(supplies);
-      setTableData(supplies);
+    if (sales) {
+      setTableData(sales);
     }
-  }, [supplies]);
+  }, [sales]);
 
   useEffect(() => {
     if (values.branchId) {
-      const updatedTableData = supplies.filter((supply) => supply.branchId === values.branchId);
+      const updatedTableData = sales.filter((sale) => sale.branchId === values.branchId);
       setTableData(updatedTableData);
     } else {
-      setTableData(supplies);
+      setTableData(sales);
     }
-  }, [values, supplies]);
+  }, [values, sales]);
 
   const getTotalQuantity = () => sumBy(tableData, 'amount');
 
   const getTotalAmountPrice = () =>
-    sumBy(tableData, (product) => {
-      if (product.quantity && product.quantity !== undefined) {
-        return product.quantity;
+    sumBy(tableData, (sale) => {
+      if (sale.quantity && sale.quantity !== undefined) {
+        return sale.quantity;
       }
       return 0;
     });
 
   const confirmedAmountProducts = () =>
-    sumBy(tableData, (product) => {
-      if (product.quantity > 0 && product.status) {
-        return product.quantity;
+    sumBy(tableData, (sale) => {
+      if (sale.quantity > 0) {
+        return sale.quantity;
       }
       return 0;
     });
@@ -130,8 +129,8 @@ export default function ReportSupplyView() {
 
   const pendingTotalAmountPrice = () =>
     sumBy(tableData, (product) => {
-      if (product.quantity && !product.status) {
-        return product.quantity;
+      if (product.quantity) {
+        return 0;
       }
       return 0;
     });
@@ -139,7 +138,7 @@ export default function ReportSupplyView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Report - Supply"
+        heading="Report - Sale"
         links={[
           {
             name: 'Dashboard',
@@ -149,7 +148,7 @@ export default function ReportSupplyView() {
             name: 'Inventory',
           },
           {
-            name: 'Supply',
+            name: 'Sale',
           },
         ]}
         action={
@@ -240,7 +239,7 @@ export default function ReportSupplyView() {
               {tableData && (
                 <TableBody>
                   {tableData.map((row) => (
-                    <SupplyTableRow
+                    <SaleTableRow
                       key={row.id}
                       row={row}
                       selected={table.selected.includes(row.id)}

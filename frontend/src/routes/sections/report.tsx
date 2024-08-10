@@ -10,7 +10,9 @@ import { LoadingScreen } from 'src/components/loading-screen';
 
 // OVERVIEW
 const ProductListPage = lazy(() => import('src/pages/Report/product/list'));
-const SaleReportPage = lazy(() => import('src/pages/Report/supply/list'));
+const SupplyReportPage = lazy(() => import('src/pages/Report/supply/list'));
+const SaleReportPage = lazy(() => import('src/pages/Report/sale/list'));
+const AttendanceReportPage = lazy(() => import('src/pages/Report/attendance/list'));
 
 export const reportRoutes = [
   {
@@ -25,7 +27,9 @@ export const reportRoutes = [
     ),
     children: [
       { path: paths.report.product, element: <ProductListPage /> },
-      { path: paths.report.supply, element: <SaleReportPage /> },
+      { path: paths.report.supply, element: <SupplyReportPage /> },
+      { path: paths.report.sale, element: <SaleReportPage /> },
+      { path: paths.report.attendance, element: <AttendanceReportPage /> },
     ],
   },
 ];

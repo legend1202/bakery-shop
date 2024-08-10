@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
 import { IBranchDelete } from 'src/types/branch';
-import { IAttendance } from 'src/types/attendance';
+import { IAttendance, ITAttendance } from 'src/types/attendance';
 
 export function useGetProductLists() {
   const URL = endpoints.product.list;
@@ -34,6 +34,25 @@ export function useGetAttendanceByUser() {
       productsLoading: isLoading,
       productsError: error,
       productsValidating: isValidating,
+    }),
+    [data?.result, error, isLoading, isValidating]
+  );
+  return memoizedValue;
+}
+
+export function useGetAttendance() {
+  const URL = endpoints.attendance.list;
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+
+  console.log(data);
+
+  const memoizedValue = useMemo(
+    () => ({
+      attendances: data?.result.result as ITAttendance[],
+      attendancesLoading: isLoading,
+      attendancesError: error,
+      attendancesValidating: isValidating,
     }),
     [data?.result, error, isLoading, isValidating]
   );

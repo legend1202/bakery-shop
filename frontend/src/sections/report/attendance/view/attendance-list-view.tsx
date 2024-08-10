@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import sumBy from 'lodash/sumBy';
 import { useForm } from 'react-hook-form';
 import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,7 +16,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 
 import { useGetBranchLists } from 'src/api/branch';
-import { useGetMngSupplyListsByUsers } from 'src/api/supply';
+import { useGetAttendance } from 'src/api/attendance';
 
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
@@ -32,35 +31,33 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { IMSupply } from 'src/types/supply';
+import { ITAttendance } from 'src/types/attendance';
 
-import SupplyAnalytic from '../supply-analytic';
-import SupplyTableRow from '../supply-table-row';
+import SupplyAnalytic from '../attendance-analytic';
+import AttendanceTableRow from '../attendance-table-row';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'productId', label: 'Product' },
   { id: 'branchId', label: 'Branch' },
-  { id: 'quantity', label: 'Quantity' },
+  { id: 'name', label: 'Name' },
   { id: 'createDate', label: 'Date' },
-  { id: 'status', label: 'Status' },
   { id: 'bio', label: 'Bio', align: 'center' },
 ];
 // ----------------------------------------------------------------------
 
-export default function ReportSupplyView() {
+export default function ReportSaleView() {
   const theme = useTheme();
 
   const settings = useSettingsContext();
 
   const { branches } = useGetBranchLists();
 
-  const { supplies } = useGetMngSupplyListsByUsers();
+  const { attendances } = useGetAttendance();
 
   const table = useTable({ defaultOrderBy: 'createDate' });
 
-  const [tableData, setTableData] = useState<IMSupply[]>([]);
+  const [tableData, setTableData] = useState<ITAttendance[]>([]);
 
   const denseHeight = table.dense ? 56 : 56 + 20;
 
@@ -87,59 +84,26 @@ export default function ReportSupplyView() {
   const values = watch();
 
   useEffect(() => {
-    if (supplies) {
-      console.log(supplies);
-      setTableData(supplies);
+    if (attendances) {
+      setTableData(attendances);
     }
-  }, [supplies]);
+  }, [attendances]);
 
   useEffect(() => {
     if (values.branchId) {
-      const updatedTableData = supplies.filter((supply) => supply.branchId === values.branchId);
+      const updatedTableData = attendances.filter(
+        (sale) => sale.userDetails.branchId === values.branchId
+      );
       setTableData(updatedTableData);
     } else {
-      setTableData(supplies);
+      setTableData(attendances);
     }
-  }, [values, supplies]);
-
-  const getTotalQuantity = () => sumBy(tableData, 'amount');
-
-  const getTotalAmountPrice = () =>
-    sumBy(tableData, (product) => {
-      if (product.quantity && product.quantity !== undefined) {
-        return product.quantity;
-      }
-      return 0;
-    });
-
-  const confirmedAmountProducts = () =>
-    sumBy(tableData, (product) => {
-      if (product.quantity > 0 && product.status) {
-        return product.quantity;
-      }
-      return 0;
-    });
-
-  const deliveryAmountProducts = () =>
-    sumBy(tableData, (product) => {
-      if (product.quantity < 0) {
-        return product.quantity;
-      }
-      return 0;
-    });
-
-  const pendingTotalAmountPrice = () =>
-    sumBy(tableData, (product) => {
-      if (product.quantity && !product.status) {
-        return product.quantity;
-      }
-      return 0;
-    });
+  }, [values, attendances]);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Report - Supply"
+        heading="Report - Attendance"
         links={[
           {
             name: 'Dashboard',
@@ -149,7 +113,7 @@ export default function ReportSupplyView() {
             name: 'Inventory',
           },
           {
-            name: 'Supply',
+            name: 'Sale',
           },
         ]}
         action={
@@ -192,29 +156,11 @@ export default function ReportSupplyView() {
           >
             <SupplyAnalytic
               title="Total"
-              total={getTotalQuantity()}
+              total={0}
               percent={100}
-              price={getTotalAmountPrice()}
+              price={0}
               icon="solar:bill-list-bold-duotone"
               color={theme.palette.info.main}
-            />
-
-            <SupplyAnalytic
-              title="Confirmed"
-              total={getTotalQuantity()}
-              percent={100}
-              price={confirmedAmountProducts()}
-              icon="solar:file-check-bold-duotone"
-              color={theme.palette.success.main}
-            />
-
-            <SupplyAnalytic
-              title="Pending"
-              total={deliveryAmountProducts()}
-              percent={100}
-              price={pendingTotalAmountPrice()}
-              icon="solar:sort-by-time-bold-duotone"
-              color={theme.palette.warning.main}
             />
           </Stack>
         </Scrollbar>
@@ -240,7 +186,7 @@ export default function ReportSupplyView() {
               {tableData && (
                 <TableBody>
                   {tableData.map((row) => (
-                    <SupplyTableRow
+                    <AttendanceTableRow
                       key={row.id}
                       row={row}
                       selected={table.selected.includes(row.id)}
