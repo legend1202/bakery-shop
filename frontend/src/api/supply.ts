@@ -104,3 +104,15 @@ export const MngSupplyDelete = async (query: IBranchDelete) => {
 
   return memoizedValue;
 };
+
+export const MngSupplyConfirm = async (query: IBranchDelete) => {
+  const res = await axiosInstance.post(endpoints.mng.supply.confirm, {
+    supply: query,
+  });
+
+  const memoizedValue = {
+    data: res?.data.result.updatedSupplyOrder as IMSupply,
+  };
+
+  return memoizedValue;
+};

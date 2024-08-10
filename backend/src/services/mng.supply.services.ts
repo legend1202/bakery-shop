@@ -1,6 +1,7 @@
 import {
   Document,
   FilterQuery,
+  UpdateQuery,
   QueryOptions,
   ClientSession,
   ProjectionType,
@@ -113,3 +114,33 @@ export async function findOneMngSupply(
 ): Promise<MngSupplies | null> {
   return await MngSuppiesModel.findOne(filter, projection, options);
 }
+
+export const handleSupplyOrderConfirm = async (
+  supply: Partial<MngSupplies> & Document,
+  session?: ClientSession
+): Promise<MngSupplies> => {
+  const { id } = supply;
+
+  if (!id) throw new RequestError('User Id must not be empty', 400);
+
+  const updatedUser = await findByIdAndUpdateSupplyDocument(id, {
+    status: true,
+  });
+
+  if (updatedUser) {
+    return updatedUser;
+  } else {
+    throw new RequestError(`There is not ${id} user.`, 500);
+  }
+};
+
+export const findByIdAndUpdateSupplyDocument = async (
+  id: string,
+  update: UpdateQuery<MngSupplies>,
+  options?: QueryOptions<MngSupplies>
+) => {
+  return await MngSuppiesModel.findOneAndUpdate({ id }, update, {
+    ...options,
+    returnDocument: 'after',
+  });
+};

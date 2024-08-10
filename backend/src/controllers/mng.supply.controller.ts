@@ -9,6 +9,7 @@ import {
   handleDeleteMngSupply,
   handleMngSupplyCreation,
   handleGetMngSupplyByUser,
+  handleSupplyOrderConfirm,
 } from '../services/mng.supply.services';
 
 import { DecodedToken } from '../types/req.type';
@@ -72,6 +73,20 @@ export const deleteMngSupply = async (req: Request, res: Response) => {
     await handleDeleteMngSupply(product.id, session);
     return sendResponse(res, 201, 'user deleted', {
       id: product.id,
+    });
+  } catch (error) {
+    throw new RequestError(`${error}`, 500);
+  }
+};
+
+export const confirmMngSupply = async (req: Request, res: Response) => {
+  const session: ClientSession = req.session!;
+
+  try {
+    const { supply } = req.body;
+    const updatedSupplyOrder = await handleSupplyOrderConfirm(supply, session);
+    return sendResponse(res, 201, 'Role assigned', {
+      updatedSupplyOrder,
     });
   } catch (error) {
     throw new RequestError(`${error}`, 500);

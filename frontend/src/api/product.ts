@@ -121,3 +121,15 @@ export const MngProductDelete = async (query: IBranchDelete) => {
 
   return memoizedValue;
 };
+
+export const MngProductConfirm = async (query: IBranchDelete) => {
+  const res = await axiosInstance.post(endpoints.mng.product.confirm, {
+    product: query,
+  });
+
+  const memoizedValue = {
+    data: res?.data.result.updatedProductOrder as IMProduct,
+  };
+
+  return memoizedValue;
+};

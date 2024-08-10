@@ -64,11 +64,13 @@ export const endpoints = {
       listByUser: '/api/mng/product/get-products-by-user',
       list: '/api/mng/product/get-products',
       delete: '/api/mng/product/delete',
+      confirm: '/api/mng/product/confirm',
     },
     supply: {
       create: '/api/mng/supply/register',
       listByUser: '/api/mng/supply/get-supply-by-user',
       delete: '/api/mng/supply/delete',
+      confirm: '/api/mng/supply/confirm',
     },
   },
   sale: {

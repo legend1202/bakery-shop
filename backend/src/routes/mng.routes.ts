@@ -6,6 +6,7 @@ import {
   getMngProducts,
   mngcreateProduct,
   deleteMngProduct,
+  confirmMngProduct,
   getMngProductsByUser,
 } from '../controllers/mng.product.controller';
 
@@ -15,6 +16,7 @@ import { withTransaction } from '../utils/transactionHelper';
 import {
   deleteMngSupply,
   mngcreateSupply,
+  confirmMngSupply,
   getMngSupplyByUser,
 } from '../controllers/mng.supply.controller';
 
@@ -58,6 +60,18 @@ router.post(
   '/product/delete',
   errorWrap(verifyToken, 'Could not verify JWT token'),
   withTransaction(errorWrap(deleteMngProduct, 'Could not delete Branch'))
+);
+
+router.post(
+  '/product/confirm',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  withTransaction(errorWrap(confirmMngProduct, 'Could not update Branch'))
+);
+
+router.post(
+  '/supply/confirm',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  withTransaction(errorWrap(confirmMngSupply, 'Could not update Branch'))
 );
 
 router.post(

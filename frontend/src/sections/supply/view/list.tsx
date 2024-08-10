@@ -10,7 +10,7 @@ import {
 } from '@mui/x-data-grid';
 
 import { useTranslate } from 'src/locales';
-import { MngSupplyDelete, useGetMngSupplyListsByUsers } from 'src/api/supply';
+import { MngSupplyDelete, MngSupplyConfirm, useGetMngSupplyListsByUsers } from 'src/api/supply';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -76,6 +76,22 @@ export default function MngSupplyListView() {
     }
   };
 
+  const handleConfirmRow = async (id: string) => {
+    const updateData = { id };
+    const result = await MngSupplyConfirm(updateData);
+
+    if (result.data) {
+      enqueueSnackbar(t('Updated'));
+      const fixedSupply = tableData.filter((supply) => supply.id !== result.data.id);
+      const updateSupply = tableData.filter((supply) => supply.id === result.data.id);
+      const updatedSupply = { ...updateSupply[0], status: result.data.status };
+      setTableData([...fixedSupply, updatedSupply]);
+      setReset(!reset);
+    } else {
+      enqueueSnackbar('Update did not success');
+    }
+  };
+
   const columns: GridColDef[] = [
     {
       field: 'branchId',
@@ -122,6 +138,12 @@ export default function MngSupplyListView() {
       filterable: false,
       disableColumnMenu: true,
       getActions: (params) => [
+        <GridActionsCellItem
+          showInMenu
+          icon={<Iconify icon="solar:eye-bold" />}
+          label="Confirm"
+          onClick={() => handleConfirmRow(params.row.id)}
+        />,
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}

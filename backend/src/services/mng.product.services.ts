@@ -1,6 +1,7 @@
 import {
   Document,
   FilterQuery,
+  UpdateQuery,
   QueryOptions,
   ClientSession,
   ProjectionType,
@@ -8,7 +9,7 @@ import {
 
 import { RequestError } from '../utils/globalErrorHandler';
 
-import { ProductsModel } from '../models/product.model';
+import { Products, ProductsModel } from '../models/product.model';
 import { MngProducts, MngProductsModel } from '../models/mng.product.model';
 import { BranchesModel } from '../models/branch.model';
 import { UsersModel } from '../models/user.model';
@@ -154,3 +155,33 @@ export async function findOneMngProduct(
 ): Promise<MngProducts | null> {
   return await MngProductsModel.findOne(filter, projection, options);
 }
+
+export const handleProductOrderConfirm = async (
+  product: Partial<MngProducts> & Document,
+  session?: ClientSession
+): Promise<MngProducts> => {
+  const { id } = product;
+
+  if (!id) throw new RequestError('User Id must not be empty', 400);
+
+  const updatedUser = await findByIdAndUpdateProductDocument(id, {
+    status: true,
+  });
+
+  if (updatedUser) {
+    return updatedUser;
+  } else {
+    throw new RequestError(`There is not ${id} user.`, 500);
+  }
+};
+
+export const findByIdAndUpdateProductDocument = async (
+  id: string,
+  update: UpdateQuery<MngProducts>,
+  options?: QueryOptions<MngProducts>
+) => {
+  return await MngProductsModel.findOneAndUpdate({ id }, update, {
+    ...options,
+    returnDocument: 'after',
+  });
+};

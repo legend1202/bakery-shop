@@ -6,9 +6,10 @@ import { RequestError } from '../utils/globalErrorHandler';
 
 import {
   handleGetMngProducts,
-  handleMngProductCreation,
-  handleGetMngProductsByUser,
   handleDeleteMngProduct,
+  handleMngProductCreation,
+  handleProductOrderConfirm,
+  handleGetMngProductsByUser,
 } from '../services/mng.product.services';
 
 import { DecodedToken } from '../types/req.type';
@@ -85,6 +86,23 @@ export const deleteMngProduct = async (req: Request, res: Response) => {
     await handleDeleteMngProduct(product.id, session);
     return sendResponse(res, 201, 'user deleted', {
       id: product.id,
+    });
+  } catch (error) {
+    throw new RequestError(`${error}`, 500);
+  }
+};
+
+export const confirmMngProduct = async (req: Request, res: Response) => {
+  const session: ClientSession = req.session!;
+
+  try {
+    const { product } = req.body;
+    const updatedProductOrder = await handleProductOrderConfirm(
+      product,
+      session
+    );
+    return sendResponse(res, 201, 'Role assigned', {
+      updatedProductOrder,
     });
   } catch (error) {
     throw new RequestError(`${error}`, 500);

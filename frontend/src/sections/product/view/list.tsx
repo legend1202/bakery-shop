@@ -13,7 +13,7 @@ import { isAdminFn } from 'src/utils/role-check';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { MngProductDelete, useGetMngProductListsByUser } from 'src/api/product';
+import { MngProductDelete, MngProductConfirm, useGetMngProductListsByUser } from 'src/api/product';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -62,7 +62,6 @@ export default function MngProductListView() {
 
   useEffect(() => {
     if (products) {
-      console.log(products);
       setTableData(products);
     }
   }, [products]);
@@ -79,6 +78,21 @@ export default function MngProductListView() {
       enqueueSnackbar(t('Deleted'));
       const updatedProducts = tableData.filter((product) => product.id !== result.data.result.id);
       setTableData([...updatedProducts]);
+      setReset(!reset);
+    } else {
+      enqueueSnackbar('Update did not success');
+    }
+  };
+  const handleConfirmRow = async (id: string) => {
+    const updateData = { id };
+    const result = await MngProductConfirm(updateData);
+
+    if (result.data) {
+      enqueueSnackbar(t('Updated'));
+      const fixedProducts = tableData.filter((product) => product.id !== result.data.id);
+      const updateProduct = tableData.filter((product) => product.id === result.data.id);
+      const updatedProduct = { ...updateProduct[0], status: result.data.status };
+      setTableData([...fixedProducts, updatedProduct]);
       setReset(!reset);
     } else {
       enqueueSnackbar('Update did not success');
@@ -131,6 +145,12 @@ export default function MngProductListView() {
       filterable: false,
       disableColumnMenu: true,
       getActions: (params) => [
+        <GridActionsCellItem
+          showInMenu
+          icon={<Iconify icon="solar:eye-bold" />}
+          label="Confirm"
+          onClick={() => handleConfirmRow(params.row.id)}
+        />,
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
