@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
 import { IBranchDelete } from 'src/types/branch';
-import { ISupply, IMSupply } from 'src/types/supply';
+import { ISupply, IMSupply, IMTSupply } from 'src/types/supply';
 
 export function useGetSupplyLists() {
   const URL = endpoints.supply.list;
@@ -69,7 +69,7 @@ export const createSupply = async (query: ISupply) => {
   return memoizedValue;
 };
 
-export const createMngSupply = async (query: IMSupply) => {
+export const createMngSupply = async (query: IMTSupply) => {
   const res = await axiosInstance.post(endpoints.mng.supply.create, {
     supply: query,
   });

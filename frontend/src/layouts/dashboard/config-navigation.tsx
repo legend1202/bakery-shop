@@ -138,14 +138,14 @@ export function useNavData() {
         items: [
           // sale
           {
-            title: t('Inventory - Product'),
+            title: t('Product'),
             path: paths.report.product,
             icon: ICONS.user,
             roles: ['ADMIN'],
           },
           // sale
           {
-            title: t('Inventory - Supply'),
+            title: t('Supply'),
             path: paths.report.supply,
             icon: ICONS.user,
             roles: ['ADMIN'],

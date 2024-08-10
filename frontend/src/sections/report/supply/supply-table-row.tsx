@@ -6,18 +6,18 @@ import ListItemText from '@mui/material/ListItemText';
 
 import { fDate, fTime } from 'src/utils/format-time';
 
-import { IMProduct } from 'src/types/product';
+import { IMSupply } from 'src/types/supply';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IMProduct;
+  row: IMSupply;
   selected: boolean;
   onSelectRow: VoidFunction;
 };
 
-export default function ProductTableRow({ row, selected, onSelectRow }: Props) {
-  const { productDetails, branchDetails, quantity, status, bio, createdAt } = row;
+export default function SupplyTableRow({ row, selected, onSelectRow }: Props) {
+  const { supplyDetails, branchDetails, quantity, status, bio, createdAt } = row;
 
   return (
     <TableRow hover selected={selected}>
@@ -30,7 +30,7 @@ export default function ProductTableRow({ row, selected, onSelectRow }: Props) {
           disableTypography
           primary={
             <Typography variant="body2" noWrap>
-              {productDetails?.name}
+              {supplyDetails?.name}
             </Typography>
           }
         />

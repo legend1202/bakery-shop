@@ -17,7 +17,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 
 import { useGetBranchLists } from 'src/api/branch';
-import { useGetMngProductLists } from 'src/api/product';
+import { useGetMngSupplyListsByUsers } from 'src/api/supply';
 
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
@@ -32,10 +32,10 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { IMProduct } from 'src/types/product';
+import { IMSupply } from 'src/types/supply';
 
-import ProductAnalytic from '../product-analytic';
-import ProductTableRow from '../product-table-row';
+import SupplyAnalytic from '../supply-analytic';
+import SupplyTableRow from '../supply-table-row';
 
 // ----------------------------------------------------------------------
 
@@ -49,18 +49,18 @@ const TABLE_HEAD = [
 ];
 // ----------------------------------------------------------------------
 
-export default function ProductListView() {
+export default function ReportSupplyView() {
   const theme = useTheme();
 
   const settings = useSettingsContext();
 
   const { branches } = useGetBranchLists();
 
-  const { products } = useGetMngProductLists();
+  const { supplies } = useGetMngSupplyListsByUsers();
 
   const table = useTable({ defaultOrderBy: 'createDate' });
 
-  const [tableData, setTableData] = useState<IMProduct[]>([]);
+  const [tableData, setTableData] = useState<IMSupply[]>([]);
 
   const denseHeight = table.dense ? 56 : 56 + 20;
 
@@ -87,20 +87,20 @@ export default function ProductListView() {
   const values = watch();
 
   useEffect(() => {
-    if (products) {
-      console.log(products);
-      setTableData(products);
+    if (supplies) {
+      console.log(supplies);
+      setTableData(supplies);
     }
-  }, [products]);
+  }, [supplies]);
 
   useEffect(() => {
     if (values.branchId) {
-      const updatedTableData = products.filter((product) => product.branchId === values.branchId);
+      const updatedTableData = supplies.filter((supply) => supply.branchId === values.branchId);
       setTableData(updatedTableData);
     } else {
-      setTableData(products);
+      setTableData(supplies);
     }
-  }, [values, products]);
+  }, [values, supplies]);
 
   const getTotalQuantity = () => sumBy(tableData, 'amount');
 
@@ -190,7 +190,7 @@ export default function ProductListView() {
             divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
             sx={{ py: 2 }}
           >
-            <ProductAnalytic
+            <SupplyAnalytic
               title="Total"
               total={getTotalQuantity()}
               percent={100}
@@ -199,7 +199,7 @@ export default function ProductListView() {
               color={theme.palette.info.main}
             />
 
-            <ProductAnalytic
+            <SupplyAnalytic
               title="Confirmed"
               total={getTotalQuantity()}
               percent={100}
@@ -208,7 +208,7 @@ export default function ProductListView() {
               color={theme.palette.success.main}
             />
 
-            <ProductAnalytic
+            <SupplyAnalytic
               title="Pending"
               total={deliveryAmountProducts()}
               percent={100}
@@ -240,7 +240,7 @@ export default function ProductListView() {
               {tableData && (
                 <TableBody>
                   {tableData.map((row) => (
-                    <ProductTableRow
+                    <SupplyTableRow
                       key={row.id}
                       row={row}
                       selected={table.selected.includes(row.id)}

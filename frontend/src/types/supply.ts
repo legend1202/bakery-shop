@@ -10,7 +10,7 @@ export type ISupply = {
 };
 
 export type IMSupply = {
-  id?: string;
+  id: string;
   supplyId: string;
   branchId: string;
   branchDetails?: IBranch;
@@ -18,5 +18,15 @@ export type IMSupply = {
   quantity: number;
   bio?: string;
   status?: string;
+  createdAt?: string;
+};
+
+export type IMTSupply = {
+  branchId?: string;
+  supplyId: string;
+  branchDetails?: IBranch;
+  supplyDetails?: ISupply;
+  quantity: number;
+  bio?: string;
   createdAt?: string;
 };

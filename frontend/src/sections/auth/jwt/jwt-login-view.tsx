@@ -49,7 +49,7 @@ export default function JwtLoginView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await login(data.email, data.password);
+      await login?.(data.email, data.password);
     } catch (error) {
       console.error(error);
       reset();
