@@ -7,34 +7,28 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { createSale } from 'src/api/sale';
-import { useGetProductListsByUser } from 'src/api/product';
+import { createProduct } from 'src/api/product';
 
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
-import { ISale } from 'src/types/sale';
+import { IProduct } from 'src/types/product';
 
 type Props = {
-  afterSavebranch: (newProduct: ISale) => void;
+  afterSavebranch: (newProduct: IProduct) => void;
 };
-export default function MngProductNewEditForm({ afterSavebranch }: Props) {
+export default function ProductNewEditFormSale({ afterSavebranch }: Props) {
   const [errorMsg, setErrorMsg] = useState('');
 
-  const { products } = useGetProductListsByUser();
-
   const NewProductSchema = Yup.object().shape({
-    productId: Yup.string().required('Name is required'),
-    quantity: Yup.number().required('Location is required'),
+    name: Yup.string().required('Name is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
-      productId: '',
-      quantity: 0,
+      name: '',
       bio: '',
     }),
     []
@@ -57,7 +51,8 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const saveData = { ...values };
-      const saveResults: any = await createSale(saveData);
+      const saveResults: any = await createProduct(saveData);
+
       if (saveResults.data?.success) {
         reset();
         afterSavebranch(saveResults.data.result);
@@ -80,28 +75,12 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
             display="grid"
             gridTemplateColumns={{
               xs: 'repeat(1, 1fr)',
-              sm: 'repeat(4, 1fr)',
+              sm: `repeat( 3, 1fr)`,
             }}
           >
-            {products && (
-              <RHFSelect
-                name="productId"
-                label="Product"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {products.map((option) => (
-                  <MenuItem key={option.id} value={option?.id}>
-                    {option?.name}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-            )}
+            <RHFTextField name="name" label="Name" />
 
-            <RHFTextField name="quantity" label="Quantity" />
-
-            <RHFTextField name="bio" label="Details" />
+            <RHFTextField name="bio" label="Bio" />
 
             <LoadingButton
               type="submit"

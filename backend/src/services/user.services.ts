@@ -19,7 +19,8 @@ export const handleUserCreation = async (
   user: Partial<Users> & Document,
   session?: ClientSession
 ): Promise<Users> => {
-  const { email, password, firstName, lastName, branchId, role, bio } = user;
+  const { email, password, firstName, lastName, branchId, userId, role, bio } =
+    user;
 
   if (!firstName) throw new RequestError('First Name must not be empty', 400);
   if (!lastName) throw new RequestError('Last Name must not be empty', 400);
@@ -44,6 +45,7 @@ export const handleUserCreation = async (
     firstName,
     lastName,
     branchId,
+    userId,
     role,
     bio,
     session
@@ -114,6 +116,9 @@ export const handleGetUsers = async (
   } else {
     const users = await UsersModel.aggregate([
       {
+        $match: { userId: userId },
+      },
+      {
         $lookup: {
           from: BranchesModel.collection.name,
           localField: 'branchId',
@@ -168,10 +173,29 @@ export const createNewUser = async (
   firstName: string,
   lastName: string,
   branchId?: string,
+  userId?: string,
   role?: string,
   bio?: string,
   session?: ClientSession
 ): Promise<Users> => {
+  const userData = await UsersModel.findOne({ id: userId });
+
+  if (userData?.role === 'ADMIN') {
+    const newUser = new UsersModel({
+      email,
+      passwordStr,
+      password,
+      firstName,
+      lastName,
+      branchId,
+      userId,
+      role: 'SALESPERSON',
+      bio,
+    });
+
+    await newUser.save({ session });
+    return newUser;
+  }
   const newUser = new UsersModel({
     email,
     passwordStr,
@@ -179,7 +203,7 @@ export const createNewUser = async (
     firstName,
     lastName,
     branchId,
-    role: role || 'SALESPERSON',
+    role: 'ADMIN',
     bio,
   });
 

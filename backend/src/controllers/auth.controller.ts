@@ -14,7 +14,10 @@ import {
 
 import { DecodedToken } from '../types/req.type';
 
-export const create = async (req: Request, res: Response) => {
+export const create = async (
+  req: Request & { userId?: DecodedToken['userId'] },
+  res: Response
+) => {
   const session: ClientSession = req.session!;
 
   try {

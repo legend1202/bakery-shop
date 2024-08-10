@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 export interface Products extends Document {
   id: string;
   branchId: string;
-  userId: string;
+  userId?: string;
   name: string;
   price?: number | 0;
   bio: string;

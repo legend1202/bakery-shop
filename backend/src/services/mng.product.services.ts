@@ -11,6 +11,7 @@ import { RequestError } from '../utils/globalErrorHandler';
 import { ProductsModel } from '../models/product.model';
 import { MngProducts, MngProductsModel } from '../models/mng.product.model';
 import { BranchesModel } from '../models/branch.model';
+import { UsersModel } from '../models/user.model';
 
 export const handleMngProductCreation = async (
   product: Partial<MngProducts> & Document,
@@ -20,7 +21,6 @@ export const handleMngProductCreation = async (
   const { branchId, productId, quantity, bio } = product;
 
   if (!userId) throw new RequestError('User must be registered', 400);
-  if (!branchId) throw new RequestError('Branch name must not be empty', 400);
   if (!productId) throw new RequestError('Proudct name must not be empty', 400);
   if (!quantity) throw new RequestError('Price must not be empty', 400);
 
@@ -38,23 +38,38 @@ export const handleMngProductCreation = async (
 
 export const createNewMngProduct = async (
   productId: string,
-  branchId: string,
-  userId: string,
-  quantity: number,
+  branchId?: string,
+  userId?: string,
+  quantity?: number,
   bio?: string,
   session?: ClientSession
 ): Promise<MngProducts> => {
-  const newProduct = new MngProductsModel({
-    productId,
-    branchId,
-    userId,
-    quantity,
-    status: false,
-    bio,
-  });
+  if (branchId) {
+    const newProduct = new MngProductsModel({
+      productId,
+      branchId,
+      userId,
+      quantity,
+      status: false,
+      bio,
+    });
 
-  await newProduct.save({ session });
-  return newProduct;
+    await newProduct.save({ session });
+    return newProduct;
+  } else {
+    const userData = await UsersModel.findOne({ id: userId });
+    const newProduct = new MngProductsModel({
+      productId,
+      branchId: userData?.branchId,
+      userId,
+      quantity,
+      status: false,
+      bio,
+    });
+
+    await newProduct.save({ session });
+    return newProduct;
+  }
 };
 
 export const handleGetMngProductsByUser = async (

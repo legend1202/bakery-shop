@@ -22,7 +22,7 @@ export type IMProduct = {
 };
 
 export type IMTProduct = {
-  branchId: string;
+  branchId?: string;
   productId: string;
   branchDetails?: IBranch;
   productDetails?: IProduct;

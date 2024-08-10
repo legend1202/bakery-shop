@@ -21,69 +21,45 @@ export const handleProductCreation = async (
   const { branchId, name, price, bio } = product;
 
   if (!userId) throw new RequestError('Creator name must not be empty', 400);
-  if (!branchId) throw new RequestError('Branch name must not be empty', 400);
   if (!name) throw new RequestError('Proudct name must not be empty', 400);
 
-  const existingProduct = await ProductsModel.findOne({
-    userId,
+  const newProduct = await createNewProduct(
     branchId,
+    userId,
     name,
     price,
-  });
+    bio,
+    session
+  );
 
-  if (existingProduct) {
-    throw new RequestError(
-      `Can't register this Product. this product is  existed.`,
-      500
-    );
-  } else {
-    const newProduct = await createNewProduct(
-      branchId,
-      userId,
-      name,
-      price,
-      bio,
-      session
-    );
-
-    return newProduct;
-  }
+  return newProduct;
 };
 
 export const handleGetProductsByUser = async (
   userId: string,
   session?: ClientSession
 ): Promise<Products[]> => {
-  const existingUser = await UsersModel.findOne({ id: userId });
+  const products = await handleGetProducts(userId, session);
 
-  if (existingUser?.role === 'ADMIN') {
-    const products = await handleGetProducts(userId, session);
-
-    return products;
-  } else {
-    const branchId = existingUser?.branchId;
-
-    if (!branchId) {
-      throw new RequestError(
-        `Can't register this branch. this branch is not existed.`,
-        500
-      );
-    } else {
-      const products = await ProductsModel.find({ branchId });
-
-      return products;
-    }
-  }
+  return products;
 };
 
 export const handleGetProducts = async (
   userId?: string,
   session?: ClientSession
 ): Promise<Products[]> => {
-  if (userId) {
+  const existingUser = await UsersModel.findOne({ id: userId });
+
+  if (existingUser?.role === 'ADMIN') {
+    const branches = await BranchesModel.find({ userId }, 'id');
+    const branchIds = await branches.map((branch) => branch.id);
+
     const products = await ProductsModel.aggregate([
-      {
+      /* {
         $match: { userId: userId },
+      }, */
+      {
+        $match: { branchId: { $in: branchIds } },
       },
       {
         $lookup: {
@@ -99,6 +75,9 @@ export const handleGetProducts = async (
     return products;
   } else {
     const products = await ProductsModel.aggregate([
+      {
+        $match: { branchId: existingUser?.branchId },
+      },
       {
         $lookup: {
           from: BranchesModel.collection.name,
@@ -146,23 +125,37 @@ export async function findOneProduct(
 }
 
 export const createNewProduct = async (
-  branchId: string,
-  userId: string,
-  name: string,
+  branchId?: string,
+  userId?: string,
+  name?: string,
   price?: number,
   bio?: string,
   session?: ClientSession
 ): Promise<Products> => {
-  const newProduct = new ProductsModel({
-    branchId,
-    userId,
-    name,
-    price,
-    bio,
-  });
+  if (branchId) {
+    const newProduct = new ProductsModel({
+      branchId,
+      userId,
+      name,
+      price,
+      bio,
+    });
 
-  await newProduct.save({ session });
-  return newProduct;
+    await newProduct.save({ session });
+    return newProduct;
+  } else {
+    const userData = await UsersModel.findOne({ id: userId });
+    const newProduct = new ProductsModel({
+      branchId: userData?.branchId,
+      userId,
+      name,
+      price,
+      bio,
+    });
+
+    await newProduct.save({ session });
+    return newProduct;
+  }
 };
 
 export const handleDeleteProduct = async (

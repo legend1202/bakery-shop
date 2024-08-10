@@ -20,12 +20,7 @@ import { useSettingsContext } from 'src/components/settings';
 import { ISale } from 'src/types/sale';
 
 import MngProductNewEditForm from '../sale-new-edit-form';
-import {
-  RenderCellBio,
-  RenderCellPrice,
-  RenderCellProduct,
-  RenderCellQuantity,
-} from '../sale-list-item';
+import { RenderCellBio, RenderCellProduct, RenderCellQuantity } from '../sale-list-item';
 
 const HIDE_COLUMNS = {
   category: false,
@@ -81,21 +76,15 @@ export default function SaleMngView() {
       field: 'productId',
       headerName: 'Product',
       flex: 1,
-      minWidth: 180,
+      minWidth: 280,
       hideable: false,
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
     {
       field: 'quantity',
       headerName: 'Quantity',
-      minWidth: 100,
+      minWidth: 220,
       renderCell: (params) => <RenderCellQuantity params={params} />,
-    },
-    {
-      field: 'price',
-      headerName: 'Price',
-      minWidth: 100,
-      renderCell: (params) => <RenderCellPrice params={params} />,
     },
     {
       field: 'bio',

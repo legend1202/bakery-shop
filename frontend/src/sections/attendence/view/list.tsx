@@ -16,6 +16,7 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import { IAttendance } from 'src/types/attendance';
 
@@ -118,6 +119,18 @@ export default function AttendanceListView() {
         flexDirection: 'column',
       }}
     >
+      <CustomBreadcrumbs
+        heading={t('Attendance')}
+        links={[
+          { name: t('User') },
+          {
+            name: t('Attendance'),
+          },
+        ]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
       <MngProductNewEditForm afterSavebranch={afterSavebranch} />
 
       <Card

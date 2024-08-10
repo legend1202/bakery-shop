@@ -29,14 +29,12 @@ export default function ProductNewEditForm({ afterSavebranch }: Props) {
   const NewProductSchema = Yup.object().shape({
     branchId: Yup.string().required('Branch is required'),
     name: Yup.string().required('Name is required'),
-    /* price: Yup.number().required('Price is required'), */
   });
 
   const defaultValues = useMemo(
     () => ({
       branchId: '',
       name: '',
-      /* price: 0, */
       bio: '',
     }),
     []
@@ -50,7 +48,6 @@ export default function ProductNewEditForm({ afterSavebranch }: Props) {
   const {
     reset,
     watch,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -63,8 +60,6 @@ export default function ProductNewEditForm({ afterSavebranch }: Props) {
       const saveResults: any = await createProduct(saveData);
 
       if (saveResults.data?.success) {
-        setValue('name', '');
-        /* setValue('price', 0); */
         reset();
         afterSavebranch(saveResults.data.result);
       } else {
@@ -86,7 +81,7 @@ export default function ProductNewEditForm({ afterSavebranch }: Props) {
             display="grid"
             gridTemplateColumns={{
               xs: 'repeat(1, 1fr)',
-              sm: 'repeat(4, 1fr)',
+              sm: `repeat(4, 1fr)`,
             }}
           >
             {branches && (
@@ -106,8 +101,6 @@ export default function ProductNewEditForm({ afterSavebranch }: Props) {
             )}
             <RHFTextField name="name" label="Name" />
 
-            {/*  <RHFTextField name="price" label="Price" />
-             */}
             <RHFTextField name="bio" label="Bio" />
 
             <LoadingButton

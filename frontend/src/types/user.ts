@@ -99,7 +99,8 @@ export type IUserItem = {
   email: string;
   password: string;
   branchId?: string;
-  role: string;
+  userId?: string;
+  role?: string;
   bio?: string;
 };
 

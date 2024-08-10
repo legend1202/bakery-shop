@@ -51,7 +51,7 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
       const saveResults: any = await createAttendance(saveData);
       if (saveResults.data?.success) {
         reset();
-        afterSavebranch(saveResults.data.result);
+        afterSavebranch(saveResults.data.result.attendances);
       } else {
         setErrorMsg(saveResults?.message);
       }

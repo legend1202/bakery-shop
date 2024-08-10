@@ -17,6 +17,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useTranslate } from 'src/locales';
 import { createUser } from 'src/api/admin';
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetBranchLists } from 'src/api/branch';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -27,6 +29,10 @@ export default function UserNewEditForm() {
 
   const { enqueueSnackbar } = useSnackbar();
 
+  const { user } = useAuthContext();
+
+  const { branches } = useGetBranchLists();
+
   const password = useBoolean();
 
   const NewProductSchema = Yup.object().shape({
@@ -34,7 +40,6 @@ export default function UserNewEditForm() {
     lastName: Yup.string().required('Location is required'),
     email: Yup.string().required('Images is required'),
     password: Yup.string().required('Content is required'),
-    role: Yup.string().required('Forecast is required'),
   });
 
   const defaultValues = useMemo(
@@ -43,7 +48,7 @@ export default function UserNewEditForm() {
       lastName: '',
       email: '',
       password: '',
-      role: '',
+      branchId: '',
       bio: '',
     }),
     []
@@ -65,7 +70,7 @@ export default function UserNewEditForm() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const saveData = { ...values };
+      const saveData = { ...values, userId: user?.userId };
       const saveResults = await createUser(saveData);
       if (saveResults.data?.success) {
         reset();
@@ -115,13 +120,13 @@ export default function UserNewEditForm() {
             />
           </Box>
 
-          {/* {branches && (
+          {user?.role === 'ADMIN' && branches && (
             <RHFSelect
               name="branchId"
               label="Branch"
               fullWidth
               InputLabelProps={{ shrink: true }}
-              PaperPropsSx={{ textTransform: "capitalize" }}
+              PaperPropsSx={{ textTransform: 'capitalize' }}
             >
               {branches.map((option) => (
                 <MenuItem key={option.id} value={option?.id}>
@@ -129,21 +134,7 @@ export default function UserNewEditForm() {
                 </MenuItem>
               ))}
             </RHFSelect>
-          )} */}
-
-          <RHFSelect
-            name="role"
-            label="Role"
-            fullWidth
-            InputLabelProps={{ shrink: true }}
-            PaperPropsSx={{ textTransform: 'capitalize' }}
-          >
-            {['ADMIN', 'SALESPERSON'].map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </RHFSelect>
+          )}
 
           <RHFTextField name="bio" label="Bio" />
         </Stack>

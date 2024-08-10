@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useMemo, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -11,24 +11,23 @@ import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { createSale } from 'src/api/sale';
-import { useGetProductListsByUser } from 'src/api/product';
+import { createMngProduct, useGetProductListsByUser } from 'src/api/product';
 
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-import { ISale } from 'src/types/sale';
+import { IMProduct } from 'src/types/product';
 
 type Props = {
-  afterSavebranch: (newProduct: ISale) => void;
+  afterSavebranch: (newProduct: IMProduct) => void;
 };
-export default function MngProductNewEditForm({ afterSavebranch }: Props) {
+export default function MngProductNewEditFormSale({ afterSavebranch }: Props) {
   const [errorMsg, setErrorMsg] = useState('');
 
   const { products } = useGetProductListsByUser();
 
   const NewProductSchema = Yup.object().shape({
-    productId: Yup.string().required('Name is required'),
-    quantity: Yup.number().required('Location is required'),
+    productId: Yup.string().required('Product is required'),
+    quantity: Yup.number().required('Quantity is required'),
   });
 
   const defaultValues = useMemo(
@@ -57,10 +56,11 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const saveData = { ...values };
-      const saveResults: any = await createSale(saveData);
+      const saveResults: any = await createMngProduct(saveData);
       if (saveResults.data?.success) {
         reset();
         afterSavebranch(saveResults.data.result);
+        setErrorMsg('');
       } else {
         setErrorMsg(saveResults?.message);
       }
@@ -80,7 +80,7 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
             display="grid"
             gridTemplateColumns={{
               xs: 'repeat(1, 1fr)',
-              sm: 'repeat(4, 1fr)',
+              sm: `repeat(4, 1fr)`,
             }}
           >
             {products && (
@@ -101,7 +101,7 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
 
             <RHFTextField name="quantity" label="Quantity" />
 
-            <RHFTextField name="bio" label="Details" />
+            <RHFTextField name="bio" label="Bio" />
 
             <LoadingButton
               type="submit"

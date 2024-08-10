@@ -9,6 +9,7 @@ export interface Users extends Document {
   passwordStr: string;
   password: string;
   branchId?: string;
+  userId?: string;
   role: 'ADMIN' | 'SALESPERSON' | 'SUPERADMIN';
   bio?: string;
   createdAt: Date;
@@ -29,6 +30,7 @@ const UsersSchema = new Schema<Users>(
     passwordStr: { type: String },
     password: { type: String },
     branchId: { type: String },
+    userId: { type: String },
     role: {
       type: String,
     },

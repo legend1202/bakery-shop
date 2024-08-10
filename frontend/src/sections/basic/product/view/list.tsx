@@ -9,7 +9,10 @@ import {
   GridColumnVisibilityModel,
 } from '@mui/x-data-grid';
 
+import { isAdminFn } from 'src/utils/role-check';
+
 import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
 import { ProductDelete, useGetProductListsByUser } from 'src/api/product';
 
 import Iconify from 'src/components/iconify';
@@ -20,6 +23,7 @@ import { useSettingsContext } from 'src/components/settings';
 import { IProduct } from 'src/types/product';
 
 import ProductNewEditForm from '../product-new-edit-form';
+import ProductNewEditFormSale from '../product-new-edit-form-sale';
 import { RenderCellBio, RenderCellName, RenderCellBranch } from '../product-list-item';
 
 const HIDE_COLUMNS = {
@@ -34,6 +38,10 @@ export default function ProductListView() {
   const { t } = useTranslate();
 
   const settings = useSettingsContext();
+
+  const { user } = useAuthContext();
+
+  const isAdmin = isAdminFn(user?.role);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -74,13 +82,13 @@ export default function ProductListView() {
     {
       field: 'product',
       headerName: 'Product',
-      minWidth: 320,
+      minWidth: 340,
       renderCell: (params) => <RenderCellName params={params} />,
     },
     {
       field: 'branch',
       headerName: 'Branch',
-      minWidth: 320,
+      minWidth: 340,
       renderCell: (params) => <RenderCellBranch params={params} />,
     },
     /* {
@@ -92,7 +100,7 @@ export default function ProductListView() {
     {
       field: 'bio',
       headerName: 'Bio',
-      minWidth: 300,
+      minWidth: 350,
       renderCell: (params) => <RenderCellBio params={params} />,
     },
     {
@@ -130,7 +138,11 @@ export default function ProductListView() {
         flexDirection: 'column',
       }}
     >
-      <ProductNewEditForm afterSavebranch={afterSavebranch} />
+      {isAdmin ? (
+        <ProductNewEditForm afterSavebranch={afterSavebranch} />
+      ) : (
+        <ProductNewEditFormSale afterSavebranch={afterSavebranch} />
+      )}
 
       <Card
         sx={{

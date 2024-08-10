@@ -5,6 +5,5 @@ export type ISale = {
   productId: string;
   productDetails?: IProduct;
   quantity: number;
-  price: number;
   bio?: string;
 };

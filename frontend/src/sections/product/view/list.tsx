@@ -9,7 +9,10 @@ import {
   GridColumnVisibilityModel,
 } from '@mui/x-data-grid';
 
+import { isAdminFn } from 'src/utils/role-check';
+
 import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
 import { MngProductDelete, useGetMngProductListsByUser } from 'src/api/product';
 
 import Iconify from 'src/components/iconify';
@@ -20,6 +23,7 @@ import { useSettingsContext } from 'src/components/settings';
 import { IMProduct } from 'src/types/product';
 
 import MngProductNewEditForm from '../mng-product-new-edit-form';
+import MngProductNewEditFormSale from '../mng-product-new-edit-form-sale';
 import {
   RenderCellBio,
   RenderCellStatus,
@@ -40,6 +44,10 @@ export default function MngProductListView() {
   const { t } = useTranslate();
 
   const settings = useSettingsContext();
+
+  const { user } = useAuthContext();
+
+  const isAdmin = isAdminFn(user?.role);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -147,7 +155,11 @@ export default function MngProductListView() {
         flexDirection: 'column',
       }}
     >
-      <MngProductNewEditForm afterSavebranch={afterSavebranch} />
+      {isAdmin ? (
+        <MngProductNewEditForm afterSavebranch={afterSavebranch} />
+      ) : (
+        <MngProductNewEditFormSale afterSavebranch={afterSavebranch} />
+      )}
 
       <Card
         sx={{
