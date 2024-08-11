@@ -23,7 +23,9 @@ const AttendancesSchema = new Schema<Attendances>(
       type: String,
       ref: 'Users',
     },
-    branchId: { typs: String },
+    branchId: {
+      type: String, // Fixed typo here
+    },
     bio: {
       type: String,
     },

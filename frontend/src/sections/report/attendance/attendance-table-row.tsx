@@ -17,7 +17,7 @@ type Props = {
 };
 
 export default function AttendanceTableRow({ row, selected, onSelectRow }: Props) {
-  const { userDetails, bio, createdAt } = row;
+  const { userDetails, branchDetails, bio, createdAt } = row;
 
   return (
     <TableRow hover selected={selected}>
@@ -30,7 +30,7 @@ export default function AttendanceTableRow({ row, selected, onSelectRow }: Props
           disableTypography
           primary={
             <Typography variant="body2" noWrap>
-              {userDetails?.firstName}
+              {userDetails?.firstName} {userDetails?.lastName}
             </Typography>
           }
         />
@@ -41,13 +41,11 @@ export default function AttendanceTableRow({ row, selected, onSelectRow }: Props
           disableTypography
           primary={
             <Typography variant="body2" noWrap>
-              {userDetails?.lastName}
+              {branchDetails?.name}
             </Typography>
           }
         />
       </TableCell>
-
-      <TableCell>{createdAt}</TableCell>
 
       <TableCell>
         <ListItemText
@@ -61,8 +59,6 @@ export default function AttendanceTableRow({ row, selected, onSelectRow }: Props
           }}
         />
       </TableCell>
-
-      <TableCell>Sold</TableCell>
 
       <TableCell align="center">{bio}</TableCell>
     </TableRow>

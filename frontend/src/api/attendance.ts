@@ -45,11 +45,9 @@ export function useGetAttendance() {
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
-  console.log(data);
-
   const memoizedValue = useMemo(
     () => ({
-      attendances: data?.result.result as ITAttendance[],
+      attendances: data?.result.results as ITAttendance[],
       attendancesLoading: isLoading,
       attendancesError: error,
       attendancesValidating: isValidating,

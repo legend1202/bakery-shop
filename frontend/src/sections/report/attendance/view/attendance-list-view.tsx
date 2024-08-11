@@ -5,12 +5,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import { useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
@@ -33,7 +30,6 @@ import {
 
 import { ITAttendance } from 'src/types/attendance';
 
-import SupplyAnalytic from '../attendance-analytic';
 import AttendanceTableRow from '../attendance-table-row';
 
 // ----------------------------------------------------------------------
@@ -47,8 +43,6 @@ const TABLE_HEAD = [
 // ----------------------------------------------------------------------
 
 export default function ReportSaleView() {
-  const theme = useTheme();
-
   const settings = useSettingsContext();
 
   const { branches } = useGetBranchLists();
@@ -118,53 +112,57 @@ export default function ReportSaleView() {
         ]}
         action={
           <FormProvider methods={methods}>
-            <RHFSelect
-              name="branchId"
-              label="Branch"
-              fullWidth
-              InputLabelProps={{ shrink: true }}
-              PaperPropsSx={{ textTransform: 'capitalize' }}
-              sx={{ minWidth: 140 }}
+            <Card
+              sx={{
+                padding: 1,
+                flexGrow: 1,
+                display: 'flex',
+                flexDirection: 'row',
+              }}
             >
-              <MenuItem key="" value="">
-                All
-              </MenuItem>
-              {branches &&
-                branches.map((branch) => (
-                  <MenuItem key={branch.id} value={branch.id}>
-                    {branch.name}
-                  </MenuItem>
-                ))}
-            </RHFSelect>
+              <RHFSelect
+                name="branchId"
+                label="Branch"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+                sx={{ minWidth: 140, mx: 1 }}
+              >
+                <MenuItem key="" value="">
+                  All
+                </MenuItem>
+                {branches &&
+                  branches.map((branch) => (
+                    <MenuItem key={branch.id} value={branch.id}>
+                      {branch.name}
+                    </MenuItem>
+                  ))}
+              </RHFSelect>
+              {/*  <RHFSelect
+                name="branchId"
+                label="Branch"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+                sx={{ minWidth: 140 }}
+              >
+                <MenuItem key="" value="">
+                  All
+                </MenuItem>
+                {branches &&
+                  branches.map((branch) => (
+                    <MenuItem key={branch.id} value={branch.id}>
+                      {branch.name}
+                    </MenuItem>
+                  ))}
+              </RHFSelect> */}
+            </Card>
           </FormProvider>
         }
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
-
-      <Card
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      >
-        <Scrollbar>
-          <Stack
-            direction="row"
-            divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
-            sx={{ py: 2 }}
-          >
-            <SupplyAnalytic
-              title="Total"
-              total={0}
-              percent={100}
-              price={0}
-              icon="solar:bill-list-bold-duotone"
-              color={theme.palette.info.main}
-            />
-          </Stack>
-        </Scrollbar>
-      </Card>
 
       <Card>
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>

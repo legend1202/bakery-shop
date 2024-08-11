@@ -29,6 +29,7 @@ export const createNewAttendance = async (
   const existingUser = await UsersModel.findOne({ id: userId });
 
   const branchId = existingUser?.branchId;
+
   if (branchId) {
     const newProduct = new AttendancesModel({
       userId,
@@ -71,8 +72,6 @@ export const handleAttendance = async (
     const branches = await BranchesModel.find({ userId }, 'id');
     const branchIds = await branches.map((branch) => branch.id);
 
-    console.log('hahah', branchIds);
-
     const results = await AttendancesModel.aggregate([
       {
         $match: { branchId: { $in: branchIds } },
@@ -80,11 +79,22 @@ export const handleAttendance = async (
       {
         $lookup: {
           from: UsersModel.collection.name,
-          localField: 'supplyId',
+          localField: 'userId',
           foreignField: 'id',
           as: 'userDetails',
         },
       },
+
+      { $unwind: '$userDetails' },
+      {
+        $lookup: {
+          from: BranchesModel.collection.name,
+          localField: 'branchId',
+          foreignField: 'id',
+          as: 'branchDetails',
+        },
+      },
+      { $unwind: '$branchDetails' },
     ]);
 
     return results;
