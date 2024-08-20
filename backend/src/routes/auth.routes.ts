@@ -15,7 +15,11 @@ import { withTransaction } from '../utils/transactionHelper';
 
 const router = express.Router();
 
-router.post('/register', errorWrap(create, 'Could not create user'));
+router.post(
+  '/register',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  errorWrap(create, 'Could not create user')
+);
 
 router.post(
   '/login',

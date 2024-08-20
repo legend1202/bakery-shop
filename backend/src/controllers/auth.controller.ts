@@ -13,6 +13,7 @@ import {
 } from '../services/user.services';
 
 import { DecodedToken } from '../types/req.type';
+import { userInfo } from 'os';
 
 export const create = async (
   req: Request & { userId?: DecodedToken['userId'] },
@@ -22,7 +23,7 @@ export const create = async (
 
   try {
     const { user } = req.body;
-    const newUser = await handleUserCreation(user, session);
+    const newUser = await handleUserCreation(user, req.userId, session);
     return sendResponse(res, 201, 'Created User Successfully', {
       user_id: newUser.id,
       email: newUser.email,

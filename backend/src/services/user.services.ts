@@ -17,10 +17,10 @@ import { Users, UsersModel } from '../models/user.model';
 
 export const handleUserCreation = async (
   user: Partial<Users> & Document,
+  userId?: string,
   session?: ClientSession
 ): Promise<Users> => {
-  const { email, password, firstName, lastName, branchId, userId, role, bio } =
-    user;
+  const { email, password, firstName, lastName, branchId, role, bio } = user;
 
   if (!firstName) throw new RequestError('First Name must not be empty', 400);
   if (!lastName) throw new RequestError('Last Name must not be empty', 400);
@@ -195,20 +195,21 @@ export const createNewUser = async (
 
     await newUser.save({ session });
     return newUser;
-  }
-  const newUser = new UsersModel({
-    email,
-    passwordStr,
-    password,
-    firstName,
-    lastName,
-    branchId,
-    role: 'ADMIN',
-    bio,
-  });
+  } else {
+    const newUser = new UsersModel({
+      email,
+      passwordStr,
+      password,
+      firstName,
+      lastName,
+      branchId,
+      role: 'ADMIN',
+      bio,
+    });
 
-  await newUser.save({ session });
-  return newUser;
+    await newUser.save({ session });
+    return newUser;
+  }
 };
 
 export const handleUserDelete = async (
