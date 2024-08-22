@@ -70,7 +70,7 @@ export default function UserNewEditForm() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const saveData = { ...values, userId: user?.userId };
+      const saveData = { ...values, role: user?.role };
       const saveResults = await createUser(saveData);
       if (saveResults.data?.success) {
         reset();

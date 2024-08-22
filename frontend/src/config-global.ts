@@ -1,4 +1,4 @@
-import { paths } from "src/routes/paths";
+import { paths } from 'src/routes/paths';
 
 // API
 // ----------------------------------------------------------------------
@@ -41,3 +41,5 @@ export const PATH_AFTER_LOGIN = paths.dashboard.root; // as '/dashboard'
 export const PATH_AFTER_REGISTER = paths.auth.jwt.login; // as '/dashboard'
 
 export const PATH_LOGIN = paths.auth.jwt.login;
+
+export const PATH_REGESTER_ATTENDANCE = paths.attendance.list;

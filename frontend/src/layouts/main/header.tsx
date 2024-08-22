@@ -2,18 +2,19 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
-// import Button from '@mui/material/Button';
+import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Badge, { badgeClasses } from '@mui/material/Badge';
 
 import { paths } from 'src/routes/paths';
-// import { RouterLink } from 'src/routes/components';
+import { RouterLink } from 'src/routes/components';
 
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 
 import { bgBlur } from 'src/theme/css';
+import { PATH_REGESTER_ATTENDANCE } from 'src/config-global';
 
 import Logo from 'src/components/logo';
 
@@ -77,6 +78,15 @@ export default function Header() {
           <Box sx={{ flexGrow: 1 }} />
 
           <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
+            <Button
+              component={RouterLink}
+              href={PATH_REGESTER_ATTENDANCE}
+              variant="outlined"
+              sx={{ mr: 1 }}
+            >
+              Register Attendance
+            </Button>
+
             <LoginButton />
 
             <SettingsButton
