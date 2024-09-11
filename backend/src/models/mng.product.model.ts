@@ -7,7 +7,11 @@ export interface MngProducts extends Document {
   branchId: string;
   userId: string;
   quantity: number;
-  status: boolean; // true: confirmed,  false: created or pending.
+  price?: number;
+  address?: string;
+  deliverDate?: string;
+  customOrderFlag: false;
+  status: 0; //0: pending 1: confirmed,  2: cancelled.
   bio: string;
   createdAt: Date;
   updateAt: Date;
@@ -29,7 +33,11 @@ const MngProductsSchema = new Schema<MngProducts>(
     },
     userId: { type: String },
     quantity: { type: Number },
-    status: { type: Boolean },
+    price: { type: Number },
+    address: { type: String },
+    deliverDate: { type: String },
+    customOrderFlag: { type: Boolean },
+    status: { type: Number },
     bio: { type: String },
   },
   {

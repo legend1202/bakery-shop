@@ -9,7 +9,7 @@ import {
   GridColumnVisibilityModel,
 } from '@mui/x-data-grid';
 
-import { isAdminFn } from 'src/utils/role-check';
+import { isAdminFn, isSuperAdminFn } from 'src/utils/role-check';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
@@ -49,6 +49,8 @@ export default function MngProductListView() {
 
   const isAdmin = isAdminFn(user?.role);
 
+  const isSuperAdmin = isSuperAdminFn(user?.role);
+
   const { enqueueSnackbar } = useSnackbar();
 
   const { products, productsLoading } = useGetMngProductListsByUser();
@@ -62,7 +64,8 @@ export default function MngProductListView() {
 
   useEffect(() => {
     if (products) {
-      setTableData(products);
+      const filteredProducts = products.filter((product) => product.quantity < 0);
+      setTableData(filteredProducts);
     }
   }, [products]);
 
@@ -74,10 +77,12 @@ export default function MngProductListView() {
   const handleDeleteRow = async (id: string) => {
     const updateData = { id };
     const result = await MngProductDelete(updateData);
-    if (result.data.success) {
-      enqueueSnackbar(t('Deleted'));
-      const updatedProducts = tableData.filter((product) => product.id !== result.data.result.id);
-      setTableData([...updatedProducts]);
+    if (result.data) {
+      enqueueSnackbar(t('Updated'));
+      const fixedProducts = tableData.filter((product) => product.id !== result.data.id);
+      const updateProduct = tableData.filter((product) => product.id === result.data.id);
+      const updatedProduct = { ...updateProduct[0], status: result.data.status };
+      setTableData([...fixedProducts, updatedProduct]);
       setReset(!reset);
     } else {
       enqueueSnackbar('Update did not success');
@@ -97,6 +102,36 @@ export default function MngProductListView() {
     } else {
       enqueueSnackbar('Update did not success');
     }
+  };
+
+  const actions = (params: any) => {
+    if (isAdmin) {
+      return [
+        <GridActionsCellItem
+          showInMenu
+          icon={<Iconify icon="solar:eye-bold" />}
+          label="Deliver"
+          onClick={() => handleConfirmRow(params.row.id)}
+        />,
+        <GridActionsCellItem
+          showInMenu
+          icon={<Iconify icon="solar:eye-bold" />}
+          label="Cancel"
+          onClick={() => handleDeleteRow(params.row.id)}
+        />,
+      ];
+    }
+    if (isSuperAdmin) {
+      return [];
+    }
+    return [
+      <GridActionsCellItem
+        showInMenu
+        icon={<Iconify icon="solar:eye-bold" />}
+        label="Deliver"
+        onClick={() => handleConfirmRow(params.row.id)}
+      />,
+    ];
   };
 
   const columns: GridColDef[] = [
@@ -144,20 +179,7 @@ export default function MngProductListView() {
       sortable: false,
       filterable: false,
       disableColumnMenu: true,
-      getActions: (params) => [
-        <GridActionsCellItem
-          showInMenu
-          icon={<Iconify icon="solar:eye-bold" />}
-          label="Confirm"
-          onClick={() => handleConfirmRow(params.row.id)}
-        />,
-        <GridActionsCellItem
-          showInMenu
-          icon={<Iconify icon="solar:eye-bold" />}
-          label="Delete"
-          onClick={() => handleDeleteRow(params.row.id)}
-        />,
-      ],
+      getActions: (params) => actions(params),
     },
   ];
 
@@ -165,6 +187,13 @@ export default function MngProductListView() {
     columns
       .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
       .map((column) => column.field);
+
+  const renderEditForm = (
+    <>
+      {!isSuperAdmin && isAdmin && <MngProductNewEditForm afterSavebranch={afterSavebranch} />}
+      {!isSuperAdmin && !isAdmin && <MngProductNewEditFormSale afterSavebranch={afterSavebranch} />}
+    </>
+  );
 
   return (
     <Container
@@ -175,11 +204,7 @@ export default function MngProductListView() {
         flexDirection: 'column',
       }}
     >
-      {isAdmin ? (
-        <MngProductNewEditForm afterSavebranch={afterSavebranch} />
-      ) : (
-        <MngProductNewEditFormSale afterSavebranch={afterSavebranch} />
-      )}
+      {renderEditForm}
 
       <Card
         sx={{

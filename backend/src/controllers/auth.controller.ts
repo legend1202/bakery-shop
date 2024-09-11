@@ -7,13 +7,13 @@ import { RequestError } from '../utils/globalErrorHandler';
 import {
   handleGetUsers,
   handleUserLogin,
+  handleUserLogout,
   handleAssignRole,
   handleUserDelete,
   handleUserCreation,
 } from '../services/user.services';
 
 import { DecodedToken } from '../types/req.type';
-import { userInfo } from 'os';
 
 export const create = async (
   req: Request & { userId?: DecodedToken['userId'] },
@@ -43,6 +43,23 @@ export const login = async (req: Request, res: Response) => {
     return sendResponse(res, 200, 'Login Successfully', {
       user: { id, firstName, lastName, email, role, branchId },
       JWT_token: token,
+    });
+  } catch (error) {
+    throw new RequestError(`${error}`, 500);
+  }
+};
+
+export const logout = async (
+  req: Request & { userId?: DecodedToken['userId'] },
+  res: Response
+) => {
+  const session: ClientSession = req.session!;
+
+  try {
+    const userId = req.userId;
+    const user = await handleUserLogout(userId, session);
+    return sendResponse(res, 200, 'Logout Successfully', {
+      user,
     });
   } catch (error) {
     throw new RequestError(`${error}`, 500);

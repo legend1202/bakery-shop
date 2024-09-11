@@ -17,7 +17,7 @@ export type IMSupply = {
   supplyDetails?: ISupply;
   quantity: number;
   bio?: string;
-  status?: string;
+  status?: number;
   createdAt?: string;
 };
 

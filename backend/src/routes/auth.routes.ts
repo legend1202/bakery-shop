@@ -4,6 +4,7 @@ import { verifyAdmin } from '../middleware/role.middleware';
 
 import {
   login,
+  logout,
   create,
   getUsers,
   assignRole,
@@ -25,6 +26,13 @@ router.post(
   '/login',
   withTransaction(errorWrap(login, 'Could not login user'))
 );
+
+router.get(
+  '/logout',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  withTransaction(errorWrap(logout, 'Could not login user'))
+);
+
 router.post(
   '/delete',
   errorWrap(verifyToken, 'Could not verify JWT token'),

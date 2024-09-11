@@ -10,6 +10,11 @@ import {
   getMngProductsByUser,
 } from '../controllers/mng.product.controller';
 
+import {
+  getMngCustomerOrderByUser,
+  mngcreateCustomerOrder,
+} from '../controllers/customerOrder.controller';
+
 import { errorWrap } from '../utils/error.utils';
 
 import { withTransaction } from '../utils/transactionHelper';
@@ -34,6 +39,12 @@ router.post(
   errorWrap(mngcreateSupply, 'Could not create branch')
 );
 
+router.post(
+  '/custom_order/register',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  errorWrap(mngcreateCustomerOrder, 'Could not create Customer Order')
+);
+
 router.get(
   '/product/get-products-by-user',
   errorWrap(verifyToken, 'Could not verify JWT token'),
@@ -41,12 +52,16 @@ router.get(
 );
 
 router.get(
+  '/custom_order/get-products-by-user',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  withTransaction(
+    errorWrap(getMngCustomerOrderByUser, 'Could not get Products')
+  )
+);
+
+router.get(
   '/product/get-products',
   errorWrap(verifyToken, 'Could not verify JWT token'),
-  errorWrap(
-    verifyAdmin,
-    `Admin can create branches only. This user can't get branches`
-  ),
   withTransaction(errorWrap(getMngProducts, 'Could not get Products'))
 );
 

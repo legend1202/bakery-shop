@@ -10,6 +10,7 @@ import {
 import { RequestError } from '../utils/globalErrorHandler';
 
 import { Branches, BranchesModel } from '../models/branch.model';
+import { UsersModel } from '../models/user.model';
 
 export const handleBranchCreation = async (
   branch: Partial<Branches> & Document,
@@ -39,9 +40,14 @@ export const handleGetBranches = async (
   userId?: string,
   session?: ClientSession
 ): Promise<Branches[]> => {
-  const branches = await BranchesModel.find({ userId });
-
-  return branches;
+  const userData = await UsersModel.findOne({ id: userId });
+  if (userData?.role === 'ADMIN') {
+    const branches = await BranchesModel.find({ userId });
+    return branches;
+  } else {
+    const branches = await BranchesModel.find();
+    return branches;
+  }
 };
 
 export const handleUpdateBranches = async (

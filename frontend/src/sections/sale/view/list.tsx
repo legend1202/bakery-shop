@@ -11,16 +11,23 @@ import {
 
 import { useTranslate } from 'src/locales';
 import { SaleDelete, useGetSaleListsByUser } from 'src/api/sale';
+import { useGetInventoryOfBranchByUser } from 'src/api/inventory';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-import { ISale } from 'src/types/sale';
+import { ISale, IMSale } from 'src/types/sale';
 
 import MngProductNewEditForm from '../sale-new-edit-form';
-import { RenderCellBio, RenderCellProduct, RenderCellQuantity } from '../sale-list-item';
+import {
+  RenderCellBio,
+  RenderCellPrice,
+  RenderCellProduct,
+  RenderCellQuantity,
+} from '../sale-list-item';
 
 const HIDE_COLUMNS = {
   category: false,
@@ -39,7 +46,11 @@ export default function SaleMngView() {
 
   const { sales, salesLoading } = useGetSaleListsByUser();
 
+  const { inventory } = useGetInventoryOfBranchByUser();
+
   const [tableData, setTableData] = useState<ISale[]>([]);
+
+  const [currentInventory, setCurrentInventory] = useState(0);
 
   const [reset, setReset] = useState(false);
 
@@ -48,20 +59,28 @@ export default function SaleMngView() {
 
   useEffect(() => {
     if (sales) {
-      console.log(sales);
       setTableData(sales);
     }
   }, [sales]);
 
+  useEffect(() => {
+    if (inventory) {
+      setCurrentInventory(inventory);
+    }
+  }, [inventory]);
+
   const afterSavebranch = async (newProduct: ISale) => {
     enqueueSnackbar('Created Successfully');
     setTableData([...tableData, newProduct]);
+    setCurrentInventory(currentInventory - newProduct.quantity);
   };
 
-  const handleDeleteRow = async (id: string) => {
-    const updateData = { id };
+  const handleDeleteRow = async (row: IMSale) => {
+    const updateData = { id: row.id };
     const result = await SaleDelete(updateData);
     if (result.data.success) {
+      console.log(result.data.result);
+      setCurrentInventory(currentInventory + row.quantity);
       enqueueSnackbar(t('Deleted'));
       const updatedProducts = tableData.filter((product) => product.id !== result.data.result.id);
       setTableData([...updatedProducts]);
@@ -87,6 +106,12 @@ export default function SaleMngView() {
       renderCell: (params) => <RenderCellQuantity params={params} />,
     },
     {
+      field: 'price',
+      headerName: 'Price',
+      minWidth: 220,
+      renderCell: (params) => <RenderCellPrice params={params} />,
+    },
+    {
       field: 'bio',
       headerName: 'Bio',
       minWidth: 280,
@@ -107,7 +132,7 @@ export default function SaleMngView() {
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
           label="Delete"
-          onClick={() => handleDeleteRow(params.row.id)}
+          onClick={() => handleDeleteRow(params.row)}
         />,
       ],
     },
@@ -127,6 +152,35 @@ export default function SaleMngView() {
         flexDirection: 'column',
       }}
     >
+      <CustomBreadcrumbs
+        heading="Sales"
+        links={[
+          {
+            name: 'Saleperson',
+          },
+          {
+            name: 'Sales',
+          },
+          {
+            name: 'List',
+          },
+        ]}
+        action={
+          <Card
+            sx={{
+              padding: 1,
+              flexGrow: 1,
+              display: 'flex',
+              flexDirection: 'row',
+            }}
+          >
+            Inventory: {currentInventory}
+          </Card>
+        }
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
       <MngProductNewEditForm afterSavebranch={afterSavebranch} />
 
       <Card

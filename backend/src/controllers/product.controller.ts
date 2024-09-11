@@ -31,10 +31,15 @@ export const create = async (
     );
     const branchData = await BranchesModel.findOne({ id: newProduct.branchId });
     return sendResponse(res, 201, 'Created Branch Successfully', {
-      id: newProduct.id,
       branchDetails: branchData,
+      id: newProduct.id,
+      branchId: newProduct.id,
+      imageUrls: newProduct.imageUrls,
+      userId: newProduct.userId,
       name: newProduct.name,
       price: newProduct.price,
+      code: newProduct.code,
+      size: newProduct.size,
       bio: newProduct.bio,
     });
   } catch (error) {
@@ -84,10 +89,22 @@ export const updateProduct = async (req: Request, res: Response) => {
   const session: ClientSession = req.session!;
 
   try {
-    const { branch } = req.body;
-    const updatedUser = await handleUpdateProducts(branch, session);
-    return sendResponse(res, 201, 'Branch updated', {
-      ...updatedUser,
+    const { product } = req.body;
+    const updatedUser = await handleUpdateProducts(product, session);
+    const branchData = await BranchesModel.findOne({
+      id: updatedUser.branchId,
+    });
+    return sendResponse(res, 201, 'Updated Branch Successfully', {
+      branchDetails: branchData,
+      id: updatedUser.id,
+      branchId: updatedUser.id,
+      imageUrls: updatedUser.imageUrls,
+      userId: updatedUser.userId,
+      name: updatedUser.name,
+      price: updatedUser.price,
+      code: updatedUser.code,
+      size: updatedUser.size,
+      bio: updatedUser.bio,
     });
   } catch (error) {
     throw new RequestError(`${error}`, 500);

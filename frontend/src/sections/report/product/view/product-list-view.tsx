@@ -18,6 +18,7 @@ import { paths } from 'src/routes/paths';
 
 import { useGetBranchLists } from 'src/api/branch';
 import { useGetMngProductLists } from 'src/api/product';
+import { useGetInventoryOfBranchByUser } from 'src/api/inventory';
 
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
@@ -43,7 +44,7 @@ const TABLE_HEAD = [
   { id: 'productId', label: 'Product' },
   { id: 'branchId', label: 'Branch' },
   { id: 'quantity', label: 'Quantity' },
-  { id: 'createDate', label: 'Date' },
+  { id: 'price', label: 'Price' },
   { id: 'status', label: 'Status' },
   { id: 'bio', label: 'Bio', align: 'center' },
 ];
@@ -55,6 +56,8 @@ export default function ProductListView() {
   const settings = useSettingsContext();
 
   const { branches } = useGetBranchLists();
+
+  const { inventory } = useGetInventoryOfBranchByUser();
 
   const { products } = useGetMngProductLists();
 
@@ -102,36 +105,87 @@ export default function ProductListView() {
     }
   }, [values, products]);
 
-  const getTotalQuantity = () => sumBy(tableData, 'amount');
-
   const getTotalAmountPrice = () =>
     sumBy(tableData, (product) => {
-      if (product.quantity && product.quantity !== undefined) {
-        return product.quantity;
+      if (
+        product.price &&
+        product.status === 1 &&
+        product.quantity &&
+        product.quantity !== undefined
+      ) {
+        return product.price;
       }
-      return 0;
-    });
-
-  const confirmedAmountProducts = () =>
-    sumBy(tableData, (product) => {
-      if (product.quantity > 0 && product.status) {
-        return product.quantity;
+      if (
+        product.status === 1 &&
+        product.quantity &&
+        product.quantity !== undefined &&
+        product?.productDetails?.price
+      ) {
+        return product.quantity * product.productDetails.price;
       }
       return 0;
     });
 
   const deliveryAmountProducts = () =>
     sumBy(tableData, (product) => {
-      if (product.quantity < 0) {
-        return product.quantity;
+      if (product.quantity < 0 && product.status === 1) {
+        return Math.abs(product.quantity);
       }
       return 0;
     });
 
-  const pendingTotalAmountPrice = () =>
+  const deliveryPriceProducts = () =>
     sumBy(tableData, (product) => {
-      if (product.quantity && !product.status) {
-        return product.quantity;
+      if (product.quantity < 0 && product.price && product.status === 1) {
+        return Math.abs(product.price);
+      }
+      if (
+        product.quantity < 0 &&
+        !product.price &&
+        product.status === 1 &&
+        product?.productDetails?.price
+      ) {
+        return Math.abs(product.quantity) * product.productDetails.price;
+      }
+      return 0;
+    });
+
+  const pendingTotalAmountProduct = () =>
+    sumBy(tableData, (product) => {
+      if (product.quantity < 0 && product.status === 0) {
+        return Math.abs(product.quantity);
+      }
+      return 0;
+    });
+
+  const pendingPriceProducts = () =>
+    sumBy(tableData, (product) => {
+      if (product.quantity < 0 && product.price && product.status === 0) {
+        return Math.abs(product.price);
+      }
+      if (
+        product.quantity < 0 &&
+        !product.price &&
+        product.status === 0 &&
+        product?.productDetails?.price
+      ) {
+        return Math.abs(product.quantity) * product.productDetails.price;
+      }
+      return 0;
+    });
+
+  const cancellTotalAmountProduct = () =>
+    sumBy(tableData, (product) => {
+      if (product.quantity < 0 && product.status === 2) {
+        return Math.abs(product.quantity);
+      }
+      return 0;
+    });
+
+  const cancellPriceProducts = () =>
+    sumBy(tableData, (product) => {
+      if (product.price && product.quantity < 0 && product.status === 2) {
+        return Math.abs(product.price);
       }
       return 0;
     });
@@ -192,7 +246,7 @@ export default function ProductListView() {
           >
             <ProductAnalytic
               title="Total"
-              total={getTotalQuantity()}
+              total={inventory}
               percent={100}
               price={getTotalAmountPrice()}
               icon="solar:bill-list-bold-duotone"
@@ -200,20 +254,28 @@ export default function ProductListView() {
             />
 
             <ProductAnalytic
-              title="Confirmed"
-              total={getTotalQuantity()}
+              title="Delivered"
+              total={deliveryAmountProducts()}
               percent={100}
-              price={confirmedAmountProducts()}
-              icon="solar:file-check-bold-duotone"
+              price={deliveryPriceProducts()}
+              icon="solar:sort-by-time-bold-duotone"
               color={theme.palette.success.main}
             />
 
             <ProductAnalytic
               title="Pending"
-              total={deliveryAmountProducts()}
+              total={pendingTotalAmountProduct()}
               percent={100}
-              price={pendingTotalAmountPrice()}
+              price={pendingPriceProducts()}
               icon="solar:sort-by-time-bold-duotone"
+              color={theme.palette.warning.main}
+            />
+            <ProductAnalytic
+              title="Cancelled"
+              total={cancellTotalAmountProduct()}
+              percent={100}
+              price={cancellPriceProducts()}
+              icon="solar:file-check-bold-duotone"
               color={theme.palette.warning.main}
             />
           </Stack>

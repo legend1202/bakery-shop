@@ -3,10 +3,12 @@ import express from 'express';
 import mngRoutes from './mng.routes';
 import saleRoutes from './sale.routes';
 import authRoutes from './auth.routes';
+import uploadRoutes from './upload.routes';
 import branchRoutes from './branch.routes';
 import supplyRoutes from './supply.routes';
 import productRoutes from './product.routes';
 import attendanceRoutes from './attendance.routes';
+import inventoryRoutes from './inventory.routes';
 
 import { sendResponse } from '../utils/response.utils';
 
@@ -16,9 +18,11 @@ router.get('/', (req, res) => sendResponse(res, 200, `API is running`));
 router.use('/api/mng', mngRoutes);
 router.use('/api/sale', saleRoutes);
 router.use('/api/auth', authRoutes);
+router.use('/api/upload', uploadRoutes);
 router.use('/api/branch', branchRoutes);
 router.use('/api/supply', supplyRoutes);
 router.use('/api/product', productRoutes);
 router.use('/api/attendance', attendanceRoutes);
+router.use('/api/inventory', inventoryRoutes);
 
 export default router;

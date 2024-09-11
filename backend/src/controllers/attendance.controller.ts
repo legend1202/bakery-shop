@@ -20,12 +20,7 @@ export const createAttendance = async (
   const session: ClientSession = req.session!;
 
   try {
-    const { product } = req.body;
-    const newProduct = await handleAttendanceCreation(
-      product,
-      req.userId,
-      session
-    );
+    const newProduct = await handleAttendanceCreation(req.userId, session);
     return sendResponse(res, 201, 'Created Attendance Successfully', {
       attendances: newProduct,
     });

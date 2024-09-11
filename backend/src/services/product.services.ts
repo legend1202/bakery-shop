@@ -18,19 +18,12 @@ export const handleProductCreation = async (
   userId?: string,
   session?: ClientSession
 ): Promise<Products> => {
-  const { branchId, name, price, bio } = product;
+  const { name } = product;
 
   if (!userId) throw new RequestError('Creator name must not be empty', 400);
   if (!name) throw new RequestError('Proudct name must not be empty', 400);
 
-  const newProduct = await createNewProduct(
-    branchId,
-    userId,
-    name,
-    price,
-    bio,
-    session
-  );
+  const newProduct = await createNewProduct(product, userId, session);
 
   return newProduct;
 };
@@ -94,19 +87,17 @@ export const handleGetProducts = async (
 };
 
 export const handleUpdateProducts = async (
-  branch: Partial<Products> & Document,
+  product: Partial<Products> & Document,
   session?: ClientSession
 ): Promise<Products> => {
-  const { id, name, price, bio } = branch;
+  const { id, name, price, bio } = product;
 
   if (!id) throw new RequestError('Branch Id must not be empty', 400);
   if (!name) throw new RequestError('Branch name must not be empty', 400);
   if (!price) throw new RequestError('Branch location must not be empty', 400);
 
   const updatedBranch = await findByIdAndUpdateProductDocument(id, {
-    name: name,
-    price: price,
-    bio: bio,
+    ...product,
   });
 
   if (updatedBranch) {
@@ -125,32 +116,27 @@ export async function findOneProduct(
 }
 
 export const createNewProduct = async (
-  branchId?: string,
+  product: Partial<Products> & Document,
   userId?: string,
-  name?: string,
-  price?: number,
-  bio?: string,
   session?: ClientSession
 ): Promise<Products> => {
+  const { branchId } = product;
+
   if (branchId) {
     const newProduct = new ProductsModel({
-      branchId,
       userId,
-      name,
-      price,
-      bio,
+      ...product,
     });
 
     await newProduct.save({ session });
     return newProduct;
   } else {
     const userData = await UsersModel.findOne({ id: userId });
+
     const newProduct = new ProductsModel({
-      branchId: userData?.branchId,
+      ...product,
       userId,
-      name,
-      price,
-      bio,
+      branchId: userData?.branchId,
     });
 
     await newProduct.save({ session });

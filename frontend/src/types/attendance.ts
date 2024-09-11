@@ -13,6 +13,13 @@ export type ITAttendance = {
   userId: string;
   userDetails: IUserItem;
   branchDetails: IBranch;
-  bio?: string;
-  createdAt?: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ResultItem = {
+  userId: string;
+  count: number;
+  userName: string;
+  branchName: string;
 };

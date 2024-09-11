@@ -1,14 +1,20 @@
 import express, { Express } from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import path from 'path';
+import cors from 'cors';
+
 import { handleGlobalError } from './src/utils/globalErrorHandler';
+
 import routes from './src/routes';
 
 dotenv.config();
 const app: Express = express();
 const port = process.env.PORT;
 const MONGODB_URI = process.env.MONGODB_URI;
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads/')));
+app.use('/uploads', express.static(path.join(__dirname, './uploads/')));
 
 if (!MONGODB_URI) {
   throw new Error(

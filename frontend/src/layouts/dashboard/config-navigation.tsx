@@ -93,15 +93,42 @@ export function useNavData() {
         ],
       },
       {
+        subheader: t('Inventory'),
+        roles: ['ADMIN'],
+        items: [
+          // product
+          {
+            title: t('Product'),
+            path: paths.inventory.product.list,
+            icon: ICONS.user,
+            roles: ['ADMIN', 'SALESPERSON'],
+          },
+          // Supply
+          {
+            title: t('Supply'),
+            path: paths.inventory.supply.list,
+            icon: ICONS.user,
+            roles: ['ADMIN'],
+          },
+        ],
+      },
+      {
         subheader: t('Order'),
-        roles: ['ADMIN', 'SALESPERSON'],
+        roles: ['ADMIN', 'SALESPERSON', 'SUPERADMIN'],
         items: [
           // product
           {
             title: t('Product'),
             path: paths.mng.product.list,
             icon: ICONS.user,
-            roles: ['ADMIN', 'SALESPERSON'],
+            roles: ['ADMIN', 'SALESPERSON', 'SUPERADMIN'],
+          },
+          // Custome Product Order
+          {
+            title: t('Custom Order'),
+            path: paths.mng.customOrder.list,
+            icon: ICONS.user,
+            roles: ['ADMIN', 'SALESPERSON', 'SUPERADMIN'],
           },
           // Supply
           {
@@ -123,42 +150,35 @@ export function useNavData() {
             icon: ICONS.user,
             roles: ['SALESPERSON'],
           },
-          // attendance
-          {
-            title: t('Attendance'),
-            path: paths.attendance.list,
-            icon: ICONS.user,
-            roles: ['SALESPERSON'],
-          },
         ],
       },
       {
         subheader: t('Report'),
-        roles: ['ADMIN'],
+        roles: ['ADMIN', 'SUPERADMIN'],
         items: [
           // sale
           {
             title: t('Product'),
             path: paths.report.product,
             icon: ICONS.user,
-            roles: ['ADMIN'],
+            roles: ['ADMIN', 'SUPERADMIN'],
           },
           // sale
           {
             title: t('Supply'),
             path: paths.report.supply,
             icon: ICONS.user,
-            roles: ['ADMIN'],
+            roles: ['ADMIN', 'SUPERADMIN'],
           },
           {
             title: t('Sale'),
             path: paths.report.sale,
             icon: ICONS.user,
-            roles: ['ADMIN'],
+            roles: ['ADMIN', 'SUPERADMIN'],
           },
           // attendance
           {
-            title: t('Attendance'),
+            title: t('Payroll'),
             path: paths.report.attendance,
             icon: ICONS.user,
             roles: ['ADMIN'],

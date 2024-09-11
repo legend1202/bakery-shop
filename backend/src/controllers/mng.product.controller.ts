@@ -65,11 +65,14 @@ export const getMngProductsByUser = async (
   }
 };
 
-export const getMngProducts = async (req: Request, res: Response) => {
+export const getMngProducts = async (
+  req: Request & { userId?: DecodedToken['userId'] },
+  res: Response
+) => {
   const session: ClientSession = req.session!;
 
   try {
-    const products = await handleGetMngProducts(session);
+    const products = await handleGetMngProducts(req.userId, session);
     return sendResponse(res, 200, 'Get Products', {
       products,
     });
@@ -83,9 +86,12 @@ export const deleteMngProduct = async (req: Request, res: Response) => {
 
   try {
     const { product } = req.body;
-    await handleDeleteMngProduct(product.id, session);
-    return sendResponse(res, 201, 'user deleted', {
-      id: product.id,
+    const updatedProductOrder = await handleDeleteMngProduct(
+      product.id,
+      session
+    );
+    return sendResponse(res, 201, 'Role assigned', {
+      updatedProductOrder,
     });
   } catch (error) {
     throw new RequestError(`${error}`, 500);

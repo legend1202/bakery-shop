@@ -9,6 +9,7 @@ const ROOTS = {
   SALE: '/sale',
   ATTENDANCE: '/attendance',
   MNG: '/mng',
+  INVENTORY: '/inventory',
   REPORT: '/report',
 };
 
@@ -55,12 +56,29 @@ export const paths = {
     create: `${ROOTS.SUPPLY}/create`,
     list: `${ROOTS.SUPPLY}/list`,
   },
+
+  inventory: {
+    root: `${ROOTS.INVENTORY}`,
+    product: {
+      root: `${ROOTS.INVENTORY}/product`,
+      list: `${ROOTS.INVENTORY}/product/list`,
+    },
+    supply: {
+      root: `${ROOTS.INVENTORY}/supply`,
+      list: `${ROOTS.INVENTORY}/supply/list`,
+    },
+  },
   mng: {
     root: `${ROOTS.MNG}`,
     product: {
       root: `${ROOTS.MNG}/product`,
       create: `${ROOTS.MNG}/product/create`,
       list: `${ROOTS.SUPPLY}/product/list`,
+    },
+    customOrder: {
+      root: `${ROOTS.MNG}/custom_order`,
+      create: `${ROOTS.MNG}/custom_order/create`,
+      list: `${ROOTS.SUPPLY}/custom_order/list`,
     },
     supply: {
       root: `${ROOTS.MNG}/supply`,

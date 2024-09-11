@@ -1,24 +1,24 @@
 export function isAdminFn(inputValue: string) {
   let isAdmin = false;
-  if (inputValue === "ADMIN") {
+  if (inputValue === 'ADMIN') {
     isAdmin = true;
   }
 
   return isAdmin;
 }
 
-export function isFellesraadFn(inputValue: string) {
+export function isSuperAdminFn(inputValue: string) {
   let isAdmin = false;
-  if (inputValue === "FELLESRAAD") {
+  if (inputValue === 'SUPERADMIN') {
     isAdmin = true;
   }
 
   return isAdmin;
 }
 
-export function isCompanyFn(inputValue: string) {
+export function isSalePersonFn(inputValue: string) {
   let isAdmin = false;
-  if (inputValue === "COMPANY") {
+  if (inputValue === 'SALESPERSON') {
     isAdmin = true;
   }
 

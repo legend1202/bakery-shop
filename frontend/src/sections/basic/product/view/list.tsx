@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
+import { Button, Dialog, DialogTitle } from '@mui/material';
 import {
   DataGrid,
   GridColDef,
@@ -9,22 +10,28 @@ import {
   GridColumnVisibilityModel,
 } from '@mui/x-data-grid';
 
-import { isAdminFn } from 'src/utils/role-check';
+import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
-import { useAuthContext } from 'src/auth/hooks';
 import { ProductDelete, useGetProductListsByUser } from 'src/api/product';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import { IProduct } from 'src/types/product';
 
-import ProductNewEditForm from '../product-new-edit-form';
-import ProductNewEditFormSale from '../product-new-edit-form-sale';
-import { RenderCellBio, RenderCellName, RenderCellBranch } from '../product-list-item';
+import OwnerForm from '../product-new-edit-form-modal';
+import {
+  RenderCellBio,
+  RenderCellCode,
+  RenderCellSize,
+  RenderCellName,
+  RenderCellPrice,
+  RenderCellBranch,
+} from '../product-list-item';
 
 const HIDE_COLUMNS = {
   category: false,
@@ -39,15 +46,17 @@ export default function ProductListView() {
 
   const settings = useSettingsContext();
 
-  const { user } = useAuthContext();
+  const [openForm, setOpenForm] = useState<boolean>(false);
 
-  const isAdmin = isAdminFn(user?.role);
+  const [currentProduct, setCurrentProduct] = useState<IProduct>({});
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { products, productsLoading } = useGetProductListsByUser();
+  const { products } = useGetProductListsByUser();
 
   const [tableData, setTableData] = useState<IProduct[]>([]);
+
+  const [tableLoading, settableLoading] = useState<boolean>(true);
 
   const [reset, setReset] = useState(false);
 
@@ -57,15 +66,17 @@ export default function ProductListView() {
   useEffect(() => {
     if (products) {
       setTableData(products);
+      settableLoading(false);
     }
   }, [products]);
 
-  const afterSavebranch = async (newProduct: IProduct) => {
-    enqueueSnackbar('Created Successfully');
-    setTableData([...tableData, newProduct]);
-  };
+  const handleEditRow = useCallback((data: IProduct) => {
+    setCurrentProduct(data);
+    setOpenForm(true);
+  }, []);
 
   const handleDeleteRow = async (id: string) => {
+    settableLoading(true);
     const updateData = { id };
     const result = await ProductDelete(updateData);
     if (result.data.success) {
@@ -76,31 +87,44 @@ export default function ProductListView() {
     } else {
       enqueueSnackbar('Update did not success');
     }
+    settableLoading(false);
   };
 
   const columns: GridColDef[] = [
     {
       field: 'product',
       headerName: 'Product',
-      minWidth: 340,
+      minWidth: 240,
       renderCell: (params) => <RenderCellName params={params} />,
     },
     {
       field: 'branch',
       headerName: 'Branch',
-      minWidth: 340,
+      minWidth: 240,
       renderCell: (params) => <RenderCellBranch params={params} />,
     },
-    /* {
+    {
+      field: 'code',
+      headerName: 'Code',
+      minWidth: 140,
+      renderCell: (params) => <RenderCellCode params={params} />,
+    },
+    {
+      field: 'size',
+      headerName: 'Size',
+      minWidth: 140,
+      renderCell: (params) => <RenderCellSize params={params} />,
+    },
+    {
       field: 'price',
       headerName: 'Price',
-      minWidth: 200,
+      minWidth: 140,
       renderCell: (params) => <RenderCellPrice params={params} />,
-    }, */
+    },
     {
       field: 'bio',
       headerName: 'Bio',
-      minWidth: 350,
+      minWidth: 140,
       renderCell: (params) => <RenderCellBio params={params} />,
     },
     {
@@ -116,6 +140,12 @@ export default function ProductListView() {
       getActions: (params) => [
         <GridActionsCellItem
           showInMenu
+          icon={<Iconify icon="solar:pen-bold" />}
+          label="Edit"
+          onClick={() => handleEditRow(params.row)}
+        />,
+        <GridActionsCellItem
+          showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
           label="Delete"
           onClick={() => handleDeleteRow(params.row.id)}
@@ -129,57 +159,109 @@ export default function ProductListView() {
       .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
       .map((column) => column.field);
 
-  return (
-    <Container
-      maxWidth={settings.themeStretch ? false : 'lg'}
-      sx={{
-        flexGrow: 1,
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      {isAdmin ? (
-        <ProductNewEditForm afterSavebranch={afterSavebranch} />
-      ) : (
-        <ProductNewEditFormSale afterSavebranch={afterSavebranch} />
-      )}
+  const handleUpdateData = (updatedResult: IProduct) => {
+    settableLoading(true);
+    setTableData([]);
+    setCurrentProduct({});
+    console.log(updatedResult);
+    const unchangedRow = tableData.filter((row) => row.id !== updatedResult.id);
 
-      <Card
+    const updatedRow = [...unchangedRow, updatedResult];
+    setTableData(updatedRow);
+    setOpenForm(false);
+    settableLoading(false);
+  };
+
+  const handleNewOwnerPopOver = () => {
+    setOpenForm(true);
+  };
+
+  const onCloseForm = () => {
+    setCurrentProduct({});
+    setOpenForm(false);
+  };
+
+  return (
+    <>
+      <Container
+        maxWidth={settings.themeStretch ? false : 'lg'}
         sx={{
-          mt: { xs: 2, md: 1 },
-          height: { xs: 800, md: 2 },
-          flexGrow: { md: 1 },
-          display: { md: 'flex' },
-          flexDirection: { md: 'column' },
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
-        <DataGrid
-          sx={{
-            px: { xs: 1, md: 2 },
-          }}
-          rows={tableData}
-          columns={columns}
-          loading={productsLoading}
-          getRowHeight={() => 'auto'}
-          pageSizeOptions={[5, 10, 25]}
-          initialState={{
-            pagination: {
-              paginationModel: { pageSize: 10 },
+        <CustomBreadcrumbs
+          heading="List"
+          links={[
+            { name: 'Dashboard', href: paths.dashboard.root },
+            {
+              name: 'Product',
+              href: paths.product.list,
             },
-          }}
-          columnVisibilityModel={columnVisibilityModel}
-          onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-          slots={{
-            noRowsOverlay: () => <EmptyContent title="No Data" />,
-            noResultsOverlay: () => <EmptyContent title="No results found" />,
-          }}
-          slotProps={{
-            columnsPanel: {
-              getTogglableColumns,
+            { name: 'List' },
+          ]}
+          action={
+            <Button onClick={handleNewOwnerPopOver} variant="contained">
+              New Product
+            </Button>
+          }
+          sx={{
+            mb: {
+              xs: 3,
+              md: 5,
             },
           }}
         />
-      </Card>
-    </Container>
+
+        <Card
+          sx={{
+            mt: { xs: 2, md: 1 },
+            height: { xs: 800, md: 2 },
+            flexGrow: { md: 1 },
+            display: { md: 'flex' },
+            flexDirection: { md: 'column' },
+          }}
+        >
+          <DataGrid
+            sx={{
+              px: { xs: 1, md: 2 },
+            }}
+            rows={tableData}
+            columns={columns}
+            loading={tableLoading}
+            getRowHeight={() => 'auto'}
+            pageSizeOptions={[5, 10, 25]}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 10 },
+              },
+            }}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+            slots={{
+              noRowsOverlay: () => <EmptyContent title="No Data" />,
+              noResultsOverlay: () => <EmptyContent title="No results found" />,
+            }}
+            slotProps={{
+              columnsPanel: {
+                getTogglableColumns,
+              },
+            }}
+          />
+        </Card>
+      </Container>
+      <Dialog fullWidth maxWidth="md" open={openForm} onClose={onCloseForm}>
+        <DialogTitle sx={{ minHeight: 76 }}>
+          {openForm && <> {currentProduct?.id ? 'Edit Product' : 'Add Product'}</>}
+        </DialogTitle>
+
+        <OwnerForm
+          currentProduct={currentProduct}
+          handleUpdateData={handleUpdateData}
+          onClose={onCloseForm}
+        />
+      </Dialog>
+    </>
   );
 }

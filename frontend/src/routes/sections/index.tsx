@@ -9,6 +9,7 @@ import { adminRoutes } from './admin';
 import { reportRoutes } from './report';
 import { HomePage, mainRoutes } from './main';
 import { dashboardRoutes } from './dashboard';
+import { inventoryRoutes } from './inventory';
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +40,8 @@ export default function Router() {
     ...mngRoutes,
 
     ...reportRoutes,
+
+    ...inventoryRoutes,
 
     // No match 404
     { path: '*', element: <Navigate to="/404" replace /> },

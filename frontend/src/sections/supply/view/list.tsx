@@ -54,7 +54,8 @@ export default function MngSupplyListView() {
 
   useEffect(() => {
     if (supplies) {
-      setTableData(supplies);
+      const filteredProducts = supplies.filter((product) => product.quantity < 0);
+      setTableData(filteredProducts);
     }
   }, [supplies]);
 

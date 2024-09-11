@@ -49,11 +49,34 @@ export const handleGetSaleByUser = async (
     ]);
 
     return sales;
-  } else {
+  } else if (existingUser?.role === 'SALESPERSON') {
     const sales = await SalesModel.aggregate([
       {
         $match: { userId },
       },
+      {
+        $lookup: {
+          from: ProductsModel.collection.name,
+          localField: 'productId',
+          foreignField: 'id',
+          as: 'productDetails',
+        },
+      },
+      { $unwind: '$productDetails' },
+      {
+        $lookup: {
+          from: BranchesModel.collection.name,
+          localField: 'branchId',
+          foreignField: 'id',
+          as: 'branchDetails',
+        },
+      },
+      { $unwind: '$branchDetails' },
+    ]);
+
+    return sales;
+  } else {
+    const sales = await SalesModel.aggregate([
       {
         $lookup: {
           from: ProductsModel.collection.name,

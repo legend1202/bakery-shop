@@ -1,11 +1,18 @@
 import { IBranch } from './branch';
 
+export type IUploadUrlType = string[];
+
+export type IImageType = File[];
+
 export type IProduct = {
   id?: string;
+  imageUrls?: string[];
   branchDetails?: IBranch;
   branchId?: string;
-  name: string;
-  price?: number;
+  name?: string;
+  code?: string;
+  size?: string;
+  price?: number | 0;
   bio?: string;
 };
 
@@ -16,8 +23,11 @@ export type IMProduct = {
   branchDetails?: IBranch;
   productDetails?: IProduct;
   quantity: number;
+  price: number | 0;
+  address?: string;
+  deliverDate?: string;
   bio?: string;
-  status?: string;
+  status?: number;
   createdAt?: string;
 };
 
@@ -26,6 +36,7 @@ export type IMTProduct = {
   productId: string;
   branchDetails?: IBranch;
   productDetails?: IProduct;
+  price?: number;
   quantity: number;
   bio?: string;
   createdAt?: string;

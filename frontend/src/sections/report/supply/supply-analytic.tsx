@@ -4,7 +4,7 @@ import { alpha } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { fCurrency, fShortenNumber } from 'src/utils/format-number';
+import { fShortenNumber } from 'src/utils/format-number';
 
 import Iconify from 'src/components/iconify';
 
@@ -61,7 +61,7 @@ export default function ProductAnalytic({ title, total, icon, color, percent, pr
           {fShortenNumber(total)} products
         </Box>
 
-        <Typography variant="subtitle2">{fCurrency(price)}</Typography>
+        {/* <Typography variant="subtitle2">{fCurrency(price)}</Typography> */}
       </Stack>
     </Stack>
   );

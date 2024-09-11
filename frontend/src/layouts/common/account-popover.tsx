@@ -9,9 +9,9 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
-// import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { UserLogout } from 'src/api/admin';
 import { useAuthContext } from 'src/auth/hooks';
 
 import { varHover } from 'src/components/animate';
@@ -50,6 +50,7 @@ export default function AccountPopover() {
 
   const handleLogout = async () => {
     try {
+      await UserLogout();
       await logout();
       popover.onClose();
       router.replace('/');

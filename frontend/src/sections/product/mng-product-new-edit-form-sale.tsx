@@ -55,7 +55,8 @@ export default function MngProductNewEditFormSale({ afterSavebranch }: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const saveData = { ...values };
+      const quantity = -values.quantity;
+      const saveData = { ...values, quantity };
       const saveResults: any = await createMngProduct(saveData);
       if (saveResults.data?.success) {
         reset();

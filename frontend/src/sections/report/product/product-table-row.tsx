@@ -1,10 +1,11 @@
+import { Stack } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fDate, fTime } from 'src/utils/format-time';
+import Label from 'src/components/label/label';
 
 import { IMProduct } from 'src/types/product';
 
@@ -16,8 +17,32 @@ type Props = {
   onSelectRow: VoidFunction;
 };
 
+const getStatusText = (status?: number, quantity?: number) => {
+  if (status === 0) {
+    return 'Pending';
+  }
+  if (status === 1) {
+    if (quantity && quantity > 0) {
+      return 'Stored';
+    }
+    if (quantity && quantity < 0) {
+      return 'Delivered';
+    }
+  }
+  return 'Cancelled';
+};
+
 export default function ProductTableRow({ row, selected, onSelectRow }: Props) {
-  const { productDetails, branchDetails, quantity, status, bio, createdAt } = row;
+  const { productDetails, branchDetails, quantity, price, status, bio } = row;
+
+  let orderPrice = 0;
+
+  if (price) {
+    orderPrice = price;
+    /* orderPrice = -quantity * (productDetails?.price ? productDetails?.price : 0); */
+  } else if (productDetails?.price !== undefined && productDetails?.price !== null) {
+    orderPrice = quantity * productDetails.price;
+  }
 
   return (
     <TableRow hover selected={selected}>
@@ -47,22 +72,24 @@ export default function ProductTableRow({ row, selected, onSelectRow }: Props) {
         />
       </TableCell>
 
-      <TableCell>{quantity}</TableCell>
+      <TableCell>{Math.abs(quantity)}</TableCell>
+      <TableCell>{Math.abs(orderPrice)}</TableCell>
 
       <TableCell>
-        <ListItemText
-          primary={fDate(createdAt)}
-          secondary={fTime(createdAt)}
-          primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-          secondaryTypographyProps={{
-            mt: 0.5,
-            component: 'span',
-            typography: 'caption',
-          }}
-        />
+        <Stack direction="row" alignItems="center" sx={{ py: 1, width: 1 }}>
+          <Label
+            variant="soft"
+            color={
+              (status === 1 && 'success') ||
+              (status === 2 && 'warning') ||
+              (status === 0 && 'default') ||
+              'default'
+            }
+          >
+            {getStatusText(status, quantity)}
+          </Label>
+        </Stack>
       </TableCell>
-
-      <TableCell>{status ? 'Confirmed' : 'Pending'}</TableCell>
 
       <TableCell align="center">{bio}</TableCell>
     </TableRow>

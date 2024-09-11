@@ -4,20 +4,18 @@ import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fDate, fTime } from 'src/utils/format-time';
-
-import { ITAttendance } from 'src/types/attendance';
+import { ResultItem } from 'src/types/attendance';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: ITAttendance;
+  row: ResultItem;
   selected: boolean;
   onSelectRow: VoidFunction;
 };
 
 export default function AttendanceTableRow({ row, selected, onSelectRow }: Props) {
-  const { userDetails, branchDetails, bio, createdAt } = row;
+  const { userName, branchName, count } = row;
 
   return (
     <TableRow hover selected={selected}>
@@ -30,7 +28,7 @@ export default function AttendanceTableRow({ row, selected, onSelectRow }: Props
           disableTypography
           primary={
             <Typography variant="body2" noWrap>
-              {userDetails?.firstName} {userDetails?.lastName}
+              {userName}
             </Typography>
           }
         />
@@ -41,7 +39,7 @@ export default function AttendanceTableRow({ row, selected, onSelectRow }: Props
           disableTypography
           primary={
             <Typography variant="body2" noWrap>
-              {branchDetails?.name}
+              {branchName}
             </Typography>
           }
         />
@@ -49,8 +47,7 @@ export default function AttendanceTableRow({ row, selected, onSelectRow }: Props
 
       <TableCell>
         <ListItemText
-          primary={fDate(createdAt)}
-          secondary={fTime(createdAt)}
+          primary={count * 200}
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           secondaryTypographyProps={{
             mt: 0.5,
@@ -59,8 +56,6 @@ export default function AttendanceTableRow({ row, selected, onSelectRow }: Props
           }}
         />
       </TableCell>
-
-      <TableCell align="center">{bio}</TableCell>
     </TableRow>
   );
 }

@@ -12,6 +12,7 @@ import { RequestError } from '../utils/globalErrorHandler';
 import { SuppliesModel } from '../models/supply.model';
 import { MngSuppiesModel, MngSupplies } from '../models/mng.supply.model';
 import { BranchesModel } from '../models/branch.model';
+import { UsersModel } from '../models/user.model';
 
 export const handleMngSupplyCreation = async (
   product: Partial<MngSupplies> & Document,
@@ -68,30 +69,55 @@ export const handleGetMngSupplyByUser = async (
       500
     );
   } else {
-    const products = await MngSuppiesModel.aggregate([
-      {
-        $match: { userId: userId },
-      },
-      {
-        $lookup: {
-          from: SuppliesModel.collection.name,
-          localField: 'supplyId',
-          foreignField: 'id',
-          as: 'supplyDetails',
+    const userData = await UsersModel.findOne({ id: userId });
+    if (userData?.role === 'SUPERADMIN') {
+      const products = await MngSuppiesModel.aggregate([
+        {
+          $lookup: {
+            from: SuppliesModel.collection.name,
+            localField: 'supplyId',
+            foreignField: 'id',
+            as: 'supplyDetails',
+          },
         },
-      },
-      { $unwind: '$supplyDetails' },
-      {
-        $lookup: {
-          from: BranchesModel.collection.name,
-          localField: 'branchId',
-          foreignField: 'id',
-          as: 'branchDetails',
+        { $unwind: '$supplyDetails' },
+        {
+          $lookup: {
+            from: BranchesModel.collection.name,
+            localField: 'branchId',
+            foreignField: 'id',
+            as: 'branchDetails',
+          },
         },
-      },
-      { $unwind: '$branchDetails' },
-    ]);
-    return products;
+        { $unwind: '$branchDetails' },
+      ]);
+      return products;
+    } else {
+      const products = await MngSuppiesModel.aggregate([
+        {
+          $match: { userId: userId },
+        },
+        {
+          $lookup: {
+            from: SuppliesModel.collection.name,
+            localField: 'supplyId',
+            foreignField: 'id',
+            as: 'supplyDetails',
+          },
+        },
+        { $unwind: '$supplyDetails' },
+        {
+          $lookup: {
+            from: BranchesModel.collection.name,
+            localField: 'branchId',
+            foreignField: 'id',
+            as: 'branchDetails',
+          },
+        },
+        { $unwind: '$branchDetails' },
+      ]);
+      return products;
+    }
   }
 };
 

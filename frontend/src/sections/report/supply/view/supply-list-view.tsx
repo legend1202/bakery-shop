@@ -102,36 +102,34 @@ export default function ReportSupplyView() {
     }
   }, [values, supplies]);
 
-  const getTotalQuantity = () => sumBy(tableData, 'amount');
-
-  const getTotalAmountPrice = () =>
+  const getTotalQuantity = () =>
     sumBy(tableData, (product) => {
-      if (product.quantity && product.quantity !== undefined) {
+      if (product.status && product.quantity && product.quantity !== undefined) {
         return product.quantity;
       }
       return 0;
     });
 
-  const confirmedAmountProducts = () =>
+  const getStoredQuantity = () =>
     sumBy(tableData, (product) => {
-      if (product.quantity > 0 && product.status) {
+      if (product.status && product.quantity && product.quantity > 0) {
         return product.quantity;
       }
       return 0;
     });
 
-  const deliveryAmountProducts = () =>
+  const pendingAmountProducts = () =>
     sumBy(tableData, (product) => {
-      if (product.quantity < 0) {
+      if (!product.status && product.quantity && product.quantity !== undefined) {
         return product.quantity;
       }
       return 0;
     });
 
-  const pendingTotalAmountPrice = () =>
+  const usedAmountProducts = () =>
     sumBy(tableData, (product) => {
-      if (product.quantity && !product.status) {
-        return product.quantity;
+      if (product.status && product.quantity && product.quantity < 0) {
+        return Math.abs(product.quantity);
       }
       return 0;
     });
@@ -194,26 +192,33 @@ export default function ReportSupplyView() {
               title="Total"
               total={getTotalQuantity()}
               percent={100}
-              price={getTotalAmountPrice()}
-              icon="solar:bill-list-bold-duotone"
-              color={theme.palette.info.main}
+              price={0}
+              icon="solar:sort-by-time-bold-duotone"
+              color={theme.palette.success.main}
             />
-
             <SupplyAnalytic
-              title="Confirmed"
-              total={getTotalQuantity()}
+              title="Stored"
+              total={getStoredQuantity()}
               percent={100}
-              price={confirmedAmountProducts()}
-              icon="solar:file-check-bold-duotone"
+              price={0}
+              icon="solar:sort-by-time-bold-duotone"
               color={theme.palette.success.main}
             />
 
             <SupplyAnalytic
               title="Pending"
-              total={deliveryAmountProducts()}
+              total={pendingAmountProducts()}
               percent={100}
-              price={pendingTotalAmountPrice()}
+              price={0}
               icon="solar:sort-by-time-bold-duotone"
+              color={theme.palette.warning.main}
+            />
+            <SupplyAnalytic
+              title="Used"
+              total={usedAmountProducts()}
+              percent={100}
+              price={0}
+              icon="solar:file-check-bold-duotone"
               color={theme.palette.warning.main}
             />
           </Stack>

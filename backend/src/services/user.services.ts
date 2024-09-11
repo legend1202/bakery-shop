@@ -14,6 +14,7 @@ import { RequestError, AuthenticationError } from '../utils/globalErrorHandler';
 import { Roles } from '../utils/constants';
 import { BranchesModel } from '../models/branch.model';
 import { Users, UsersModel } from '../models/user.model';
+import { createNewAttendance, createNewWorkOff } from './attendance.services';
 
 export const handleUserCreation = async (
   user: Partial<Users> & Document,
@@ -71,10 +72,11 @@ export const handleUserLogin = async (
     }
 
     if (existingUser?.role && Roles.includes(existingUser?.role)) {
+      const userId = existingUser.id;
       const secretKey: string = process.env.JWT_SECRET_KEY || '';
       const token = jwt.sign(
         {
-          userId: existingUser.id,
+          userId,
           firstName: existingUser.firstName,
           lastName: existingUser.lastName,
           role: existingUser.role,
@@ -83,12 +85,21 @@ export const handleUserLogin = async (
         },
         secretKey,
         {
-          expiresIn: '6d',
+          expiresIn: '10h',
         }
       );
+
+      await findByIdAndUpdateUserDocument(userId, {
+        loginStatus: true,
+      });
+
+      if (existingUser.role === 'SALESPERSON') {
+        await createNewAttendance(userId, session);
+      }
+
       return {
         token,
-        userId: existingUser.id,
+        userId,
         email: existingUser.email,
         firstName: existingUser.firstName,
         lastName: existingUser.lastName,
@@ -103,6 +114,25 @@ export const handleUserLogin = async (
   }
 };
 
+export const handleUserLogout = async (
+  userId?: string,
+  session?: ClientSession
+) => {
+  const existingUser = await findOneUser({ id: userId }, { _id: 0, __v: 0 });
+  if (userId && existingUser?.role === 'SALESPERSON') {
+    const user = await findByIdAndUpdateUserDocument(userId, {
+      loginStatus: false,
+    });
+    await createNewWorkOff(userId, session);
+    return user;
+  }
+  if (userId && existingUser?.role !== 'SALESPERSON') {
+    return existingUser;
+  } else {
+    throw new AuthenticationError(`Authentication error.`);
+  }
+};
+
 export const handleGetUsers = async (
   userId?: string,
   session?: ClientSession
@@ -111,7 +141,6 @@ export const handleGetUsers = async (
 
   if (userData?.role === 'SUPERADMIN') {
     const users = await UsersModel.find();
-
     return users;
   } else {
     const users = await UsersModel.aggregate([

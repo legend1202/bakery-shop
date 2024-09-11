@@ -1,10 +1,10 @@
-import { useMemo, useEffect, useReducer, useCallback } from "react";
+import { useMemo, useEffect, useReducer, useCallback } from 'react';
 
-import axios, { endpoints } from "src/utils/axios";
+import axios, { endpoints } from 'src/utils/axios';
 
-import { AuthContext } from "./auth-context";
-import { setSession, isValidToken } from "./utils";
-import { AuthUserType, ActionMapType, AuthStateType } from "../../types";
+import { AuthContext } from './auth-context';
+import { setSession, isValidToken } from './utils';
+import { AuthUserType, ActionMapType, AuthStateType } from '../../types';
 
 // ----------------------------------------------------------------------
 /**
@@ -15,10 +15,10 @@ import { AuthUserType, ActionMapType, AuthStateType } from "../../types";
 // ----------------------------------------------------------------------
 
 enum Types {
-  INITIAL = "INITIAL",
-  LOGIN = "LOGIN",
-  REGISTER = "REGISTER",
-  LOGOUT = "LOGOUT",
+  INITIAL = 'INITIAL',
+  LOGIN = 'LOGIN',
+  REGISTER = 'REGISTER',
+  LOGOUT = 'LOGOUT',
 }
 
 type Payload = {
@@ -43,7 +43,7 @@ type ActionsType = ActionMapType<Payload>[keyof ActionMapType<Payload>];
 const initialState: AuthStateType = {
   user: null,
   loading: true,
-  status: "",
+  status: '',
 };
 
 const reducer = (state: AuthStateType, action: ActionsType) => {
@@ -78,7 +78,7 @@ const reducer = (state: AuthStateType, action: ActionsType) => {
 
 // ----------------------------------------------------------------------
 
-const STORAGE_KEY = "accessToken";
+const STORAGE_KEY = 'accessToken';
 
 type Props = {
   children: React.ReactNode;
@@ -171,12 +171,7 @@ export function AuthProvider({ children }: Props) {
 
   // REGISTER
   const register = useCallback(
-    async (
-      email: string,
-      password: string,
-      firstName: string,
-      lastName: string
-    ) => {
+    async (email: string, password: string, firstName: string, lastName: string) => {
       const data = {
         user: {
           email,
@@ -222,17 +217,17 @@ export function AuthProvider({ children }: Props) {
 
   // ----------------------------------------------------------------------
 
-  const checkAuthenticated = state.user ? "authenticated" : "unauthenticated";
+  const checkAuthenticated = state.user ? 'authenticated' : 'unauthenticated';
 
-  const status = state.loading ? "loading" : checkAuthenticated;
+  const status = state.loading ? 'loading' : checkAuthenticated;
 
   const memoizedValue = useMemo(
     () => ({
       user: state.user,
-      method: "jwt",
-      loading: status === "loading",
-      authenticated: status === "authenticated",
-      unauthenticated: status === "unauthenticated",
+      method: 'jwt',
+      loading: status === 'loading',
+      authenticated: status === 'authenticated',
+      unauthenticated: status === 'unauthenticated',
       //
       login,
       register,
@@ -241,9 +236,5 @@ export function AuthProvider({ children }: Props) {
     [login, logout, register, state.user, status]
   );
 
-  return (
-    <AuthContext.Provider value={memoizedValue}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;
 }

@@ -12,13 +12,15 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 
+import { shouldCountAsHalf } from 'src/utils/attendanceTimeValidator';
+
 import { useGetBranchLists } from 'src/api/branch';
 import { useGetAttendance } from 'src/api/attendance';
 
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import FormProvider, { RHFSelect } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import {
   useTable,
   emptyRows,
@@ -28,17 +30,16 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { ITAttendance } from 'src/types/attendance';
+import { ResultItem } from 'src/types/attendance';
 
 import AttendanceTableRow from '../attendance-table-row';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'branchId', label: 'Branch' },
   { id: 'name', label: 'Name' },
-  { id: 'createDate', label: 'Date' },
-  { id: 'bio', label: 'Bio', align: 'center' },
+  { id: 'branchId', label: 'Branch' },
+  { id: 'payroll', label: 'Amount' },
 ];
 // ----------------------------------------------------------------------
 
@@ -51,7 +52,7 @@ export default function ReportSaleView() {
 
   const table = useTable({ defaultOrderBy: 'createDate' });
 
-  const [tableData, setTableData] = useState<ITAttendance[]>([]);
+  const [tableData, setTableData] = useState<ResultItem[]>([]);
 
   const denseHeight = table.dense ? 56 : 56 + 20;
 
@@ -59,13 +60,17 @@ export default function ReportSaleView() {
 
   const NewProductSchema = Yup.object().shape({
     branchId: Yup.string().required('Name is required'),
+    month: Yup.string().required('Month is required'),
   });
+
+  const currentMonth = new Date().toISOString().slice(0, 7);
 
   const defaultValues = useMemo(
     () => ({
       branchId: '',
+      month: currentMonth,
     }),
-    []
+    [currentMonth]
   );
 
   const methods = useForm({
@@ -78,36 +83,96 @@ export default function ReportSaleView() {
   const values = watch();
 
   useEffect(() => {
-    if (attendances) {
-      setTableData(attendances);
-    }
-  }, [attendances]);
+    if (values.branchId && values.month) {
+      const resultMap: Record<string, ResultItem> = attendances
+        .filter(
+          (item) =>
+            item.userDetails.branchId === values.branchId && item.createdAt.startsWith(values.month)
+        ) // Filter by the specified month
+        .reduce(
+          (acc, item) => {
+            const { userId } = item;
+            const userName = `${item.userDetails.firstName} ${item.userDetails.lastName}`;
+            const branchName = item.branchDetails.name;
 
-  useEffect(() => {
-    if (values.branchId) {
-      const updatedTableData = attendances.filter(
-        (sale) => sale.userDetails.branchId === values.branchId
-      );
-      setTableData(updatedTableData);
-    } else {
-      setTableData(attendances);
+            const createdAt = new Date(item.createdAt);
+            const updatedAt = new Date(item.updatedAt);
+
+            // Determine the increment value based on the time of day
+            const increment = shouldCountAsHalf(createdAt, updatedAt) ? 1 : 0.5;
+
+            // Initialize the count for this userId if not already done
+            if (!acc[userId]) {
+              acc[userId] = {
+                userId,
+                userName,
+                branchName,
+                count: 0,
+              };
+            }
+            // Increment the count for this userId
+            acc[userId].count += increment;
+            return acc;
+          },
+          {} as Record<string, ResultItem>
+        ); // Use a Record to group by userId
+
+      // Convert the result map to an array of ResultItem
+      const result: ResultItem[] = Object.values(resultMap);
+
+      setTableData(result);
+    } else if (!values.branchId && attendances) {
+      const resultMap: Record<string, ResultItem> = attendances
+        .filter((item) => item.createdAt.startsWith(values.month)) // Filter by the specified month
+        .reduce(
+          (acc, item) => {
+            const { userId } = item;
+            const userName = `${item.userDetails.firstName} ${item.userDetails.lastName}`;
+            const branchName = item.branchDetails.name;
+
+            const createdAt = new Date(item.createdAt);
+            const updatedAt = new Date(item.updatedAt);
+
+            // Determine the increment value based on the time of day
+            const increment = shouldCountAsHalf(createdAt, updatedAt) ? 1 : 0.5;
+
+            // Initialize the count for this userId if not already done
+            if (!acc[userId]) {
+              acc[userId] = {
+                userId,
+                userName,
+                branchName,
+                count: 0,
+              };
+            }
+            // Increment the count for this userId
+            acc[userId].count += increment;
+            return acc;
+          },
+          {} as Record<string, ResultItem>
+        ); // Use a Record to group by userId
+
+      // Convert the result map to an array of ResultItem
+      const result: ResultItem[] = Object.values(resultMap);
+
+      setTableData(result);
     }
-  }, [values, attendances]);
+  }, [values.branchId, values.month, attendances]);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Report - Attendance"
+        heading="Report - Payroll"
         links={[
           {
             name: 'Dashboard',
             href: paths.dashboard.root,
           },
           {
-            name: 'Inventory',
+            name: 'Report',
           },
           {
-            name: 'Sale',
+            name: 'Payroll',
           },
         ]}
         action={
@@ -138,24 +203,8 @@ export default function ReportSaleView() {
                     </MenuItem>
                   ))}
               </RHFSelect>
-              {/*  <RHFSelect
-                name="branchId"
-                label="Branch"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-                sx={{ minWidth: 140 }}
-              >
-                <MenuItem key="" value="">
-                  All
-                </MenuItem>
-                {branches &&
-                  branches.map((branch) => (
-                    <MenuItem key={branch.id} value={branch.id}>
-                      {branch.name}
-                    </MenuItem>
-                  ))}
-              </RHFSelect> */}
+
+              <RHFTextField name="month" label="Month" type="month" />
             </Card>
           </FormProvider>
         }
@@ -177,7 +226,7 @@ export default function ReportSaleView() {
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(checked, tableData?.map((row) => row.id))
+                    table.onSelectAllRows(checked, tableData?.map((row) => row.userId))
                   }
                 />
               )}
@@ -185,10 +234,10 @@ export default function ReportSaleView() {
                 <TableBody>
                   {tableData.map((row) => (
                     <AttendanceTableRow
-                      key={row.id}
+                      key={row.userId}
                       row={row}
-                      selected={table.selected.includes(row.id)}
-                      onSelectRow={() => table.onSelectRow(row.id)}
+                      selected={table.selected.includes(row.userId)}
+                      onSelectRow={() => table.onSelectRow(row.userId)}
                     />
                   ))}
 

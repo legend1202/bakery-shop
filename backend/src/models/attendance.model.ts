@@ -5,7 +5,8 @@ export interface Attendances extends Document {
   id: string;
   userId: string;
   branchId: string;
-  bio: string;
+  bio?: string;
+  status: boolean;
   attendanceTime?: string;
   createdAt: Date;
   updateAt: Date;
@@ -26,6 +27,7 @@ const AttendancesSchema = new Schema<Attendances>(
     branchId: {
       type: String, // Fixed typo here
     },
+    status: { type: Boolean },
     bio: {
       type: String,
     },

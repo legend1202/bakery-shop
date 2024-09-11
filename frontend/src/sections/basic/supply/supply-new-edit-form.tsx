@@ -16,10 +16,10 @@ import { useGetBranchLists } from 'src/api/branch';
 
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-import { IProduct } from 'src/types/product';
+import { ISupply } from 'src/types/supply';
 
 type Props = {
-  afterSavebranch: (newProduct: IProduct) => void;
+  afterSavebranch: (newProduct: ISupply) => void;
 };
 export default function SupplyNewEditForm({ afterSavebranch }: Props) {
   const [errorMsg, setErrorMsg] = useState('');
@@ -85,7 +85,7 @@ export default function SupplyNewEditForm({ afterSavebranch }: Props) {
             display="grid"
             gridTemplateColumns={{
               xs: 'repeat(1, 1fr)',
-              sm: 'repeat(5, 1fr)',
+              sm: 'repeat(4, 1fr)',
             }}
           >
             {branches && (

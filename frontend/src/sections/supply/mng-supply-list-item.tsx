@@ -35,7 +35,7 @@ export function RenderCellProduct({ params }: ParamsProps) {
 export function RenderCellAmount({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.quantity}
+      primary={-params.row.quantity}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

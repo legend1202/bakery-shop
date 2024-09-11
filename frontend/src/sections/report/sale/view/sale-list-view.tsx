@@ -43,6 +43,7 @@ const TABLE_HEAD = [
   { id: 'productId', label: 'Product' },
   { id: 'branchId', label: 'Branch' },
   { id: 'quantity', label: 'Quantity' },
+  { id: 'price', label: 'Price' },
   { id: 'createDate', label: 'Date' },
   { id: 'status', label: 'Status' },
   { id: 'bio', label: 'Bio', align: 'center' },
@@ -101,9 +102,7 @@ export default function ReportSaleView() {
     }
   }, [values, sales]);
 
-  const getTotalQuantity = () => sumBy(tableData, 'amount');
-
-  const getTotalAmountPrice = () =>
+  const getTotalQuantity = () =>
     sumBy(tableData, (sale) => {
       if (sale.quantity && sale.quantity !== undefined) {
         return sale.quantity;
@@ -111,26 +110,10 @@ export default function ReportSaleView() {
       return 0;
     });
 
-  const confirmedAmountProducts = () =>
+  const getTotalAmountPrice = () =>
     sumBy(tableData, (sale) => {
-      if (sale.quantity > 0) {
-        return sale.quantity;
-      }
-      return 0;
-    });
-
-  const deliveryAmountProducts = () =>
-    sumBy(tableData, (product) => {
-      if (product.quantity < 0) {
-        return product.quantity;
-      }
-      return 0;
-    });
-
-  const pendingTotalAmountPrice = () =>
-    sumBy(tableData, (product) => {
-      if (product.quantity) {
-        return 0;
+      if (sale.price && sale.price !== undefined) {
+        return sale.price;
       }
       return 0;
     });
@@ -197,24 +180,32 @@ export default function ReportSaleView() {
               icon="solar:bill-list-bold-duotone"
               color={theme.palette.info.main}
             />
-
+            {/* 
             <SupplyAnalytic
-              title="Confirmed"
-              total={getTotalQuantity()}
+              title="Delivered"
+              total={deliveryAmountProducts()}
               percent={100}
-              price={confirmedAmountProducts()}
-              icon="solar:file-check-bold-duotone"
+              price={pendingTotalAmountPrice()}
+              icon="solar:sort-by-time-bold-duotone"
               color={theme.palette.success.main}
             />
 
             <SupplyAnalytic
               title="Pending"
-              total={deliveryAmountProducts()}
+              total={getTotalQuantity()}
               percent={100}
-              price={pendingTotalAmountPrice()}
+              price={confirmedAmountProducts()}
               icon="solar:sort-by-time-bold-duotone"
               color={theme.palette.warning.main}
             />
+            <SupplyAnalytic
+              title="Cancelled"
+              total={deliveryAmountProducts()}
+              percent={100}
+              price={pendingTotalAmountPrice()}
+              icon="solar:file-check-bold-duotone"
+              color={theme.palette.warning.main}
+            /> */}
           </Stack>
         </Scrollbar>
       </Card>

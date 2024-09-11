@@ -12,6 +12,7 @@ export interface Users extends Document {
   userId?: string;
   role: 'ADMIN' | 'SALESPERSON' | 'SUPERADMIN';
   bio?: string;
+  loginStatus: false;
   createdAt: Date;
   updateAt: Date;
 }
@@ -35,6 +36,7 @@ const UsersSchema = new Schema<Users>(
       type: String,
     },
     bio: { type: String },
+    loginStatus: { type: Boolean },
   },
   {
     timestamps: true,

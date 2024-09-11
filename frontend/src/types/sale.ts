@@ -9,6 +9,7 @@ export type ISale = {
   productDetails?: IProduct;
   branchDetails?: IBranch;
   quantity: number;
+  price?: number;
   status?: boolean;
   bio?: string;
   createdAt?: string;
@@ -22,6 +23,7 @@ export type IMSale = {
   productDetails?: IProduct;
   branchDetails?: IBranch;
   quantity: number;
+  price?: number;
   status?: boolean;
   bio?: string;
   createdAt?: string;

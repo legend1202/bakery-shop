@@ -43,6 +43,7 @@ export const endpoints = {
   },
   product: {
     create: '/api/product/register',
+    update: '/api/product/update',
     list: '/api/product/get-products',
     listByUser: '/api/product/get-products-by-user',
     delete: '/api/product/delete',
@@ -57,6 +58,7 @@ export const endpoints = {
     me: '/api/auth/me',
     login: '/api/auth/login',
     register: '/api/auth/register',
+    logout: '/api/auth/logout',
   },
   mng: {
     product: {
@@ -65,6 +67,13 @@ export const endpoints = {
       list: '/api/mng/product/get-products',
       delete: '/api/mng/product/delete',
       confirm: '/api/mng/product/confirm',
+    },
+    customerOrder: {
+      create: '/api/mng/custom_order/register',
+      listByUser: '/api/mng/custom_order/get-products-by-user',
+      list: '/api/mng/custom_order/get-products',
+      delete: '/api/mng/custom_order/delete',
+      confirm: '/api/mng/custom_order/confirm',
     },
     supply: {
       create: '/api/mng/supply/register',
@@ -83,5 +92,9 @@ export const endpoints = {
     listByUser: '/api/attendance/get-attendance-by-user',
     list: '/api/attendance/get-attendance',
     delete: '/api/attendance/delete',
+  },
+  upload: '/api/upload',
+  inventory: {
+    branch: '/api/inventory/branch',
   },
 };

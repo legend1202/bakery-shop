@@ -57,3 +57,9 @@ export const UserDelete = async (query: IUserDelete) => {
 
   return memoizedValue;
 };
+
+export const UserLogout = async () => {
+  const URL = endpoints.auth.logout;
+
+  await axiosInstance.get(URL);
+};

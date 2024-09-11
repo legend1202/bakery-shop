@@ -8,22 +8,18 @@ import { BranchesModel } from '../models/branch.model';
 import { UsersModel } from '../models/user.model';
 
 export const handleAttendanceCreation = async (
-  product: Partial<Attendances> & Document,
   userId?: string,
   session?: ClientSession
 ): Promise<Attendances> => {
-  const { bio } = product;
-
   if (!userId) throw new RequestError('Branch name must not be empty', 400);
 
-  const newAttendance = await createNewAttendance(userId, bio, session);
+  const newAttendance = await createNewAttendance(userId, session);
 
   return newAttendance;
 };
 
 export const createNewAttendance = async (
   userId: string,
-  bio?: string,
   session?: ClientSession
 ): Promise<Attendances> => {
   const existingUser = await UsersModel.findOne({ id: userId });
@@ -31,14 +27,73 @@ export const createNewAttendance = async (
   const branchId = existingUser?.branchId;
 
   if (branchId) {
-    const newProduct = new AttendancesModel({
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0); // Start of the day
+
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999); // End of the day
+
+    // Check if there is already an attendance record for the user today
+    const existingAttendance = await AttendancesModel.findOne({
       userId,
       branchId,
-      bio,
+      createdAt: { $gte: todayStart, $lte: todayEnd },
     });
 
-    await newProduct.save({ session });
-    return newProduct;
+    if (existingAttendance) {
+      // If a record exists, do not save a new one
+      return existingAttendance;
+    } else {
+      const newProduct = new AttendancesModel({
+        userId,
+        branchId,
+        status: true,
+      });
+
+      await newProduct.save();
+      return newProduct;
+    }
+  } else {
+    throw new RequestError(`There is not ${userId} user.`, 500);
+  }
+};
+
+export const createNewWorkOff = async (
+  userId: string,
+  session?: ClientSession
+): Promise<Attendances> => {
+  const existingUser = await UsersModel.findOne({ id: userId });
+
+  const branchId = existingUser?.branchId;
+
+  if (branchId) {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0); // Start of the day
+
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999); // End of the day
+
+    // Check if there is already an attendance record for the user today
+    const existingAttendance = await AttendancesModel.findOne({
+      userId,
+      branchId,
+      createdAt: { $gte: todayStart, $lte: todayEnd },
+    });
+
+    if (existingAttendance) {
+      existingAttendance.status = false;
+      await existingAttendance.save();
+      return existingAttendance;
+    } else {
+      const newProduct = new AttendancesModel({
+        userId,
+        branchId,
+        status: false,
+      });
+
+      await newProduct.save();
+      return newProduct;
+    }
   } else {
     throw new RequestError(`There is not ${userId} user.`, 500);
   }
