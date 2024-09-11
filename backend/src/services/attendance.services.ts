@@ -124,35 +124,62 @@ export const handleAttendance = async (
       500
     );
   } else {
-    const branches = await BranchesModel.find({ userId }, 'id');
-    const branchIds = await branches.map((branch) => branch.id);
+    const userData = await UsersModel.findOne({ id: userId });
+    if (userData?.role === 'ADMIN') {
+      const branches = await BranchesModel.find({ userId }, 'id');
+      const branchIds = await branches.map((branch) => branch.id);
 
-    const results = await AttendancesModel.aggregate([
-      {
-        $match: { branchId: { $in: branchIds } },
-      },
-      {
-        $lookup: {
-          from: UsersModel.collection.name,
-          localField: 'userId',
-          foreignField: 'id',
-          as: 'userDetails',
+      const results = await AttendancesModel.aggregate([
+        {
+          $match: { branchId: { $in: branchIds } },
         },
-      },
-
-      { $unwind: '$userDetails' },
-      {
-        $lookup: {
-          from: BranchesModel.collection.name,
-          localField: 'branchId',
-          foreignField: 'id',
-          as: 'branchDetails',
+        {
+          $lookup: {
+            from: UsersModel.collection.name,
+            localField: 'userId',
+            foreignField: 'id',
+            as: 'userDetails',
+          },
         },
-      },
-      { $unwind: '$branchDetails' },
-    ]);
 
-    return results;
+        { $unwind: '$userDetails' },
+        {
+          $lookup: {
+            from: BranchesModel.collection.name,
+            localField: 'branchId',
+            foreignField: 'id',
+            as: 'branchDetails',
+          },
+        },
+        { $unwind: '$branchDetails' },
+      ]);
+      return results;
+    } else if (userData?.role === 'SUPERADMIN') {
+      const results = await AttendancesModel.aggregate([
+        {
+          $lookup: {
+            from: UsersModel.collection.name,
+            localField: 'userId',
+            foreignField: 'id',
+            as: 'userDetails',
+          },
+        },
+
+        { $unwind: '$userDetails' },
+        {
+          $lookup: {
+            from: BranchesModel.collection.name,
+            localField: 'branchId',
+            foreignField: 'id',
+            as: 'branchDetails',
+          },
+        },
+        { $unwind: '$branchDetails' },
+      ]);
+      return results;
+    } else {
+      return [];
+    }
   }
 };
 

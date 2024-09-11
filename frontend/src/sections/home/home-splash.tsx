@@ -79,20 +79,20 @@ export default function HomeSplash() {
           >
             <m.div variants={varFade().inUp}>
               <Typography component="div" variant="h2" sx={{ color: '#d69c00' }}>
-                Welcome to Amar Bakery Shop!
+                Pastelerías Segovia
               </Typography>
             </m.div>
 
             <m.div variants={varFade().inDown}>
               <Typography variant="overline">
                 <b>
-                  Fairly basic milky kosher café. We bought some take away sandwiches which were
-                  made up for us and decent quality.
+                  {/* Fairly basic milky kosher café. We bought some take away sandwiches which were
+                  made up for us and decent quality. */}
                 </b>
                 <br />
                 <b>
-                  There was not a huge choice of breads. We did not have to wait too long and they
-                  were not too expensive.
+                  {/*  There was not a huge choice of breads. We did not have to wait too long and they
+                  were not too expensive. */}
                 </b>
               </Typography>
             </m.div>

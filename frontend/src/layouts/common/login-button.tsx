@@ -13,7 +13,13 @@ type Props = {
 
 export default function LoginButton({ sx }: Props) {
   return (
-    <Button component={RouterLink} href={PATH_AFTER_LOGIN} variant="outlined" sx={{ mr: 1, ...sx }}>
+    <Button
+      component={RouterLink}
+      href={PATH_AFTER_LOGIN}
+      variant="outlined"
+      color="info"
+      sx={{ mr: 1 }}
+    >
       Login
     </Button>
   );

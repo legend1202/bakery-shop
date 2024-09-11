@@ -11,6 +11,7 @@ const ROOTS = {
   MNG: '/mng',
   INVENTORY: '/inventory',
   REPORT: '/report',
+  SHIFT: '/shift',
 };
 
 // ----------------------------------------------------------------------
@@ -102,5 +103,10 @@ export const paths = {
     supply: `${ROOTS.REPORT}/supply`,
     sale: `${ROOTS.REPORT}/sale`,
     attendance: `${ROOTS.REPORT}/attendance`,
+  },
+  shift: {
+    root: `${ROOTS.SHIFT}`,
+    create: `${ROOTS.SHIFT}/create`,
+    list: `${ROOTS.SHIFT}/list`,
   },
 };

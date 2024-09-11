@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 
 import Link from '@mui/material/Link';
-import { Avatar } from '@mui/material';
+import { Button } from '@mui/material';
 import { BoxProps } from '@mui/material/Box';
 
 import { RouterLink } from 'src/routes/components';
@@ -15,16 +15,17 @@ export interface LogoProps extends BoxProps {
 const Logo = forwardRef<HTMLDivElement, LogoProps>(
   ({ disabledLink = false, sx, ...other }, ref) => {
     const logo = (
-      <Avatar
+      /*  <Avatar
         src="/assets/background/logo.jpg"
-        alt="logo"
+        alt="Pastelerías"
         sx={{
           margin: 2,
           width: 36,
           height: 36,
           border: (theme) => `solid 2px ${theme.palette.background.default}`,
         }}
-      />
+      /> */
+      <Button color="error">Página Principal</Button>
     );
 
     if (disabledLink) {

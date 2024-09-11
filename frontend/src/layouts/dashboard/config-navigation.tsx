@@ -67,7 +67,7 @@ export function useNavData() {
 
       {
         subheader: t('Basic'),
-        roles: ['ADMIN', 'SALESPERSON'],
+        roles: ['ADMIN', 'SALESPERSON', 'SUPERADMIN'],
         items: [
           // Create
           {
@@ -89,6 +89,13 @@ export function useNavData() {
             path: paths.supplies.list,
             icon: ICONS.user,
             roles: ['ADMIN'],
+          },
+          // Shift Criteria
+          {
+            title: t('Shift'),
+            path: paths.shift.list,
+            icon: ICONS.user,
+            roles: ['SUPERADMIN'],
           },
         ],
       },
@@ -181,7 +188,7 @@ export function useNavData() {
             title: t('Payroll'),
             path: paths.report.attendance,
             icon: ICONS.user,
-            roles: ['ADMIN'],
+            roles: ['ADMIN', 'SUPERADMIN'],
           },
         ],
       },

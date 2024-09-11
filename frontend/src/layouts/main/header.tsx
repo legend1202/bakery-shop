@@ -1,5 +1,8 @@
+import { useSnackbar } from 'notistack';
+
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
+import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,10 +11,14 @@ import Container from '@mui/material/Container';
 import Badge, { badgeClasses } from '@mui/material/Badge';
 
 import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
 
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 
 import { bgBlur } from 'src/theme/css';
+import { UserLogout } from 'src/api/admin';
+import { useAuthContext } from 'src/auth/hooks';
+import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Logo from 'src/components/logo';
 
@@ -26,7 +33,20 @@ import SettingsButton from '../common/settings-button';
 export default function Header() {
   const theme = useTheme();
 
+  const { logout } = useAuthContext();
   const offsetTop = useOffSetTop(HEADER.H_DESKTOP);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleLogout = async () => {
+    try {
+      await UserLogout();
+      await logout();
+      enqueueSnackbar('End shift successfully!', { variant: 'success' });
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar('Unable to logout!', { variant: 'error' });
+    }
+  };
 
   return (
     <AppBar>
@@ -75,6 +95,19 @@ export default function Header() {
           <Box sx={{ flexGrow: 1 }} />
 
           <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
+            <Button onClick={handleLogout} variant="outlined" color="warning" sx={{ mr: 1 }}>
+              End Shift
+            </Button>
+            <Button
+              component={RouterLink}
+              href={PATH_AFTER_LOGIN}
+              variant="outlined"
+              color="secondary"
+              sx={{ mr: 1 }}
+            >
+              Start Shift
+            </Button>
+
             <LoginButton />
 
             <SettingsButton
