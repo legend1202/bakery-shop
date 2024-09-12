@@ -91,12 +91,12 @@ export function useNavData() {
             roles: ['ADMIN'],
           },
           // Shift Criteria
-          {
+         /*  {
             title: t('Shift'),
             path: paths.shift.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
-          },
+          }, */
         ],
       },
       {
