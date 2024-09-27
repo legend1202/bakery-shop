@@ -9,6 +9,8 @@ import {
   GridColumnVisibilityModel,
 } from '@mui/x-data-grid';
 
+import { sumBySupplyId } from 'src/utils/product';
+
 import { useTranslate } from 'src/locales';
 import { MngSupplyDelete, MngSupplyConfirm, useGetMngSupplyListsByUsers } from 'src/api/supply';
 
@@ -18,6 +20,7 @@ import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 
 import { IMSupply } from 'src/types/supply';
+import { ISupplyCount } from 'src/types/product';
 
 import MngSupplyNewEditForm from '../mng-supply-new-edit-form';
 import {
@@ -47,6 +50,8 @@ export default function MngSupplyListView() {
 
   const [tableData, setTableData] = useState<IMSupply[]>([]);
 
+  const [supplyCount, setSupplyCount] = useState<ISupplyCount[]>([]);
+
   const [reset, setReset] = useState(false);
 
   const [columnVisibilityModel, setColumnVisibilityModel] =
@@ -54,6 +59,7 @@ export default function MngSupplyListView() {
 
   useEffect(() => {
     if (supplies) {
+      setSupplyCount(sumBySupplyId(supplies));
       const filteredProducts = supplies.filter((product) => product.quantity < 0);
       setTableData(filteredProducts);
     }
@@ -114,7 +120,7 @@ export default function MngSupplyListView() {
       field: 'quantity',
       headerName: 'Quantity',
       minWidth: 100,
-      renderCell: (params) => <RenderCellAmount params={params} />,
+      renderCell: (params) => <RenderCellAmount params={params} supplyCount={supplyCount} />,
     },
     {
       field: 'createAt',

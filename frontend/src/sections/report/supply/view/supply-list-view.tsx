@@ -16,8 +16,7 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 
-import { useGetBranchLists } from 'src/api/branch';
-import { useGetMngSupplyListsByUsers } from 'src/api/supply';
+import { useGetSupplyListsByUsers, useGetMngSupplyListsByUsers } from 'src/api/supply';
 
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
@@ -54,7 +53,7 @@ export default function ReportSupplyView() {
 
   const settings = useSettingsContext();
 
-  const { branches } = useGetBranchLists();
+  const { supplies: basicSupplies } = useGetSupplyListsByUsers();
 
   const { supplies } = useGetMngSupplyListsByUsers();
 
@@ -67,12 +66,12 @@ export default function ReportSupplyView() {
   const notFound = tableData && !tableData.length;
 
   const NewProductSchema = Yup.object().shape({
-    branchId: Yup.string().required('Name is required'),
+    supplyId: Yup.string().required('Name is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
-      branchId: '',
+      supplyId: '',
     }),
     []
   );
@@ -94,13 +93,13 @@ export default function ReportSupplyView() {
   }, [supplies]);
 
   useEffect(() => {
-    if (values.branchId) {
-      const updatedTableData = supplies.filter((supply) => supply.branchId === values.branchId);
+    if (values.supplyId) {
+      const updatedTableData = supplies.filter((supply) => supply.supplyId === values.supplyId);
       setTableData(updatedTableData);
     } else {
       setTableData(supplies);
     }
-  }, [values, supplies]);
+  }, [values.supplyId, supplies]);
 
   const getTotalQuantity = () =>
     sumBy(tableData, (product) => {
@@ -153,8 +152,8 @@ export default function ReportSupplyView() {
         action={
           <FormProvider methods={methods}>
             <RHFSelect
-              name="branchId"
-              label="Branch"
+              name="supplyId"
+              label="Supply"
               fullWidth
               InputLabelProps={{ shrink: true }}
               PaperPropsSx={{ textTransform: 'capitalize' }}
@@ -163,8 +162,8 @@ export default function ReportSupplyView() {
               <MenuItem key="" value="">
                 All
               </MenuItem>
-              {branches &&
-                branches.map((branch) => (
+              {basicSupplies &&
+                basicSupplies.map((branch) => (
                   <MenuItem key={branch.id} value={branch.id}>
                     {branch.name}
                   </MenuItem>

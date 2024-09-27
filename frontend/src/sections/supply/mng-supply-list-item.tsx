@@ -1,10 +1,21 @@
+import { Stack } from '@mui/system';
 import { GridCellParams } from '@mui/x-data-grid';
 import ListItemText from '@mui/material/ListItemText';
 
 import { fDate } from 'src/utils/format-time';
+import { getQuantityBySupplyId } from 'src/utils/product';
+
+import Label from 'src/components/label/label';
+
+import { ISupplyCount } from 'src/types/product';
 
 type ParamsProps = {
   params: GridCellParams;
+};
+
+type ParamsCountProps = {
+  params: GridCellParams;
+  supplyCount: ISupplyCount[];
 };
 
 export function RenderCellBranch({ params }: ParamsProps) {
@@ -34,17 +45,25 @@ export function RenderCellProduct({ params }: ParamsProps) {
   );
 }
 
-export function RenderCellAmount({ params }: ParamsProps) {
+export function RenderCellAmount({ params, supplyCount }: ParamsCountProps) {
+  const totolQuantity = getQuantityBySupplyId(supplyCount, params.row.supplyId);
+
+  const getQuantityStatus = totolQuantity && -params.row.quantity <= totolQuantity;
+
   return (
-    <ListItemText
-      primary={-params.row.quantity}
-      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-      secondaryTypographyProps={{
-        mt: 0.5,
-        component: 'span',
-        typography: 'caption',
-      }}
-    />
+    <Stack direction="row" alignItems="center" sx={{ py: 1, width: 1 }}>
+      <Label
+        variant="soft"
+        color={
+          (params.row.status && 'default') ||
+          (getQuantityStatus && 'success') ||
+          (getQuantityStatus && 'warning') ||
+          'warning'
+        }
+      >
+        {-params.row.quantity}
+      </Label>
+    </Stack>
   );
 }
 

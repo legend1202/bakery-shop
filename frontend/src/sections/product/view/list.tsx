@@ -9,6 +9,7 @@ import {
   GridColumnVisibilityModel,
 } from '@mui/x-data-grid';
 
+import { sumByProductId } from 'src/utils/product';
 import { isAdminFn, isSuperAdminFn } from 'src/utils/role-check';
 
 import { useTranslate } from 'src/locales';
@@ -20,7 +21,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 
-import { IMProduct } from 'src/types/product';
+import { IMProduct, IProductCount } from 'src/types/product';
 
 import MngProductNewEditForm from '../mng-product-new-edit-form';
 import MngProductNewEditFormSale from '../mng-product-new-edit-form-sale';
@@ -55,6 +56,8 @@ export default function MngProductListView() {
 
   const { products, productsLoading } = useGetMngProductListsByUser();
 
+  const [productCount, setProductCount] = useState<IProductCount[]>([]);
+
   const [tableData, setTableData] = useState<IMProduct[]>([]);
 
   const [reset, setReset] = useState(false);
@@ -64,7 +67,10 @@ export default function MngProductListView() {
 
   useEffect(() => {
     if (products) {
-      const filteredProducts = products.filter((product) => product.quantity < 0);
+      setProductCount(sumByProductId(products));
+      const filteredProducts = products.filter(
+        (product) => product.quantity < 0 && !product?.customOrderFlag
+      );
       setTableData(filteredProducts);
     }
   }, [products]);
@@ -153,7 +159,7 @@ export default function MngProductListView() {
           field: 'quantity',
           headerName: 'Quantity',
           minWidth: 100,
-          renderCell: (params) => <RenderCellAmount params={params} />,
+          renderCell: (params) => <RenderCellAmount params={params} productCount={productCount} />,
         },
         {
           field: 'bio',
@@ -193,7 +199,7 @@ export default function MngProductListView() {
           field: 'quantity',
           headerName: 'Quantity',
           minWidth: 100,
-          renderCell: (params) => <RenderCellAmount params={params} />,
+          renderCell: (params) => <RenderCellAmount params={params} productCount={productCount} />,
         },
         {
           field: 'bio',

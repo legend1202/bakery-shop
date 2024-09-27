@@ -12,6 +12,7 @@ export type IProduct = {
   name?: string;
   code?: string;
   size?: string;
+  customOrderFlag?: boolean;
   price?: number | 0;
   bio?: string;
 };
@@ -26,6 +27,7 @@ export type IMProduct = {
   price: number | 0;
   address?: string;
   deliverDate?: string;
+  customOrderFlag?: boolean;
   bio?: string;
   status?: number;
   createdAt?: string;
@@ -41,3 +43,8 @@ export type IMTProduct = {
   bio?: string;
   createdAt?: string;
 };
+
+export type IProductCount = { productId: string; quantity: number };
+
+export type ISupplyCount = { supplyId: string; quantity: number };
+

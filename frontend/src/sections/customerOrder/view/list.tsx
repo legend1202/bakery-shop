@@ -9,19 +9,19 @@ import {
   GridColumnVisibilityModel,
 } from '@mui/x-data-grid';
 
+import { sumByProductId } from 'src/utils/product';
 import { isAdminFn, isSuperAdminFn } from 'src/utils/role-check';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetCustomOrderListsByUser } from 'src/api/customerOrder';
-import { MngProductDelete, MngProductConfirm } from 'src/api/product';
+import { MngProductDelete, MngProductConfirm, useGetMngProductLists } from 'src/api/product';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 
-import { IMProduct } from 'src/types/product';
+import { IMProduct, IProductCount } from 'src/types/product';
 
 import CustomerOrderNewEditForm from '../customer-order-new-edit-form';
 import CustomerOrderEditFormSale from '../customer-order-new-edit-form-sale';
@@ -57,7 +57,11 @@ export default function CustomerOrderListView() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { products, productsLoading } = useGetCustomOrderListsByUser();
+  /* const { products, productsLoading } = useGetCustomOrderListsByUser(); */
+
+  const { products, productsLoading } = useGetMngProductLists();
+
+  const [productCount, setProductCount] = useState<IProductCount[]>([]);
 
   const [tableData, setTableData] = useState<IMProduct[]>([]);
 
@@ -68,7 +72,10 @@ export default function CustomerOrderListView() {
 
   useEffect(() => {
     if (products) {
-      const filteredProducts = products.filter((product) => product.quantity < 0);
+      setProductCount(sumByProductId(products));
+      const filteredProducts = products.filter(
+        (product) => product.quantity < 0 && product?.customOrderFlag
+      );
       setTableData(filteredProducts);
     }
   }, [products]);
@@ -156,7 +163,7 @@ export default function CustomerOrderListView() {
       field: 'quantity',
       headerName: 'Quantity',
       minWidth: 100,
-      renderCell: (params) => <RenderCellAmount params={params} />,
+      renderCell: (params) => <RenderCellAmount params={params} productCount={productCount} />,
     },
     {
       field: 'price',

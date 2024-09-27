@@ -16,8 +16,12 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 
+import { isSuperAdminFn } from 'src/utils/role-check';
+
+import { useAuthContext } from 'src/auth/hooks';
 import { useGetBranchLists } from 'src/api/branch';
 import { useGetSaleListsByUser } from 'src/api/sale';
+import { useGetProductListsByUser } from 'src/api/product';
 
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
@@ -55,7 +59,13 @@ export default function ReportSaleView() {
 
   const settings = useSettingsContext();
 
+  const { user } = useAuthContext();
+
+  const isSuperAdmin = isSuperAdminFn(user?.role);
+
   const { branches } = useGetBranchLists();
+
+  const { products } = useGetProductListsByUser();
 
   const { sales } = useGetSaleListsByUser();
 
@@ -69,11 +79,13 @@ export default function ReportSaleView() {
 
   const NewProductSchema = Yup.object().shape({
     branchId: Yup.string().required('Name is required'),
+    productId: Yup.string().required('Name is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
       branchId: '',
+      productId: '',
     }),
     []
   );
@@ -94,10 +106,22 @@ export default function ReportSaleView() {
   }, [sales]);
 
   useEffect(() => {
-    if (values.branchId) {
-      const updatedTableData = sales.filter((sale) => sale.branchId === values.branchId);
+    if (values.branchId && values.productId) {
+      const updatedTableData = sales.filter(
+        (sale) => sale.branchId === values.branchId && sale.productId === values.productId
+      );
       setTableData(updatedTableData);
     } else {
+      if (values.branchId) {
+        const updatedTableData = sales.filter((sale) => sale.branchId === values.branchId);
+        setTableData(updatedTableData);
+      }
+      if (values.productId) {
+        const updatedTableData = sales.filter((sale) => sale.productId === values.productId);
+        setTableData(updatedTableData);
+      }
+    }
+    if (!values.branchId && !values.productId) {
       setTableData(sales);
     }
   }, [values, sales]);
@@ -133,24 +157,54 @@ export default function ReportSaleView() {
         ]}
         action={
           <FormProvider methods={methods}>
-            <RHFSelect
-              name="branchId"
-              label="Branch"
-              fullWidth
-              InputLabelProps={{ shrink: true }}
-              PaperPropsSx={{ textTransform: 'capitalize' }}
-              sx={{ minWidth: 140 }}
+            <Card
+              sx={{
+                padding: 1,
+                flexGrow: 1,
+                display: 'flex',
+                flexDirection: 'row',
+              }}
             >
-              <MenuItem key="" value="">
-                All
-              </MenuItem>
-              {branches &&
-                branches.map((branch) => (
-                  <MenuItem key={branch.id} value={branch.id}>
-                    {branch.name}
+              {isSuperAdmin && (
+                <RHFSelect
+                  name="branchId"
+                  label="Branch"
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                  sx={{ minWidth: 140 }}
+                >
+                  <MenuItem key="" value="">
+                    All
                   </MenuItem>
-                ))}
-            </RHFSelect>
+                  {branches &&
+                    branches.map((branch) => (
+                      <MenuItem key={branch.id} value={branch.id}>
+                        {branch.name}
+                      </MenuItem>
+                    ))}
+                </RHFSelect>
+              )}
+
+              <RHFSelect
+                name="productId"
+                label="Product"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+                sx={{ minWidth: 140 }}
+              >
+                <MenuItem key="" value="">
+                  All
+                </MenuItem>
+                {products &&
+                  products.map((product) => (
+                    <MenuItem key={product.id} value={product.id}>
+                      {product.name}
+                    </MenuItem>
+                  ))}
+              </RHFSelect>
+            </Card>
           </FormProvider>
         }
         sx={{

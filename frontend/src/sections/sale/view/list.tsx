@@ -73,7 +73,6 @@ export default function SaleMngView() {
     const updateData = { id: row.id };
     const result = await SaleDelete(updateData);
     if (result.data.success) {
-      console.log(result.data.result);
       setCurrentInventory(currentInventory + row.quantity);
       enqueueSnackbar(t('Deleted'));
       const updatedProducts = tableData.filter((product) => product.id !== result.data.result.id);

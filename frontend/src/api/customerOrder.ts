@@ -5,7 +5,6 @@ import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
 import { IMProduct, IMTProduct } from 'src/types/product';
 
-
 export function useGetCustomOrderListsByUser() {
   const URL = endpoints.mng.customerOrder.listByUser;
 
@@ -22,7 +21,6 @@ export function useGetCustomOrderListsByUser() {
   );
   return memoizedValue;
 }
-
 
 export const createMngCustomerOrder = async (query: IMTProduct) => {
   const res = await axiosInstance.post(endpoints.mng.customerOrder.create, {
