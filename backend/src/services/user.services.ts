@@ -27,6 +27,7 @@ export const handleUserCreation = async (
   if (!lastName) throw new RequestError('Last Name must not be empty', 400);
   if (!email) throw new RequestError('Invalid fields', 400);
   if (!password) throw new RequestError('Password must not be empty', 400);
+  if (!userId) throw new RequestError('General Admin must not be empty', 400);
 
   const existingUser = await findOneUser({ email });
 
@@ -93,7 +94,7 @@ export const handleUserLogin = async (
         loginStatus: true,
       });
 
-      if (existingUser.role === 'SALESPERSON') {
+      if (existingUser.role !== 'SUPERADMIN') {
         await createNewAttendance(userId, session);
       }
 
@@ -119,14 +120,14 @@ export const handleUserLogout = async (
   session?: ClientSession
 ) => {
   const existingUser = await findOneUser({ id: userId }, { _id: 0, __v: 0 });
-  if (userId && existingUser?.role === 'SALESPERSON') {
+  if (userId && existingUser?.role !== 'SUPERADMIN') {
     const user = await findByIdAndUpdateUserDocument(userId, {
       loginStatus: false,
     });
     await createNewWorkOff(userId, session);
     return user;
   }
-  if (userId && existingUser?.role !== 'SALESPERSON') {
+  if (userId && existingUser?.role === 'SUPERADMIN') {
     return existingUser;
   } else {
     throw new AuthenticationError(`Authentication error.`);
@@ -137,15 +138,25 @@ export const handleGetUsers = async (
   userId?: string,
   session?: ClientSession
 ): Promise<Users[]> => {
-  const userData = await findOneUser({ id: userId });
+  const userData = await UsersModel.findOne({ id: userId });
 
   if (userData?.role === 'SUPERADMIN') {
-    const users = await UsersModel.find();
+    const users = await UsersModel.aggregate([
+      {
+        $lookup: {
+          from: BranchesModel.collection.name,
+          localField: 'branchId',
+          foreignField: 'id',
+          as: 'branchDetails',
+        },
+      },
+      { $unwind: '$branchDetails' },
+    ]);
     return users;
   } else {
     const users = await UsersModel.aggregate([
       {
-        $match: { userId: userId },
+        $match: { branchId: userData?.branchId, role: 'SALESPERSON' },
       },
       {
         $lookup: {
@@ -209,7 +220,7 @@ export const createNewUser = async (
 ): Promise<Users> => {
   const userData = await UsersModel.findOne({ id: userId });
 
-  if (userData?.role === 'ADMIN') {
+  if (userData?.role === 'SUPERADMIN') {
     const newUser = new UsersModel({
       email,
       passwordStr,
@@ -218,7 +229,7 @@ export const createNewUser = async (
       lastName,
       branchId,
       userId,
-      role: 'SALESPERSON',
+      role,
       bio,
     });
 
@@ -231,8 +242,8 @@ export const createNewUser = async (
       password,
       firstName,
       lastName,
-      branchId,
-      role: 'ADMIN',
+      branchId: userData?.branchId,
+      role: 'SALESPERSON',
       bio,
     });
 

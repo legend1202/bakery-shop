@@ -29,9 +29,9 @@ export const create = async (
       req.userId,
       session
     );
-    const branchData = await BranchesModel.findOne({ id: newProduct.branchId });
+    /* const branchData = await BranchesModel.findOne({ id: newProduct.branchId }); */
     return sendResponse(res, 201, 'Created Branch Successfully', {
-      branchDetails: branchData,
+      /* branchDetails: branchData, */
       id: newProduct.id,
       branchId: newProduct.id,
       imageUrls: newProduct.imageUrls,
@@ -91,11 +91,11 @@ export const updateProduct = async (req: Request, res: Response) => {
   try {
     const { product } = req.body;
     const updatedUser = await handleUpdateProducts(product, session);
-    const branchData = await BranchesModel.findOne({
+    /* const branchData = await BranchesModel.findOne({
       id: updatedUser.branchId,
-    });
+    }); */
     return sendResponse(res, 201, 'Updated Branch Successfully', {
-      branchDetails: branchData,
+     /*  branchDetails: branchData, */
       id: updatedUser.id,
       branchId: updatedUser.id,
       imageUrls: updatedUser.imageUrls,

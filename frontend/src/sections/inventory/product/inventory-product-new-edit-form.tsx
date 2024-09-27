@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -11,12 +11,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { useGetBranchLists } from 'src/api/branch';
 import { createMngProduct, useGetProductListsByUser } from 'src/api/product';
 
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-import { IProduct, IMProduct } from 'src/types/product';
+import { IMProduct } from 'src/types/product';
 
 type Props = {
   afterSavebranch: (newProduct: IMProduct) => void;
@@ -26,19 +25,19 @@ export default function InventoryProductNewEditForm({ afterSavebranch }: Props) 
 
   const { products } = useGetProductListsByUser();
 
-  const { branches } = useGetBranchLists();
+  /* const { branches } = useGetBranchLists(); */
 
-  const [productsForBranch, setProductsForBranch] = useState<IProduct[]>([]);
+  /* const [productsForBranch, setProductsForBranch] = useState<IProduct[]>([]); */
 
   const NewProductSchema = Yup.object().shape({
-    branchId: Yup.string().required('Branch is required'),
+    /*  branchId: Yup.string().required('Branch is required'), */
     productId: Yup.string().required('Product is required'),
     quantity: Yup.number().required('Quantity is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
-      branchId: '',
+      /* branchId: '', */
       productId: '',
       quantity: 0,
       bio: '',
@@ -60,17 +59,16 @@ export default function InventoryProductNewEditForm({ afterSavebranch }: Props) 
 
   const values = watch();
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (values.branchId) {
       const updatedProducts = products.filter((product) => product.branchId === values.branchId);
       setProductsForBranch(updatedProducts);
     }
-  }, [values.branchId, products]);
+  }, [values.branchId, products]); */
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const saveData = { ...values };
-      const saveResults: any = await createMngProduct(saveData);
+      const saveResults: any = await createMngProduct(values);
       if (saveResults.data?.success) {
         reset();
         afterSavebranch(saveResults.data.result);
@@ -94,10 +92,10 @@ export default function InventoryProductNewEditForm({ afterSavebranch }: Props) 
             display="grid"
             gridTemplateColumns={{
               xs: 'repeat(1, 1fr)',
-              sm: 'repeat(5, 1fr)',
+              sm: 'repeat(4, 1fr)',
             }}
           >
-            {branches && (
+            {/* {branches && (
               <RHFSelect
                 name="branchId"
                 label="Branch"
@@ -112,8 +110,8 @@ export default function InventoryProductNewEditForm({ afterSavebranch }: Props) 
                 ))}
               </RHFSelect>
             )}
-
-            {productsForBranch && (
+ */}
+            {products && (
               <RHFSelect
                 name="productId"
                 label="Product"
@@ -121,7 +119,7 @@ export default function InventoryProductNewEditForm({ afterSavebranch }: Props) 
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {productsForBranch.map((option) => (
+                {products.map((option) => (
                   <MenuItem key={option.id} value={option?.id}>
                     {option?.name}
                   </MenuItem>

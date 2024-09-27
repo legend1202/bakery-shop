@@ -36,10 +36,10 @@ router.get(
 router.put(
   '/update',
   errorWrap(verifyToken, 'Could not verify JWT token'),
-  errorWrap(
+  /* errorWrap(
     verifyAdmin,
     `Admin can create branches only. This user can't get branches`
-  ),
+  ), */
   withTransaction(errorWrap(updateSupply, 'Could not update Branch'))
 );
 

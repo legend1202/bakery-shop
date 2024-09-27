@@ -24,6 +24,8 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
+const roles = ['ADMIN', 'SALESPERSON'];
+
 export default function UserNewEditForm() {
   const { t } = useTranslate();
 
@@ -40,6 +42,8 @@ export default function UserNewEditForm() {
     lastName: Yup.string().required('Location is required'),
     email: Yup.string().required('Images is required'),
     password: Yup.string().required('Content is required'),
+    /* branchId: Yup.string().required('Branch is required'),
+    role: Yup.string().required('Role is required'), */
   });
 
   const defaultValues = useMemo(
@@ -48,7 +52,8 @@ export default function UserNewEditForm() {
       lastName: '',
       email: '',
       password: '',
-      branchId: '',
+      /* branchId: '',
+      role: '', */
       bio: '',
     }),
     []
@@ -70,8 +75,7 @@ export default function UserNewEditForm() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const saveData = { ...values, role: user?.role };
-      const saveResults = await createUser(saveData);
+      const saveResults = await createUser(values);
       if (saveResults.data?.success) {
         reset();
         enqueueSnackbar('Create success!');
@@ -118,23 +122,38 @@ export default function UserNewEditForm() {
                 ),
               }}
             />
-          </Box>
+            {user?.role === 'SUPERADMIN' && branches && (
+              <RHFSelect
+                name="branchId"
+                label="Branch"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {branches.map((option) => (
+                  <MenuItem key={option.id} value={option?.id}>
+                    {option?.name}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+            )}
 
-          {user?.role === 'ADMIN' && branches && (
-            <RHFSelect
-              name="branchId"
-              label="Branch"
-              fullWidth
-              InputLabelProps={{ shrink: true }}
-              PaperPropsSx={{ textTransform: 'capitalize' }}
-            >
-              {branches.map((option) => (
-                <MenuItem key={option.id} value={option?.id}>
-                  {option?.name}
-                </MenuItem>
-              ))}
-            </RHFSelect>
-          )}
+            {user?.role === 'SUPERADMIN' && branches && (
+              <RHFSelect
+                name="role"
+                label="Role"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {roles.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+            )}
+          </Box>
 
           <RHFTextField name="bio" label="Bio" />
         </Stack>

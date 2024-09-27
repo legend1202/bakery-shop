@@ -90,6 +90,7 @@ export const paths = {
   sale: {
     root: `${ROOTS.SALE}`,
     create: `${ROOTS.SALE}/create`,
+    purchase: `${ROOTS.SALE}/purchase`,
     list: `${ROOTS.SALE}/list`,
   },
   attendance: {

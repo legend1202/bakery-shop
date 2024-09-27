@@ -12,6 +12,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 const MngProductListPage = lazy(() => import('src/pages/product/list'));
 const MngSuppliesListPage = lazy(() => import('src/pages/supply/list'));
 const SaleMngPage = lazy(() => import('src/pages/Sale/list'));
+const PurchasePage = lazy(() => import('src/pages/Sale/purchase'));
 const AttendanceMngPage = lazy(() => import('src/pages/attendance/list'));
 const CustomerOrderListPage = lazy(() => import('src/pages/customerOrder/list'));
 
@@ -31,6 +32,7 @@ export const mngRoutes = [
       { path: paths.mng.customOrder.list, element: <CustomerOrderListPage /> },
       { path: paths.mng.supply.list, element: <MngSuppliesListPage /> },
       { path: paths.sale.list, element: <SaleMngPage /> },
+      { path: paths.sale.purchase, element: <PurchasePage /> },
       { path: paths.attendance.list, element: <AttendanceMngPage /> },
     ],
   },

@@ -22,8 +22,8 @@ import { IMSupply } from 'src/types/supply';
 import MngSupplyNewEditForm from '../mng-supply-new-edit-form';
 import {
   RenderCellBio,
+  RenderCellDate,
   RenderCellAmount,
-  RenderCellBranch,
   RenderCellStatus,
   RenderCellProduct,
 } from '../mng-supply-list-item';
@@ -94,14 +94,14 @@ export default function MngSupplyListView() {
   };
 
   const columns: GridColDef[] = [
-    {
+    /* {
       field: 'branchId',
       headerName: 'Branch',
       flex: 1,
       minWidth: 180,
       hideable: false,
       renderCell: (params) => <RenderCellBranch params={params} />,
-    },
+    }, */
     {
       field: 'supplyId',
       headerName: 'Supply',
@@ -115,6 +115,12 @@ export default function MngSupplyListView() {
       headerName: 'Quantity',
       minWidth: 100,
       renderCell: (params) => <RenderCellAmount params={params} />,
+    },
+    {
+      field: 'createAt',
+      headerName: 'Date',
+      minWidth: 140,
+      renderCell: (params) => <RenderCellDate params={params} />,
     },
     {
       field: 'bio',
@@ -142,7 +148,7 @@ export default function MngSupplyListView() {
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Confirm"
+          label="Accept"
           onClick={() => handleConfirmRow(params.row.id)}
         />,
         <GridActionsCellItem

@@ -9,10 +9,7 @@ import {
   GridColumnVisibilityModel,
 } from '@mui/x-data-grid';
 
-import { isAdminFn } from 'src/utils/role-check';
-
 import { useTranslate } from 'src/locales';
-import { useAuthContext } from 'src/auth/hooks';
 import { MngProductDelete, MngProductConfirm, useGetMngProductListsByUser } from 'src/api/product';
 
 import Iconify from 'src/components/iconify';
@@ -27,7 +24,6 @@ import {
   RenderCellBio,
   RenderCellStatus,
   RenderCellAmount,
-  RenderCellBranch,
   RenderCellProduct,
 } from '../inventory-product-list-item';
 
@@ -43,10 +39,6 @@ export default function MngProductListView() {
   const { t } = useTranslate();
 
   const settings = useSettingsContext();
-
-  const { user } = useAuthContext();
-
-  const isAdmin = isAdminFn(user?.role);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -114,32 +106,20 @@ export default function MngProductListView() {
     }
   };
 
-  const actions = (params: any) => {
-    if (isAdmin) {
-      return [
-        <GridActionsCellItem
-          showInMenu
-          icon={<Iconify icon="solar:eye-bold" />}
-          label="Store"
-          onClick={() => handleConfirmRow(params.row.id)}
-        />,
-        <GridActionsCellItem
-          showInMenu
-          icon={<Iconify icon="solar:eye-bold" />}
-          label="Cancel"
-          onClick={() => handleDeleteRow(params.row.id)}
-        />,
-      ];
-    }
-    return [
-      <GridActionsCellItem
-        showInMenu
-        icon={<Iconify icon="solar:eye-bold" />}
-        label="Cancel"
-        onClick={() => handleDeleteRow(params.row.id)}
-      />,
-    ];
-  };
+  const actions = (params: any) => [
+    <GridActionsCellItem
+      showInMenu
+      icon={<Iconify icon="solar:eye-bold" />}
+      label="Store"
+      onClick={() => handleConfirmRow(params.row.id)}
+    />,
+    <GridActionsCellItem
+      showInMenu
+      icon={<Iconify icon="solar:eye-bold" />}
+      label="Cancel"
+      onClick={() => handleDeleteRow(params.row.id)}
+    />,
+  ];
 
   const columns: GridColDef[] = [
     {
@@ -150,14 +130,14 @@ export default function MngProductListView() {
       hideable: false,
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
-    {
+    /* {
       field: 'branchId',
       headerName: 'Branch',
       flex: 1,
       minWidth: 180,
       hideable: false,
       renderCell: (params) => <RenderCellBranch params={params} />,
-    },
+    }, */
     {
       field: 'quantity',
       headerName: 'Quantity',

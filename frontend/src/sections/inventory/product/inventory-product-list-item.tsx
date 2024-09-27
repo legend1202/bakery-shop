@@ -55,7 +55,7 @@ export function RenderCellStatus({ params }: ParamsProps) {
       return 'Pending';
     }
     if (status === 1) {
-      return 'Delivered';
+      return 'Stored';
     }
     return 'Cancelled';
   };

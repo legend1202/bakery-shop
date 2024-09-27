@@ -41,32 +41,14 @@ export const handleGetProducts = async (
   userId?: string,
   session?: ClientSession
 ): Promise<Products[]> => {
-  const existingUser = await UsersModel.findOne({ id: userId });
+  /* const existingUser = await UsersModel.findOne({ id: userId }); */
 
-  if (existingUser?.role === 'ADMIN') {
-    const branches = await BranchesModel.find({ userId }, 'id');
-    const branchIds = await branches.map((branch) => branch.id);
+  /* if (existingUser?.role === 'ADMIN') {
+   */
+  const products = await ProductsModel.find();
 
-    const products = await ProductsModel.aggregate([
-      /* {
-        $match: { userId: userId },
-      }, */
-      {
-        $match: { branchId: { $in: branchIds } },
-      },
-      {
-        $lookup: {
-          from: BranchesModel.collection.name,
-          localField: 'branchId',
-          foreignField: 'id',
-          as: 'branchDetails',
-        },
-      },
-      { $unwind: '$branchDetails' },
-    ]);
-
-    return products;
-  } else {
+  return products;
+  /* } else {
     const products = await ProductsModel.aggregate([
       {
         $match: { branchId: existingUser?.branchId },
@@ -83,7 +65,7 @@ export const handleGetProducts = async (
     ]);
 
     return products;
-  }
+  } */
 };
 
 export const handleUpdateProducts = async (
@@ -120,7 +102,7 @@ export const createNewProduct = async (
   userId?: string,
   session?: ClientSession
 ): Promise<Products> => {
-  const { branchId } = product;
+  /* const { branchId } = product;
 
   if (branchId) {
     const newProduct = new ProductsModel({
@@ -130,18 +112,18 @@ export const createNewProduct = async (
 
     await newProduct.save({ session });
     return newProduct;
-  } else {
-    const userData = await UsersModel.findOne({ id: userId });
+  } else { */
+  /* const userData = await UsersModel.findOne({ id: userId }); */
 
-    const newProduct = new ProductsModel({
-      ...product,
-      userId,
-      branchId: userData?.branchId,
-    });
+  const newProduct = new ProductsModel({
+    ...product,
+    userId,
+    /* branchId: userData?.branchId, */
+  });
 
-    await newProduct.save({ session });
-    return newProduct;
-  }
+  await newProduct.save({ session });
+  return newProduct;
+  /* } */
 };
 
 export const handleDeleteProduct = async (

@@ -31,7 +31,7 @@ export const handleBranchCreation = async (
     );
   }
 
-  const newBranch = await createNewBranch(name, location, bio, userId, session);
+  const newBranch = await createNewBranch(name, location, bio, session);
 
   return newBranch;
 };
@@ -86,14 +86,12 @@ export const createNewBranch = async (
   name: string,
   location: string,
   bio?: string,
-  userId?: string,
   session?: ClientSession
 ): Promise<Branches> => {
   const newBranch = new BranchesModel({
     name,
     location,
     bio,
-    userId,
   });
 
   await newBranch.save({ session });

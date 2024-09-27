@@ -21,12 +21,9 @@ export const handleGetSaleByUser = async (
   const existingUser = await UsersModel.findOne({ id: userId });
 
   if (existingUser?.role === 'ADMIN') {
-    const branches = await BranchesModel.find({ userId }, 'id');
-    const branchIds = await branches.map((branch) => branch.id);
-
     const sales = await SalesModel.aggregate([
       {
-        $match: { branchId: { $in: branchIds } },
+        $match: { branchId: existingUser.branchId },
       },
       {
         $lookup: {

@@ -19,7 +19,7 @@ export const handleMngProductCreation = async (
   userId?: string,
   session?: ClientSession
 ): Promise<MngProducts> => {
-  const { branchId, productId, quantity, bio } = product;
+  const { productId, quantity, bio } = product;
 
   if (!userId) throw new RequestError('User must be registered', 400);
   if (!productId) throw new RequestError('Proudct name must not be empty', 400);
@@ -27,7 +27,7 @@ export const handleMngProductCreation = async (
 
   const newproduct = await createNewMngProduct(
     productId,
-    branchId,
+    /* branchId, */
     userId,
     quantity,
     bio,
@@ -39,16 +39,18 @@ export const handleMngProductCreation = async (
 
 export const createNewMngProduct = async (
   productId: string,
-  branchId?: string,
+  /* branchId?: string, */
   userId?: string,
   quantity?: number,
   bio?: string,
   session?: ClientSession
 ): Promise<MngProducts> => {
-  if (branchId) {
+  /*   if (branchId) { */
+  const userData = await UsersModel.findOne({ id: userId });
+  if (userData?.role === 'SUPERADMIN') {
     const newProduct = new MngProductsModel({
       productId,
-      branchId,
+      /*  branchId, */
       userId,
       quantity,
       customOrderFlag: false,
@@ -59,7 +61,6 @@ export const createNewMngProduct = async (
     await newProduct.save({ session });
     return newProduct;
   } else {
-    const userData = await UsersModel.findOne({ id: userId });
     const newProduct = new MngProductsModel({
       productId,
       branchId: userData?.branchId,
@@ -73,6 +74,21 @@ export const createNewMngProduct = async (
     await newProduct.save({ session });
     return newProduct;
   }
+  /* } else {
+    const userData = await UsersModel.findOne({ id: userId });
+    const newProduct = new MngProductsModel({
+      productId,
+      branchId: userData?.branchId,
+      userId,
+      quantity,
+      customOrderFlag: false,
+      status: 0,
+      bio,
+    });
+
+    await newProduct.save({ session });
+    return newProduct;
+  } */
 };
 
 export const handleGetMngProductsByUser = async (
@@ -85,7 +101,7 @@ export const handleGetMngProductsByUser = async (
       500
     );
   } else {
-    const userData = await UsersModel.findOne({ id: userId });
+    /* const userData = await UsersModel.findOne({ id: userId });
     if (userData?.role === 'SALESPERSON') {
       const products = await MngProductsModel.aggregate([
         {
@@ -140,32 +156,39 @@ export const handleGetMngProductsByUser = async (
       ]);
 
       return products;
-    } else {
-      const products = await MngProductsModel.aggregate([
-        {
-          $match: { customOrderFlag: false },
+    } else { */
+    const products = await MngProductsModel.aggregate([
+      {
+        $match: { customOrderFlag: false },
+      },
+      {
+        $lookup: {
+          from: ProductsModel.collection.name,
+          localField: 'productId',
+          foreignField: 'id',
+          as: 'productDetails',
         },
-        {
-          $lookup: {
-            from: ProductsModel.collection.name,
-            localField: 'productId',
-            foreignField: 'id',
-            as: 'productDetails',
+      },
+      { $unwind: '$productDetails' },
+      {
+        $lookup: {
+          from: BranchesModel.collection.name,
+          localField: 'branchId',
+          foreignField: 'id',
+          as: 'branchDetails',
+        },
+      },
+      {
+        $addFields: {
+          branchDetails: {
+            $ifNull: ['$branchDetails', []], // If branchDetails is null, set it to an empty array
           },
         },
-        { $unwind: '$productDetails' },
-        {
-          $lookup: {
-            from: BranchesModel.collection.name,
-            localField: 'branchId',
-            foreignField: 'id',
-            as: 'branchDetails',
-          },
-        },
-        { $unwind: '$branchDetails' },
-      ]);
-      return products;
-    }
+      },
+      { $unwind: { path: '$branchDetails', preserveNullAndEmptyArrays: true } },
+    ]);
+    return products;
+    /* } */
   }
 };
 
@@ -179,7 +202,7 @@ export const handleGetMngProducts = async (
       500
     );
   } else {
-    const userData = await UsersModel.findOne({ id: userId });
+    /* const userData = await UsersModel.findOne({ id: userId });
     if (userData?.role === 'SALESPERSON') {
       const products = await MngProductsModel.aggregate([
         {
@@ -234,29 +257,36 @@ export const handleGetMngProducts = async (
       ]);
 
       return products;
-    } else {
-      const products = await MngProductsModel.aggregate([
-        {
-          $lookup: {
-            from: ProductsModel.collection.name,
-            localField: 'productId',
-            foreignField: 'id',
-            as: 'productDetails',
+    } else { */
+    const products = await MngProductsModel.aggregate([
+      {
+        $lookup: {
+          from: ProductsModel.collection.name,
+          localField: 'productId',
+          foreignField: 'id',
+          as: 'productDetails',
+        },
+      },
+      { $unwind: '$productDetails' },
+      {
+        $lookup: {
+          from: BranchesModel.collection.name,
+          localField: 'branchId',
+          foreignField: 'id',
+          as: 'branchDetails',
+        },
+      },
+      {
+        $addFields: {
+          branchDetails: {
+            $ifNull: ['$branchDetails', []], // If branchDetails is null, set it to an empty array
           },
         },
-        { $unwind: '$productDetails' },
-        {
-          $lookup: {
-            from: BranchesModel.collection.name,
-            localField: 'branchId',
-            foreignField: 'id',
-            as: 'branchDetails',
-          },
-        },
-        { $unwind: '$branchDetails' },
-      ]);
-      return products;
-    }
+      },
+      { $unwind: { path: '$branchDetails', preserveNullAndEmptyArrays: true } },
+    ]);
+    return products;
+    /* } */
   }
 };
 

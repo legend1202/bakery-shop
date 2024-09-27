@@ -17,7 +17,7 @@ export default function UserCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : "lg"}>
       <CustomBreadcrumbs
-        heading={t("Admin")}
+        heading={t("User")}
         links={[
           { name: t("User"), href: paths.admin.users.create },
           {

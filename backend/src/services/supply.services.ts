@@ -18,10 +18,10 @@ export const handleSupplyCreation = async (
   userId?: string,
   session?: ClientSession
 ): Promise<Supplies> => {
-  const { branchId, name, price, bio } = supply;
+  const { name, price, bio } = supply;
 
-  if (!branchId) throw new RequestError('Branch name must not be empty', 400);
-
+  /*  if (!branchId) throw new RequestError('Branch name must not be empty', 400);
+   */
   if (!name) throw new RequestError('Proudct name must not be empty', 400);
 
   if (!userId) {
@@ -30,7 +30,7 @@ export const handleSupplyCreation = async (
       500
     );
   } else {
-    const existingBranch = await findOneSupply({ name, branchId, price });
+    const existingBranch = await findOneSupply({ name, price });
     if (existingBranch) {
       throw new RequestError(
         `Can't register this supply. this supply has already created.`,
@@ -39,7 +39,7 @@ export const handleSupplyCreation = async (
     } else {
       const newBranch = await createNewSupply(
         userId,
-        branchId,
+        /* branchId, */
         name,
         price,
         bio,
@@ -55,24 +55,11 @@ export const handleGetSupplies = async (
   userId?: string,
   session?: ClientSession
 ): Promise<Supplies[]> => {
-  if (userId) {
-    const products = await SuppliesModel.aggregate([
-      {
-        $match: { userId: userId },
-      },
-      {
-        $lookup: {
-          from: BranchesModel.collection.name,
-          localField: 'branchId',
-          foreignField: 'id',
-          as: 'branchDetails',
-        },
-      },
-      { $unwind: '$branchDetails' },
-    ]);
+  /* if (userId) { */
+  const products = await SuppliesModel.find();
 
-    return products;
-  } else {
+  return products;
+  /*  } else {
     const products = await SuppliesModel.aggregate([
       {
         $lookup: {
@@ -86,14 +73,14 @@ export const handleGetSupplies = async (
     ]);
 
     return products;
-  }
+  } */
 };
 
 export const handleGetSupplyByUser = async (
   userId?: string,
   session?: ClientSession
 ): Promise<Supplies[]> => {
-  const existingUser = await UsersModel.findOne({ id: userId });
+  /* const existingUser = await UsersModel.findOne({ id: userId });
 
   if (existingUser?.role === 'ADMIN') {
     const products = await handleGetSupplies(userId, session);
@@ -107,12 +94,12 @@ export const handleGetSupplyByUser = async (
         `Can't register this branch. this branch is not existed.`,
         500
       );
-    } else {
-      const products = await SuppliesModel.find({ branchId });
+    } else { */
+  const products = await SuppliesModel.find();
 
-      return products;
-    }
-  }
+  return products;
+  /*   }
+  } */
 };
 
 export const handleUpdateSupply = async (
@@ -146,7 +133,7 @@ export async function findOneSupply(
 
 export const createNewSupply = async (
   userId: string,
-  branchId: string,
+  /* branchId: string, */
   name: string,
   price?: number,
   bio?: string,
@@ -154,7 +141,7 @@ export const createNewSupply = async (
 ): Promise<Supplies> => {
   const newProduct = new SuppliesModel({
     userId,
-    branchId,
+    /* branchId, */
     name,
     price,
     bio,

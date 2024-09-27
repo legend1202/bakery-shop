@@ -30,7 +30,6 @@ import {
   RenderCellSize,
   RenderCellName,
   RenderCellPrice,
-  RenderCellBranch,
 } from '../product-list-item';
 
 const HIDE_COLUMNS = {
@@ -97,12 +96,12 @@ export default function ProductListView() {
       minWidth: 240,
       renderCell: (params) => <RenderCellName params={params} />,
     },
-    {
+    /*  {
       field: 'branch',
       headerName: 'Branch',
       minWidth: 240,
       renderCell: (params) => <RenderCellBranch params={params} />,
-    },
+    }, */
     {
       field: 'code',
       headerName: 'Code',

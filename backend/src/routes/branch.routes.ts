@@ -17,10 +17,10 @@ const router = express.Router();
 router.post(
   '/register',
   errorWrap(verifyToken, 'Could not verify JWT token'),
-  errorWrap(
+  /* errorWrap(
     verifyAdmin,
     `Admin can create branches only. This user can't get branches`
-  ),
+  ), */
   errorWrap(create, 'Could not create branch')
 );
 
@@ -33,20 +33,20 @@ router.get(
 router.put(
   '/update',
   errorWrap(verifyToken, 'Could not verify JWT token'),
-  errorWrap(
+  /*  errorWrap(
     verifyAdmin,
     `Admin can create branches only. This user can't get branches`
-  ),
+  ), */
   withTransaction(errorWrap(updateBranch, 'Could not update Branch'))
 );
 
 router.post(
   '/delete',
   errorWrap(verifyToken, 'Could not verify JWT token'),
-  errorWrap(
+  /* errorWrap(
     verifyAdmin,
     `Admin can delete branches only. This user can't delete branches`
-  ),
+  ), */
   withTransaction(errorWrap(deleteBranch, 'Could not delete Branch'))
 );
 

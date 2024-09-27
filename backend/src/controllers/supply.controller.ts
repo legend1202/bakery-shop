@@ -24,10 +24,10 @@ export const create = async (
   try {
     const { supply } = req.body;
     const newSupply = await handleSupplyCreation(supply, req.userId, session);
-    const branchData = await BranchesModel.findOne({ id: newSupply.branchId });
+    /* const branchData = await BranchesModel.findOne({ id: newSupply.branchId }); */
     return sendResponse(res, 201, 'Created Supply Successfully', {
       id: newSupply.id,
-      branchDetails: branchData,
+      /* branchDetails: branchData, */
       name: newSupply.name,
       bio: newSupply.bio,
     });

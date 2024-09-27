@@ -11,8 +11,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { useGetBranchLists } from 'src/api/branch';
-import { createMngProduct, useGetProductListsByUser } from 'src/api/product';
+import { useGetProductListsByUser } from 'src/api/product';
+import { createMngCustomerOrder } from 'src/api/customerOrder';
 
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
@@ -26,12 +26,8 @@ export default function CustomerOrderNewEditForm({ afterSavebranch }: Props) {
 
   const { products } = useGetProductListsByUser();
 
-  const { branches } = useGetBranchLists();
-
-  const [productsForBranch, setProductsForBranch] = useState<IProduct[]>([]);
-
   const NewProductSchema = Yup.object().shape({
-    branchId: Yup.string().required('Branch is required'),
+    /*  branchId: Yup.string().required('Branch is required'), */
     productId: Yup.string().required('Product is required'),
     quantity: Yup.number().required('Quantity is required'),
     price: Yup.number(),
@@ -39,7 +35,7 @@ export default function CustomerOrderNewEditForm({ afterSavebranch }: Props) {
 
   const defaultValues = useMemo(
     () => ({
-      branchId: '',
+      /* branchId: '', */
       productId: '',
       quantity: 0,
       price: 0,
@@ -65,12 +61,12 @@ export default function CustomerOrderNewEditForm({ afterSavebranch }: Props) {
 
   const values = watch();
 
-  useEffect(() => {
+  /*  useEffect(() => {
     if (values.branchId) {
       const updatedProducts = products.filter((product) => product.branchId === values.branchId);
       setProductsForBranch(updatedProducts);
     }
-  }, [values.branchId, products]);
+  }, [values.branchId, products]); */
 
   useEffect(() => {
     if (values.productId) {
@@ -91,7 +87,7 @@ export default function CustomerOrderNewEditForm({ afterSavebranch }: Props) {
     try {
       const quantity = -values.quantity;
       const saveData = { ...values, quantity };
-      const saveResults: any = await createMngProduct(saveData);
+      const saveResults: any = await createMngCustomerOrder(saveData);
       if (saveResults.data?.success) {
         reset();
         afterSavebranch(saveResults.data.result);
@@ -115,10 +111,10 @@ export default function CustomerOrderNewEditForm({ afterSavebranch }: Props) {
             display="grid"
             gridTemplateColumns={{
               xs: 'repeat(1, 1fr)',
-              sm: 'repeat(5, 1fr)',
+              sm: 'repeat(4, 1fr)',
             }}
           >
-            {branches && (
+            {/*  {branches && (
               <RHFSelect
                 name="branchId"
                 label="Branch"
@@ -132,9 +128,9 @@ export default function CustomerOrderNewEditForm({ afterSavebranch }: Props) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-            )}
+            )} */}
 
-            {productsForBranch && (
+            {products && (
               <RHFSelect
                 name="productId"
                 label="Product"
@@ -142,7 +138,7 @@ export default function CustomerOrderNewEditForm({ afterSavebranch }: Props) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {productsForBranch.map((option) => (
+                {products.map((option) => (
                   <MenuItem key={option.id} value={option?.id}>
                     {option?.name}
                   </MenuItem>

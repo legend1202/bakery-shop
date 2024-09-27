@@ -126,12 +126,12 @@ export const handleAttendance = async (
   } else {
     const userData = await UsersModel.findOne({ id: userId });
     if (userData?.role === 'ADMIN') {
-      const branches = await BranchesModel.find({ userId }, 'id');
-      const branchIds = await branches.map((branch) => branch.id);
+      /* const branches = await BranchesModel.find({ userId }, 'id');
+      const branchIds = await branches.map((branch) => branch.id); */
 
       const results = await AttendancesModel.aggregate([
         {
-          $match: { branchId: { $in: branchIds } },
+          $match: { branchId: userData.branchId },
         },
         {
           $lookup: {

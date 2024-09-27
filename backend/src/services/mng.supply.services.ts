@@ -22,13 +22,13 @@ export const handleMngSupplyCreation = async (
   const { supplyId, branchId, quantity, bio } = product;
 
   if (!userId) throw new RequestError('User must not be empty', 400);
-  if (!branchId) throw new RequestError('Branch name must not be empty', 400);
+  /*  if (!branchId) throw new RequestError('Branch name must not be empty', 400); */
   if (!supplyId) throw new RequestError('Proudct name must not be empty', 400);
   if (!quantity) throw new RequestError('Price must not be empty', 400);
 
   const newproduct = await createNewMngSupply(
     supplyId,
-    branchId,
+    /* branchId, */
     userId,
     quantity,
     bio,
@@ -40,7 +40,7 @@ export const handleMngSupplyCreation = async (
 
 export const createNewMngSupply = async (
   supplyId: string,
-  branchId: string,
+  /* branchId: string, */
   userId: string,
   quantity: number,
   bio?: string,
@@ -48,7 +48,7 @@ export const createNewMngSupply = async (
 ): Promise<MngSupplies> => {
   const newProduct = new MngSuppiesModel({
     supplyId,
-    branchId,
+    /*  branchId, */
     userId,
     quantity,
     status: false,
@@ -69,19 +69,19 @@ export const handleGetMngSupplyByUser = async (
       500
     );
   } else {
-    const userData = await UsersModel.findOne({ id: userId });
-    if (userData?.role === 'SUPERADMIN') {
-      const products = await MngSuppiesModel.aggregate([
-        {
-          $lookup: {
-            from: SuppliesModel.collection.name,
-            localField: 'supplyId',
-            foreignField: 'id',
-            as: 'supplyDetails',
-          },
+    /* const userData = await UsersModel.findOne({ id: userId });
+    if (userData?.role === 'SUPERADMIN') { */
+    const products = await MngSuppiesModel.aggregate([
+      {
+        $lookup: {
+          from: SuppliesModel.collection.name,
+          localField: 'supplyId',
+          foreignField: 'id',
+          as: 'supplyDetails',
         },
-        { $unwind: '$supplyDetails' },
-        {
+      },
+      { $unwind: '$supplyDetails' },
+      /*  {
           $lookup: {
             from: BranchesModel.collection.name,
             localField: 'branchId',
@@ -89,10 +89,10 @@ export const handleGetMngSupplyByUser = async (
             as: 'branchDetails',
           },
         },
-        { $unwind: '$branchDetails' },
-      ]);
-      return products;
-    } else {
+        { $unwind: '$branchDetails' }, */
+    ]);
+    return products;
+    /*  } else {
       const products = await MngSuppiesModel.aggregate([
         {
           $match: { userId: userId },
@@ -117,7 +117,7 @@ export const handleGetMngSupplyByUser = async (
         { $unwind: '$branchDetails' },
       ]);
       return products;
-    }
+    } */
   }
 };
 

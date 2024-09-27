@@ -21,9 +21,9 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 
 import { ISale, IMSale } from 'src/types/sale';
 
-import MngProductNewEditForm from '../sale-new-edit-form';
 import {
   RenderCellBio,
+  RenderCellDate,
   RenderCellPrice,
   RenderCellProduct,
   RenderCellQuantity,
@@ -69,12 +69,6 @@ export default function SaleMngView() {
     }
   }, [inventory]);
 
-  const afterSavebranch = async (newProduct: ISale) => {
-    enqueueSnackbar('Created Successfully');
-    setTableData([...tableData, newProduct]);
-    setCurrentInventory(currentInventory - newProduct.quantity);
-  };
-
   const handleDeleteRow = async (row: IMSale) => {
     const updateData = { id: row.id };
     const result = await SaleDelete(updateData);
@@ -95,26 +89,32 @@ export default function SaleMngView() {
       field: 'productId',
       headerName: 'Product',
       flex: 1,
-      minWidth: 280,
+      minWidth: 180,
       hideable: false,
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
     {
       field: 'quantity',
       headerName: 'Quantity',
-      minWidth: 220,
+      minWidth: 180,
       renderCell: (params) => <RenderCellQuantity params={params} />,
     },
     {
       field: 'price',
       headerName: 'Price',
-      minWidth: 220,
+      minWidth: 180,
       renderCell: (params) => <RenderCellPrice params={params} />,
+    },
+    {
+      field: 'createdAt',
+      headerName: 'Date',
+      minWidth: 180,
+      renderCell: (params) => <RenderCellDate params={params} />,
     },
     {
       field: 'bio',
       headerName: 'Bio',
-      minWidth: 280,
+      minWidth: 220,
       renderCell: (params) => <RenderCellBio params={params} />,
     },
     {
@@ -165,7 +165,7 @@ export default function SaleMngView() {
             name: 'List',
           },
         ]}
-        action={
+        /* action={
           <Card
             sx={{
               padding: 1,
@@ -176,13 +176,13 @@ export default function SaleMngView() {
           >
             Inventory: {currentInventory}
           </Card>
-        }
+        } */
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
-      <MngProductNewEditForm afterSavebranch={afterSavebranch} />
-
+      {/* <MngProductNewEditForm afterSavebranch={afterSavebranch} />
+       */}
       <Card
         sx={{
           mt: { xs: 2, md: 1 },

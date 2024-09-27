@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export interface Products extends Document {
   id: string;
-  branchId: string;
+  /* branchId: string; */
   imageUrls: string[];
   userId?: string;
   name: string;
@@ -23,9 +23,9 @@ const ProductsSchema = new Schema<Products>(
       required: true,
       unique: true,
     },
-    branchId: {
+    /* branchId: {
       type: String,
-    },
+    }, */
     imageUrls: {
       type: [String],
     },

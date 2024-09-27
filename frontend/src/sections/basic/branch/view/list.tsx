@@ -79,7 +79,7 @@ export default function BranchListView() {
   };
 
   const actions = (params: any) => {
-    if (!isSuperAdmin) {
+    if (isSuperAdmin) {
       return [
         <GridActionsCellItem
           showInMenu
@@ -141,7 +141,7 @@ export default function BranchListView() {
         flexDirection: 'column',
       }}
     >
-      {!isSuperAdmin && <BranchNewEditForm afterSavebranch={afterSavebranch} />}
+      {isSuperAdmin && <BranchNewEditForm afterSavebranch={afterSavebranch} />}
 
       <Card
         sx={{

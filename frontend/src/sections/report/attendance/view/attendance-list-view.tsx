@@ -12,8 +12,10 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 
+import { isSuperAdminFn } from 'src/utils/role-check';
 import { shouldCountAsHalf } from 'src/utils/attendanceTimeValidator';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { useGetBranchLists } from 'src/api/branch';
 import { useGetAttendance } from 'src/api/attendance';
 
@@ -45,6 +47,10 @@ const TABLE_HEAD = [
 
 export default function ReportSaleView() {
   const settings = useSettingsContext();
+
+  const { user } = useAuthContext();
+
+  const isSuperAdmin = isSuperAdminFn(user?.role);
 
   const { branches } = useGetBranchLists();
 
@@ -185,24 +191,26 @@ export default function ReportSaleView() {
                 flexDirection: 'row',
               }}
             >
-              <RHFSelect
-                name="branchId"
-                label="Branch"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-                sx={{ minWidth: 140, mx: 1 }}
-              >
-                <MenuItem key="" value="">
-                  All
-                </MenuItem>
-                {branches &&
-                  branches.map((branch) => (
-                    <MenuItem key={branch.id} value={branch.id}>
-                      {branch.name}
-                    </MenuItem>
-                  ))}
-              </RHFSelect>
+              {isSuperAdmin && (
+                <RHFSelect
+                  name="branchId"
+                  label="Branch"
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                  sx={{ minWidth: 140, mx: 1 }}
+                >
+                  <MenuItem key="" value="">
+                    All
+                  </MenuItem>
+                  {branches &&
+                    branches.map((branch) => (
+                      <MenuItem key={branch.id} value={branch.id}>
+                        {branch.name}
+                      </MenuItem>
+                    ))}
+                </RHFSelect>
+              )}
 
               <RHFTextField name="month" label="Month" type="month" />
             </Card>

@@ -105,7 +105,7 @@ export default function MngProductListView() {
   };
 
   const actions = (params: any) => {
-    if (isAdmin) {
+    if (isSuperAdmin) {
       return [
         <GridActionsCellItem
           showInMenu
@@ -121,67 +121,105 @@ export default function MngProductListView() {
         />,
       ];
     }
-    if (isSuperAdmin) {
-      return [];
-    }
     return [
       <GridActionsCellItem
         showInMenu
         icon={<Iconify icon="solar:eye-bold" />}
-        label="Deliver"
-        onClick={() => handleConfirmRow(params.row.id)}
+        label="Cancel"
+        onClick={() => handleDeleteRow(params.row.id)}
       />,
     ];
   };
 
-  const columns: GridColDef[] = [
-    {
-      field: 'productId',
-      headerName: 'Product',
-      flex: 1,
-      minWidth: 180,
-      hideable: false,
-      renderCell: (params) => <RenderCellProduct params={params} />,
-    },
-    {
-      field: 'branchId',
-      headerName: 'Branch',
-      flex: 1,
-      minWidth: 180,
-      hideable: false,
-      renderCell: (params) => <RenderCellBranch params={params} />,
-    },
-    {
-      field: 'quantity',
-      headerName: 'Quantity',
-      minWidth: 100,
-      renderCell: (params) => <RenderCellAmount params={params} />,
-    },
-    {
-      field: 'bio',
-      headerName: 'Bio',
-      minWidth: 180,
-      renderCell: (params) => <RenderCellBio params={params} />,
-    },
-    {
-      field: 'status',
-      headerName: 'Status',
-      minWidth: 100,
-      renderCell: (params) => <RenderCellStatus params={params} />,
-    },
-    {
-      type: 'actions',
-      field: 'actions',
-      headerName: ' ',
-      align: 'right',
-      headerAlign: 'right',
-      width: 80,
-      sortable: false,
-      filterable: false,
-      disableColumnMenu: true,
-      getActions: (params) => actions(params),
-    },
-  ];
+  const columns: GridColDef[] = isSuperAdmin
+    ? [
+        {
+          field: 'productId',
+          headerName: 'Product',
+          flex: 1,
+          minWidth: 180,
+          hideable: false,
+          renderCell: (params) => <RenderCellProduct params={params} />,
+        },
+        {
+          field: 'branchId',
+          headerName: 'Branch',
+          flex: 1,
+          minWidth: 180,
+          hideable: false,
+          renderCell: (params) => <RenderCellBranch params={params} />,
+        },
+        {
+          field: 'quantity',
+          headerName: 'Quantity',
+          minWidth: 100,
+          renderCell: (params) => <RenderCellAmount params={params} />,
+        },
+        {
+          field: 'bio',
+          headerName: 'Bio',
+          minWidth: 180,
+          renderCell: (params) => <RenderCellBio params={params} />,
+        },
+        {
+          field: 'status',
+          headerName: 'Status',
+          minWidth: 100,
+          renderCell: (params) => <RenderCellStatus params={params} />,
+        },
+        {
+          type: 'actions',
+          field: 'actions',
+          headerName: ' ',
+          align: 'right',
+          headerAlign: 'right',
+          width: 80,
+          sortable: false,
+          filterable: false,
+          disableColumnMenu: true,
+          getActions: (params) => actions(params),
+        },
+      ]
+    : [
+        {
+          field: 'productId',
+          headerName: 'Product',
+          flex: 1,
+          minWidth: 180,
+          hideable: false,
+          renderCell: (params) => <RenderCellProduct params={params} />,
+        },
+        {
+          field: 'quantity',
+          headerName: 'Quantity',
+          minWidth: 100,
+          renderCell: (params) => <RenderCellAmount params={params} />,
+        },
+        {
+          field: 'bio',
+          headerName: 'Bio',
+          minWidth: 180,
+          renderCell: (params) => <RenderCellBio params={params} />,
+        },
+        {
+          field: 'status',
+          headerName: 'Status',
+          minWidth: 100,
+          renderCell: (params) => <RenderCellStatus params={params} />,
+        },
+        {
+          type: 'actions',
+          field: 'actions',
+          headerName: ' ',
+          align: 'right',
+          headerAlign: 'right',
+          width: 80,
+          sortable: false,
+          filterable: false,
+          disableColumnMenu: true,
+          getActions: (params) => actions(params),
+        },
+      ];
 
   const getTogglableColumns = () =>
     columns

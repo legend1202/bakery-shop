@@ -29,7 +29,7 @@ import {
   RenderCellRole,
   RenderCellName,
   RenderCellEmail,
-  /* RenderCellBranch, */
+  RenderCellBranch,
   RenderCellPassword,
 } from '../user-list-items';
 
@@ -81,14 +81,14 @@ export default function UserListView() {
       field: 'name',
       headerName: 'Name',
       flex: 1,
-      minWidth: 180,
+      minWidth: 140,
       hideable: false,
       renderCell: (params) => <RenderCellName params={params} />,
     },
     {
       field: 'email',
       headerName: 'Email',
-      minWidth: 180,
+      minWidth: 220,
       renderCell: (params) => <RenderCellEmail params={params} />,
     },
     {
@@ -97,12 +97,12 @@ export default function UserListView() {
       minWidth: 180,
       renderCell: (params) => <RenderCellPassword params={params} />,
     },
-    /* {
-      field: "branch",
-      headerName: "Branch",
+    {
+      field: 'branch',
+      headerName: 'Branch',
       minWidth: 180,
       renderCell: (params) => <RenderCellBranch params={params} />,
-    }, */
+    },
     {
       field: 'role',
       headerName: 'Role',

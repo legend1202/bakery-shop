@@ -11,16 +11,11 @@ import { Card, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import DialogActions from '@mui/material/DialogActions';
 
-import { isAdminFn } from 'src/utils/role-check';
-
 import { upload } from 'src/api/upload';
-import { useAuthContext } from 'src/auth/hooks';
-import { useGetBranchLists } from 'src/api/branch';
 import { createProduct, updateProduct } from 'src/api/product';
 
-import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
-import { IBranch } from 'src/types/branch';
 import { IProduct, IUploadUrlType } from 'src/types/product';
 
 type Props = {
@@ -31,16 +26,11 @@ type Props = {
 
 export default function OwnerForm({ currentProduct, handleUpdateData, onClose }: Props) {
   const [bannerUrls, setBannerUrls] = useState([] as IUploadUrlType);
-  const { user } = useAuthContext();
-
-  const isAdmin = isAdminFn(user?.role);
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { branches } = useGetBranchLists();
-
   const EventSchema = Yup.object().shape({
-    branchId: Yup.string(),
+    /* branchId: Yup.string(), */
     name: Yup.string().required(),
     code: Yup.string().required(),
     size: Yup.string(),
@@ -52,7 +42,7 @@ export default function OwnerForm({ currentProduct, handleUpdateData, onClose }:
   const methods = useForm({
     resolver: yupResolver(EventSchema),
     defaultValues: {
-      branchId: currentProduct?.branchId || '',
+      /* branchId: currentProduct?.branchId || '', */
       imageUrls: currentProduct?.imageUrls || [],
       price: currentProduct?.price || '',
       name: currentProduct?.name || '',
@@ -167,7 +157,7 @@ export default function OwnerForm({ currentProduct, handleUpdateData, onClose }:
                 md: 'repeat(3, 1fr)',
               }}
             >
-              {isAdmin && (
+              {/* {isAdmin && (
                 <RHFSelect native name="branchId" label="Branch" InputLabelProps={{ shrink: true }}>
                   <option key="" value="" />
                   {branches?.map((branch: IBranch) => (
@@ -176,7 +166,7 @@ export default function OwnerForm({ currentProduct, handleUpdateData, onClose }:
                     </option>
                   ))}
                 </RHFSelect>
-              )}
+              )} */}
 
               <RHFTextField name="name" label="Name" />
 

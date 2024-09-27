@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -11,12 +11,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { useGetBranchLists } from 'src/api/branch';
 import { createMngSupply, useGetSupplyListsByUsers } from 'src/api/supply';
 
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-import { ISupply, IMSupply } from 'src/types/supply';
+import { IMSupply } from 'src/types/supply';
 
 type Props = {
   afterSavebranch: (newProduct: IMSupply) => void;
@@ -26,19 +25,15 @@ export default function InventorySupplyNewEditForm({ afterSavebranch }: Props) {
 
   const { supplies } = useGetSupplyListsByUsers();
 
-  const { branches } = useGetBranchLists();
-
-  const [supplyForBranch, setSupplyForBranch] = useState<ISupply[]>([]);
-
   const NewProductSchema = Yup.object().shape({
-    branchId: Yup.string().required('Branch is required'),
+    /* branchId: Yup.string().required('Branch is required'), */
     supplyId: Yup.string().required('Supply is required'),
     quantity: Yup.number().required('Quantity is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
-      branchId: '',
+      /* branchId: '', */
       supplyId: '',
       quantity: 0,
       bio: '',
@@ -60,12 +55,12 @@ export default function InventorySupplyNewEditForm({ afterSavebranch }: Props) {
 
   const values = watch();
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (values.branchId) {
       const updatedProducts = supplies.filter((product) => product.branchId === values.branchId);
       setSupplyForBranch(updatedProducts);
     }
-  }, [values.branchId, supplies]);
+  }, [values.branchId, supplies]); */
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -94,10 +89,10 @@ export default function InventorySupplyNewEditForm({ afterSavebranch }: Props) {
             display="grid"
             gridTemplateColumns={{
               xs: 'repeat(1, 1fr)',
-              sm: 'repeat(5, 1fr)',
+              sm: 'repeat(4, 1fr)',
             }}
           >
-            {branches && (
+            {/* {branches && (
               <RHFSelect
                 name="branchId"
                 label="Branch"
@@ -111,8 +106,8 @@ export default function InventorySupplyNewEditForm({ afterSavebranch }: Props) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-            )}
-            {supplyForBranch && (
+            )} */}
+            {supplies && (
               <RHFSelect
                 name="supplyId"
                 label="Supply"
@@ -120,7 +115,7 @@ export default function InventorySupplyNewEditForm({ afterSavebranch }: Props) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {supplyForBranch.map((option) => (
+                {supplies.map((option) => (
                   <MenuItem key={option.id} value={option?.id}>
                     {option?.name}
                   </MenuItem>

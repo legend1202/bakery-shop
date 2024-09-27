@@ -1,6 +1,8 @@
 import { GridCellParams } from '@mui/x-data-grid';
 import ListItemText from '@mui/material/ListItemText';
 
+import { fDate } from 'src/utils/format-time';
+
 type ParamsProps = {
   params: GridCellParams;
 };
@@ -37,6 +39,20 @@ export function RenderCellPrice({ params }: ParamsProps) {
   return (
     <ListItemText
       primary={params.row.price}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
+export function RenderCellDate({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={fDate(params.row.createdAt)}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

@@ -52,7 +52,7 @@ export function useNavData() {
 
   const data = useMemo(
     () => [
-      {
+      /* {
         subheader: t('overview'),
         roles: ['ADMIN'],
         items: [
@@ -63,16 +63,30 @@ export function useNavData() {
             roles: ['ADMIN'],
           },
         ],
-      },
+      }, */
 
       {
-        subheader: t('Basic'),
-        roles: ['ADMIN', 'SALESPERSON', 'SUPERADMIN'],
+        subheader: t('Administer'),
+        roles: ['ADMIN', 'SUPERADMIN'],
         items: [
           // Create
           {
             title: t('Branches'),
             path: paths.branches.list,
+            icon: ICONS.user,
+            roles: ['SUPERADMIN'],
+          },
+
+          {
+            title: t('Users'),
+            path: paths.admin.users.create,
+            icon: ICONS.user,
+            roles: ['ADMIN', 'SUPERADMIN'],
+          },
+          // List
+          {
+            title: t('LIST EMPLOYEES'),
+            path: paths.admin.users.list,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
           },
@@ -81,68 +95,68 @@ export function useNavData() {
             title: t('Product'),
             path: paths.product.list,
             icon: ICONS.user,
-            roles: ['ADMIN', 'SALESPERSON'],
+            roles: ['SUPERADMIN'],
           },
           // Supplies
           {
             title: t('Supplies'),
             path: paths.supplies.list,
             icon: ICONS.user,
-            roles: ['ADMIN'],
+            roles: ['SUPERADMIN'],
           },
-          // Shift Criteria
-         /*  {
+          /* // Shift Criteria
+          {
             title: t('Shift'),
             path: paths.shift.list,
             icon: ICONS.user,
-            roles: ['SUPERADMIN'],
+            roles: ['SUPERADMIN', 'ADMIN'],
           }, */
         ],
       },
       {
-        subheader: t('Inventory'),
-        roles: ['ADMIN'],
+        subheader: t('INSUMOS'),
+        roles: ['SUPERADMIN'],
         items: [
           // product
           {
             title: t('Product'),
             path: paths.inventory.product.list,
             icon: ICONS.user,
-            roles: ['ADMIN', 'SALESPERSON'],
+            roles: ['SUPERADMIN'],
           },
           // Supply
           {
             title: t('Supply'),
             path: paths.inventory.supply.list,
             icon: ICONS.user,
-            roles: ['ADMIN'],
+            roles: ['SUPERADMIN'],
           },
         ],
       },
       {
-        subheader: t('Order'),
-        roles: ['ADMIN', 'SALESPERSON', 'SUPERADMIN'],
+        subheader: t('ORDENES'),
+        roles: ['ADMIN', 'SUPERADMIN'],
         items: [
           // product
           {
             title: t('Product'),
             path: paths.mng.product.list,
             icon: ICONS.user,
-            roles: ['ADMIN', 'SALESPERSON', 'SUPERADMIN'],
+            roles: ['ADMIN', 'SUPERADMIN'],
           },
           // Custome Product Order
           {
             title: t('Custom Order'),
             path: paths.mng.customOrder.list,
             icon: ICONS.user,
-            roles: ['ADMIN', 'SALESPERSON', 'SUPERADMIN'],
+            roles: ['ADMIN', 'SUPERADMIN'],
           },
           // Supply
           {
             title: t('Supply'),
             path: paths.mng.supply.list,
             icon: ICONS.user,
-            roles: ['ADMIN'],
+            roles: ['SUPERADMIN'],
           },
         ],
       },
@@ -152,7 +166,13 @@ export function useNavData() {
         items: [
           // sale
           {
-            title: t('Sale'),
+            title: t('Purchase'),
+            path: paths.sale.purchase,
+            icon: ICONS.user,
+            roles: ['SALESPERSON'],
+          },
+          {
+            title: t('List'),
             path: paths.sale.list,
             icon: ICONS.user,
             roles: ['SALESPERSON'],
@@ -168,14 +188,14 @@ export function useNavData() {
             title: t('Product'),
             path: paths.report.product,
             icon: ICONS.user,
-            roles: ['ADMIN', 'SUPERADMIN'],
+            roles: ['SUPERADMIN'],
           },
           // sale
           {
             title: t('Supply'),
             path: paths.report.supply,
             icon: ICONS.user,
-            roles: ['ADMIN', 'SUPERADMIN'],
+            roles: ['SUPERADMIN'],
           },
           {
             title: t('Sale'),
@@ -187,26 +207,6 @@ export function useNavData() {
           {
             title: t('Payroll'),
             path: paths.report.attendance,
-            icon: ICONS.user,
-            roles: ['ADMIN', 'SUPERADMIN'],
-          },
-        ],
-      },
-      {
-        subheader: t('Users'),
-        roles: ['ADMIN', 'SUPERADMIN'],
-        items: [
-          // Create
-          {
-            title: t('Create'),
-            path: paths.admin.users.create,
-            icon: ICONS.user,
-            roles: ['ADMIN', 'SUPERADMIN'],
-          },
-          // List
-          {
-            title: t('List'),
-            path: paths.admin.users.list,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
           },

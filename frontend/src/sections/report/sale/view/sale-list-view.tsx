@@ -124,11 +124,8 @@ export default function ReportSaleView() {
         heading="Report - Sale"
         links={[
           {
-            name: 'Dashboard',
+            name: 'Report',
             href: paths.dashboard.root,
-          },
-          {
-            name: 'Inventory',
           },
           {
             name: 'Sale',

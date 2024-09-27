@@ -109,7 +109,7 @@ export default function CustomerOrderListView() {
   };
 
   const actions = (params: any) => {
-    if (isAdmin) {
+    if (isSuperAdmin) {
       return [
         <GridActionsCellItem
           showInMenu
@@ -125,15 +125,12 @@ export default function CustomerOrderListView() {
         />,
       ];
     }
-    if (isSuperAdmin) {
-      return [];
-    }
     return [
       <GridActionsCellItem
         showInMenu
         icon={<Iconify icon="solar:eye-bold" />}
-        label="Deliver"
-        onClick={() => handleConfirmRow(params.row.id)}
+        label="Cancel"
+        onClick={() => handleDeleteRow(params.row.id)}
       />,
     ];
   };
@@ -182,7 +179,7 @@ export default function CustomerOrderListView() {
     {
       field: 'bio',
       headerName: 'Bio',
-      minWidth: 180,
+      minWidth: 100,
       renderCell: (params) => <RenderCellBio params={params} />,
     },
     {

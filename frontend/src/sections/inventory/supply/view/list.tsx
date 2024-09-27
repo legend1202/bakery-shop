@@ -23,7 +23,6 @@ import InventorySupplyNewEditForm from '../inventory-supply-new-edit-form';
 import {
   RenderCellBio,
   RenderCellAmount,
-  RenderCellBranch,
   RenderCellStatus,
   RenderCellProduct,
 } from '../inventory-supply-list-item';
@@ -94,14 +93,14 @@ export default function InventorySupplyListView() {
   };
 
   const columns: GridColDef[] = [
-    {
+    /* {
       field: 'branchId',
       headerName: 'Branch',
       flex: 1,
       minWidth: 180,
       hideable: false,
       renderCell: (params) => <RenderCellBranch params={params} />,
-    },
+    }, */
     {
       field: 'supplyId',
       headerName: 'Supply',

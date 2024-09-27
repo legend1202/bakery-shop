@@ -35,7 +35,7 @@ export const createNewMngCustomerOrder = async (
   userId: string,
   session?: ClientSession
 ): Promise<MngProducts> => {
-  if (product.branchId) {
+  /* if (product.branchId) {
     const newProduct = new MngProductsModel({
       ...product,
       status: 0,
@@ -44,19 +44,19 @@ export const createNewMngCustomerOrder = async (
 
     await newProduct.save({ session });
     return newProduct;
-  } else {
-    const userData = await UsersModel.findOne({ id: userId });
-    const newProduct = new MngProductsModel({
-      ...product,
-      userId,
-      branchId: userData?.branchId,
-      status: 0,
-      customOrderFlag: true,
-    });
+  } else { */
+  const userData = await UsersModel.findOne({ id: userId });
+  const newProduct = new MngProductsModel({
+    ...product,
+    userId,
+    branchId: userData?.branchId,
+    status: 0,
+    customOrderFlag: true,
+  });
 
-    await newProduct.save({ session });
-    return newProduct;
-  }
+  await newProduct.save({ session });
+  return newProduct;
+  /* } */
 };
 
 export const handleGetMngCustomerOrderByUser = async (
@@ -70,7 +70,7 @@ export const handleGetMngCustomerOrderByUser = async (
     );
   } else {
     const userData = await UsersModel.findOne({ id: userId });
-    if (userData?.role === 'SALESPERSON') {
+    if (userData?.role === 'ADMIN') {
       const products = await MngProductsModel.aggregate([
         {
           $match: { userId: userId, customOrderFlag: true },
@@ -95,7 +95,7 @@ export const handleGetMngCustomerOrderByUser = async (
         { $unwind: '$branchDetails' },
       ]);
       return products;
-    } else if (userData?.role === 'ADMIN') {
+      /* } else if (userData?.role === 'ADMIN') {
       const branches = await BranchesModel.find({ userId }, 'id');
       const branchIds = await branches.map((branch) => branch.id);
 
@@ -123,7 +123,7 @@ export const handleGetMngCustomerOrderByUser = async (
         { $unwind: '$branchDetails' },
       ]);
 
-      return products;
+      return products; */
     } else {
       const products = await MngProductsModel.aggregate([
         {
