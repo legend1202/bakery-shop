@@ -30,7 +30,9 @@ import {
   RenderCellName,
   RenderCellEmail,
   RenderCellBranch,
+  RenderCellPayRate,
   RenderCellPassword,
+  RenderCellWorkTime,
 } from '../user-list-items';
 
 const HIDE_COLUMNS = {
@@ -79,7 +81,7 @@ export default function UserListView() {
   const columns: GridColDef[] = [
     {
       field: 'name',
-      headerName: 'Name',
+      headerName: 'Nombre',
       flex: 1,
       minWidth: 140,
       hideable: false,
@@ -87,20 +89,20 @@ export default function UserListView() {
     },
     {
       field: 'email',
-      headerName: 'Email',
+      headerName: 'Correo electrónico',
       minWidth: 220,
       renderCell: (params) => <RenderCellEmail params={params} />,
     },
     {
       field: 'password',
-      headerName: 'Password',
-      minWidth: 180,
+      headerName: 'Contraseña',
+      minWidth: 140,
       renderCell: (params) => <RenderCellPassword params={params} />,
     },
     {
       field: 'branch',
-      headerName: 'Branch',
-      minWidth: 180,
+      headerName: 'Sucursal',
+      minWidth: 140,
       renderCell: (params) => <RenderCellBranch params={params} />,
     },
     {
@@ -108,6 +110,18 @@ export default function UserListView() {
       headerName: 'Role',
       minWidth: 140,
       renderCell: (params) => <RenderCellRole params={params} />,
+    },
+    {
+      field: 'startTime',
+      headerName: 'Tiempo de trabajo',
+      minWidth: 100,
+      renderCell: (params) => <RenderCellWorkTime params={params} />,
+    },
+    {
+      field: 'payment',
+      headerName: 'Tasa de pago',
+      minWidth: 140,
+      renderCell: (params) => <RenderCellPayRate params={params} />,
     },
     {
       type: 'actions',
@@ -123,7 +137,7 @@ export default function UserListView() {
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Delete"
+          label="Borrar"
           onClick={() => handleDeleteRow(params.row.id)}
         />,
       ],
@@ -145,8 +159,8 @@ export default function UserListView() {
       }}
     >
       <CustomBreadcrumbs
-        heading="List"
-        links={[{ name: 'User', href: paths.dashboard.root }, { name: 'List' }]}
+        heading="LISTAR EMPLEADOS"
+        links={[{ name: 'EMPLEADOS', href: paths.dashboard.root }, { name: 'LISTAR' }]}
         sx={{
           mb: {
             xs: 3,

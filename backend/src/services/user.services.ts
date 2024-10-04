@@ -21,7 +21,19 @@ export const handleUserCreation = async (
   userId?: string,
   session?: ClientSession
 ): Promise<Users> => {
-  const { email, password, firstName, lastName, branchId, role, bio } = user;
+  const {
+    email,
+    password,
+    firstName,
+    lastName,
+    branchId,
+    role,
+    bio,
+    startTime,
+    endTime,
+    payment,
+    color,
+  } = user;
 
   if (!firstName) throw new RequestError('First Name must not be empty', 400);
   if (!lastName) throw new RequestError('Last Name must not be empty', 400);
@@ -50,6 +62,10 @@ export const handleUserCreation = async (
     userId,
     role,
     bio,
+    startTime,
+    endTime,
+    payment,
+    color,
     session
   );
 
@@ -216,6 +232,10 @@ export const createNewUser = async (
   userId?: string,
   role?: string,
   bio?: string,
+  startTime?: string,
+  endTime?: string,
+  payment?: string,
+  color?: string,
   session?: ClientSession
 ): Promise<Users> => {
   const userData = await UsersModel.findOne({ id: userId });
@@ -231,6 +251,10 @@ export const createNewUser = async (
       userId,
       role,
       bio,
+      startTime,
+      endTime,
+      payment,
+      color,
     });
 
     await newUser.save({ session });
@@ -245,6 +269,10 @@ export const createNewUser = async (
       branchId: userData?.branchId,
       role: 'SALESPERSON',
       bio,
+      startTime,
+      endTime,
+      payment,
+      color,
     });
 
     await newUser.save({ session });

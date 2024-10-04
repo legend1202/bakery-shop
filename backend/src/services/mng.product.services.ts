@@ -101,8 +101,8 @@ export const handleGetMngProductsByUser = async (
       500
     );
   } else {
-    /* const userData = await UsersModel.findOne({ id: userId });
-    if (userData?.role === 'SALESPERSON') {
+    const userData = await UsersModel.findOne({ id: userId });
+    /* if (userData?.role === 'SALESPERSON') {
       const products = await MngProductsModel.aggregate([
         {
           $match: { userId: userId, customOrderFlag: false },
@@ -126,14 +126,12 @@ export const handleGetMngProductsByUser = async (
         },
         { $unwind: '$branchDetails' },
       ]);
-      return products;
-    } else if (userData?.role === 'ADMIN') {
-      const branches = await BranchesModel.find({ userId }, 'id');
-      const branchIds = await branches.map((branch) => branch.id);
-
+      return products; */
+    /* } else  */
+    if (userData?.role === 'ADMIN') {
       const products = await MngProductsModel.aggregate([
         {
-          $match: { branchId: { $in: branchIds }, customOrderFlag: false },
+          $match: { branchId: userData.branchId, customOrderFlag: false },
         },
         {
           $lookup: {
@@ -152,43 +150,53 @@ export const handleGetMngProductsByUser = async (
             as: 'branchDetails',
           },
         },
-        { $unwind: '$branchDetails' },
-      ]);
-
-      return products;
-    } else { */
-    const products = await MngProductsModel.aggregate([
-      {
-        $match: { customOrderFlag: false },
-      },
-      {
-        $lookup: {
-          from: ProductsModel.collection.name,
-          localField: 'productId',
-          foreignField: 'id',
-          as: 'productDetails',
-        },
-      },
-      { $unwind: '$productDetails' },
-      {
-        $lookup: {
-          from: BranchesModel.collection.name,
-          localField: 'branchId',
-          foreignField: 'id',
-          as: 'branchDetails',
-        },
-      },
-      {
-        $addFields: {
-          branchDetails: {
-            $ifNull: ['$branchDetails', []], // If branchDetails is null, set it to an empty array
+        {
+          $addFields: {
+            branchDetails: {
+              $ifNull: ['$branchDetails', []], // If branchDetails is null, set it to an empty array
+            },
           },
         },
-      },
-      { $unwind: { path: '$branchDetails', preserveNullAndEmptyArrays: true } },
-    ]);
-    return products;
-    /* } */
+        {
+          $unwind: { path: '$branchDetails', preserveNullAndEmptyArrays: true },
+        },
+      ]);
+      return products;
+    } else {
+      const products = await MngProductsModel.aggregate([
+        {
+          $match: { customOrderFlag: false },
+        },
+        {
+          $lookup: {
+            from: ProductsModel.collection.name,
+            localField: 'productId',
+            foreignField: 'id',
+            as: 'productDetails',
+          },
+        },
+        { $unwind: '$productDetails' },
+        {
+          $lookup: {
+            from: BranchesModel.collection.name,
+            localField: 'branchId',
+            foreignField: 'id',
+            as: 'branchDetails',
+          },
+        },
+        {
+          $addFields: {
+            branchDetails: {
+              $ifNull: ['$branchDetails', []], // If branchDetails is null, set it to an empty array
+            },
+          },
+        },
+        {
+          $unwind: { path: '$branchDetails', preserveNullAndEmptyArrays: true },
+        },
+      ]);
+      return products;
+    }
   }
 };
 

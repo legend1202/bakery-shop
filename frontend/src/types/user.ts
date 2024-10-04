@@ -102,6 +102,9 @@ export type IUserItem = {
   userId?: string;
   role?: string;
   bio?: string;
+  startTime?: string;
+  endTIme?: string;
+  payment?: string;
 };
 
 export type ITUserItem = {

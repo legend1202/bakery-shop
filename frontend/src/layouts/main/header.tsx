@@ -96,7 +96,7 @@ export default function Header() {
 
           <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
             <Button onClick={handleLogout} variant="outlined" color="warning" sx={{ mr: 1 }}>
-              End Shift
+              Fin del turno
             </Button>
             <Button
               component={RouterLink}
@@ -105,7 +105,7 @@ export default function Header() {
               color="secondary"
               sx={{ mr: 1 }}
             >
-              Start Shift
+              Iniciar turno
             </Button>
 
             <LoginButton />

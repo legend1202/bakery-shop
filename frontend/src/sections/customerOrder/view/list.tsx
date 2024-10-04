@@ -14,7 +14,11 @@ import { isAdminFn, isSuperAdminFn } from 'src/utils/role-check';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { MngProductDelete, MngProductConfirm, useGetMngProductLists } from 'src/api/product';
+import {
+  MngProductDelete,
+  MngProductConfirm,
+  useGetMngCustomerProductListsByUser,
+} from 'src/api/product';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -59,7 +63,7 @@ export default function CustomerOrderListView() {
 
   /* const { products, productsLoading } = useGetCustomOrderListsByUser(); */
 
-  const { products, productsLoading } = useGetMngProductLists();
+  const { products, productsLoading } = useGetMngCustomerProductListsByUser();
 
   const [productCount, setProductCount] = useState<IProductCount[]>([]);
 
@@ -121,13 +125,13 @@ export default function CustomerOrderListView() {
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Deliver"
+          label="Entregar"
           onClick={() => handleConfirmRow(params.row.id)}
         />,
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Cancel"
+          label="Cancelar"
           onClick={() => handleDeleteRow(params.row.id)}
         />,
       ];
@@ -136,7 +140,7 @@ export default function CustomerOrderListView() {
       <GridActionsCellItem
         showInMenu
         icon={<Iconify icon="solar:eye-bold" />}
-        label="Cancel"
+        label="Cancelar"
         onClick={() => handleDeleteRow(params.row.id)}
       />,
     ];
@@ -145,7 +149,7 @@ export default function CustomerOrderListView() {
   const columns: GridColDef[] = [
     {
       field: 'productId',
-      headerName: 'Product',
+      headerName: 'Producto',
       flex: 1,
       minWidth: 180,
       hideable: false,
@@ -153,7 +157,7 @@ export default function CustomerOrderListView() {
     },
     {
       field: 'branchId',
-      headerName: 'Branch',
+      headerName: 'Sucursal',
       flex: 1,
       minWidth: 180,
       hideable: false,
@@ -161,37 +165,37 @@ export default function CustomerOrderListView() {
     },
     {
       field: 'quantity',
-      headerName: 'Quantity',
+      headerName: 'Cantidad',
       minWidth: 100,
       renderCell: (params) => <RenderCellAmount params={params} productCount={productCount} />,
     },
     {
       field: 'price',
-      headerName: 'Price',
+      headerName: 'Precio',
       minWidth: 100,
       renderCell: (params) => <RenderCellPrice params={params} />,
     },
     {
       field: 'address',
-      headerName: 'Address',
+      headerName: 'DIRECCIÓN',
       minWidth: 100,
       renderCell: (params) => <RenderCellAddress params={params} />,
     },
     {
       field: 'deliverDate',
-      headerName: 'Delivery Date',
+      headerName: 'Fecha de entrega',
       minWidth: 140,
       renderCell: (params) => <RenderCellDeliverDate params={params} />,
     },
     {
       field: 'bio',
-      headerName: 'Bio',
+      headerName: 'Biografía',
       minWidth: 100,
       renderCell: (params) => <RenderCellBio params={params} />,
     },
     {
       field: 'status',
-      headerName: 'Status',
+      headerName: 'Estado',
       minWidth: 100,
       renderCell: (params) => <RenderCellStatus params={params} />,
     },

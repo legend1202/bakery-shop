@@ -1,9 +1,15 @@
-export function shouldCountAsHalf(createdAt: Date, updatedAt: Date): boolean {
+export function shouldCountAsHalf(
+  createdAt: Date,
+  updatedAt: Date,
+  startTime: any,
+  endTime: any
+): boolean {
   const createdHour = createdAt.getHours();
   const updatedHour = updatedAt.getHours();
 
-  const workingTime = updatedHour - createdHour > 7;
+  const workingSTime = startTime - createdHour >= 0;
+  const workingETime = updatedHour - endTime >= 0;
 
   // Check if createdAt is after 8 AM and updatedAt is before 5 PM
-  return createdHour > 7 && updatedHour < 22 && workingTime;
+  return workingSTime && workingETime;
 }

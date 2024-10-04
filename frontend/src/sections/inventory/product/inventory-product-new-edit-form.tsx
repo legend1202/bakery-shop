@@ -114,7 +114,7 @@ export default function InventoryProductNewEditForm({ afterSavebranch }: Props) 
             {products && (
               <RHFSelect
                 name="productId"
-                label="Product"
+                label="Producto"
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
@@ -127,9 +127,9 @@ export default function InventoryProductNewEditForm({ afterSavebranch }: Props) 
               </RHFSelect>
             )}
 
-            <RHFTextField name="quantity" label="Quantity" />
+            <RHFTextField name="quantity" label="Cantidad" />
 
-            <RHFTextField name="bio" label="Bio" />
+            <RHFTextField name="bio" label="Biografía" />
 
             <LoadingButton
               type="submit"
@@ -141,7 +141,7 @@ export default function InventoryProductNewEditForm({ afterSavebranch }: Props) 
                 justifyContent: 'flex-end',
               }}
             >
-              Add
+              Agregar
             </LoadingButton>
           </Box>
         </Stack>

@@ -65,6 +65,23 @@ export function useGetMngProductListsByUser() {
   return memoizedValue;
 }
 
+export function useGetMngCustomerProductListsByUser() {
+  const URL = endpoints.mng.customerOrder.listByUser;
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      products: data?.result.products as IMProduct[],
+      productsLoading: isLoading,
+      productsError: error,
+      productsValidating: isValidating,
+    }),
+    [data?.result, error, isLoading, isValidating]
+  );
+  return memoizedValue;
+}
+
 export function useGetMngProductLists() {
   const URL = endpoints.mng.product.list;
 

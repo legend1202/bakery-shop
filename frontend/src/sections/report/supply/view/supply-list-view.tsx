@@ -39,12 +39,12 @@ import SupplyTableRow from '../supply-table-row';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'productId', label: 'Product' },
-  { id: 'branchId', label: 'Branch' },
-  { id: 'quantity', label: 'Quantity' },
-  { id: 'createDate', label: 'Date' },
-  { id: 'status', label: 'Status' },
-  { id: 'bio', label: 'Bio', align: 'center' },
+  { id: 'productId', label: 'Producto' },
+  { id: 'branchId', label: 'Sucursal' },
+  { id: 'quantity', label: 'Cantidad' },
+  { id: 'createDate', label: 'Fecha' },
+  { id: 'status', label: 'Estado' },
+  { id: 'bio', label: 'Biografía', align: 'center' },
 ];
 // ----------------------------------------------------------------------
 
@@ -136,31 +136,31 @@ export default function ReportSupplyView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Report - Supply"
+        heading="ÓRDENES DE INSUMOS"
         links={[
           {
-            name: 'Dashboard',
+            name: 'Panel',
             href: paths.dashboard.root,
           },
           {
-            name: 'Inventory',
+            name: 'ÓRDENES',
           },
           {
-            name: 'Supply',
+            name: 'INSUMOS',
           },
         ]}
         action={
           <FormProvider methods={methods}>
             <RHFSelect
               name="supplyId"
-              label="Supply"
+              label="INSUMOS"
               fullWidth
               InputLabelProps={{ shrink: true }}
               PaperPropsSx={{ textTransform: 'capitalize' }}
               sx={{ minWidth: 140 }}
             >
               <MenuItem key="" value="">
-                All
+                Toda
               </MenuItem>
               {basicSupplies &&
                 basicSupplies.map((branch) => (
@@ -196,7 +196,7 @@ export default function ReportSupplyView() {
               color={theme.palette.success.main}
             />
             <SupplyAnalytic
-              title="Stored"
+              title="Almacenada"
               total={getStoredQuantity()}
               percent={100}
               price={0}
@@ -205,7 +205,7 @@ export default function ReportSupplyView() {
             />
 
             <SupplyAnalytic
-              title="Pending"
+              title="Pendiente"
               total={pendingAmountProducts()}
               percent={100}
               price={0}
@@ -213,7 +213,7 @@ export default function ReportSupplyView() {
               color={theme.palette.warning.main}
             />
             <SupplyAnalytic
-              title="Used"
+              title="Usada"
               total={usedAmountProducts()}
               percent={100}
               price={0}

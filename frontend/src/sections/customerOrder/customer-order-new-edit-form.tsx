@@ -133,7 +133,7 @@ export default function CustomerOrderNewEditForm({ afterSavebranch }: Props) {
             {products && (
               <RHFSelect
                 name="productId"
-                label="Product"
+                label="Producto"
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
@@ -146,9 +146,9 @@ export default function CustomerOrderNewEditForm({ afterSavebranch }: Props) {
               </RHFSelect>
             )}
 
-            <RHFTextField name="quantity" label="Quantity" />
+            <RHFTextField name="quantity" label="Cantidad" />
 
-            <RHFTextField name="price" label="Price" />
+            <RHFTextField name="price" label="Precio" />
 
             <LoadingButton
               type="submit"
@@ -160,7 +160,7 @@ export default function CustomerOrderNewEditForm({ afterSavebranch }: Props) {
                 justifyContent: 'flex-end',
               }}
             >
-              Save
+              Ahorrar
             </LoadingButton>
           </Box>
           <Box
@@ -172,11 +172,11 @@ export default function CustomerOrderNewEditForm({ afterSavebranch }: Props) {
               sm: 'repeat(3, 1fr)',
             }}
           >
-            <RHFTextField name="address" label="Address" />
+            <RHFTextField name="address" label="DIRECCIÓN" />
 
-            <RHFTextField name="deliverDate" label="Deliver Date" type="Date" />
+            <RHFTextField name="deliverDate" label="Fecha de entrega" type="Date" />
 
-            <RHFTextField name="bio" label="Description" />
+            <RHFTextField name="bio" label="Descripción" />
           </Box>
         </Stack>
       </Card>

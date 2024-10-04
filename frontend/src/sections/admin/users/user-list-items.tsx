@@ -61,6 +61,36 @@ export function RenderCellBranch({ params }: ParamsProps) {
   );
 }
 
+export function RenderCellWorkTime({ params }: ParamsProps) {
+  const startTime = params.row.startTime || '';
+  const endTime = params.row.endTime || '';
+  return (
+    <ListItemText
+      primary={`${startTime  } - ${  endTime}`}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
+export function RenderCellPayRate({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.payment || ''}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
 export function RenderCellRole({ params }: ParamsProps) {
   return (
     <ListItemText

@@ -39,9 +39,9 @@ import AttendanceTableRow from '../attendance-table-row';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name' },
-  { id: 'branchId', label: 'Branch' },
-  { id: 'payroll', label: 'Amount' },
+  { id: 'name', label: 'Nombre' },
+  { id: 'branchId', label: 'Sucursal' },
+  { id: 'payroll', label: 'Cantidad' },
 ];
 // ----------------------------------------------------------------------
 
@@ -104,8 +104,12 @@ export default function ReportSaleView() {
             const createdAt = new Date(item.createdAt);
             const updatedAt = new Date(item.updatedAt);
 
+            const { startTime } = item.userDetails;
+            const endTime = item.userDetails.endTIme;
+            const payrate = Number(item?.userDetails?.payment);
+
             // Determine the increment value based on the time of day
-            const increment = shouldCountAsHalf(createdAt, updatedAt) ? 1 : 0.5;
+            const increment = shouldCountAsHalf(createdAt, updatedAt, startTime, endTime) ? 1 : 0.5;
 
             // Initialize the count for this userId if not already done
             if (!acc[userId]) {
@@ -117,7 +121,7 @@ export default function ReportSaleView() {
               };
             }
             // Increment the count for this userId
-            acc[userId].count += increment;
+            acc[userId].count += increment * payrate || 200;
             return acc;
           },
           {} as Record<string, ResultItem>
@@ -133,14 +137,19 @@ export default function ReportSaleView() {
         .reduce(
           (acc, item) => {
             const { userId } = item;
+
             const userName = `${item.userDetails.firstName} ${item.userDetails.lastName}`;
             const branchName = item.branchDetails.name;
 
             const createdAt = new Date(item.createdAt);
             const updatedAt = new Date(item.updatedAt);
 
+            const { startTime } = item.userDetails;
+            const endTime = item.userDetails.endTIme;
+            const payrate = Number(item?.userDetails?.payment) || 200;
+
             // Determine the increment value based on the time of day
-            const increment = shouldCountAsHalf(createdAt, updatedAt) ? 1 : 0.5;
+            const increment = shouldCountAsHalf(createdAt, updatedAt, startTime, endTime) ? 1 : 0.5;
 
             // Initialize the count for this userId if not already done
             if (!acc[userId]) {
@@ -152,7 +161,7 @@ export default function ReportSaleView() {
               };
             }
             // Increment the count for this userId
-            acc[userId].count += increment;
+            acc[userId].count += increment * payrate;
             return acc;
           },
           {} as Record<string, ResultItem>
@@ -168,17 +177,17 @@ export default function ReportSaleView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Report - Payroll"
+        heading="NÓMINA"
         links={[
           {
-            name: 'Dashboard',
+            name: 'Panel',
             href: paths.dashboard.root,
           },
           {
-            name: 'Report',
+            name: 'REPORTES',
           },
           {
-            name: 'Payroll',
+            name: 'NÓMINA',
           },
         ]}
         action={
@@ -194,14 +203,14 @@ export default function ReportSaleView() {
               {isSuperAdmin && (
                 <RHFSelect
                   name="branchId"
-                  label="Branch"
+                  label="Sucursal"
                   fullWidth
                   InputLabelProps={{ shrink: true }}
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                   sx={{ minWidth: 140, mx: 1 }}
                 >
                   <MenuItem key="" value="">
-                    All
+                    Toda
                   </MenuItem>
                   {branches &&
                     branches.map((branch) => (
@@ -212,7 +221,7 @@ export default function ReportSaleView() {
                 </RHFSelect>
               )}
 
-              <RHFTextField name="month" label="Month" type="month" />
+              <RHFTextField name="month" label="Mes" type="month" />
             </Card>
           </FormProvider>
         }

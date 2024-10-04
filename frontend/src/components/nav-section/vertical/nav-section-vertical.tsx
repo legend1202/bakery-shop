@@ -1,20 +1,20 @@
-import { memo, useState, useEffect, useCallback } from "react";
+import { memo, useState, useEffect, useCallback } from 'react';
 
-import Stack from "@mui/material/Stack";
-import Collapse from "@mui/material/Collapse";
-import ListSubheader from "@mui/material/ListSubheader";
+import Stack from '@mui/material/Stack';
+import Collapse from '@mui/material/Collapse';
+import ListSubheader from '@mui/material/ListSubheader';
 
-import { useRouter } from "src/routes/hooks";
+import { useRouter } from 'src/routes/hooks';
 
-import { useAuthContext } from "src/auth/hooks";
-import { PATH_AFTER_REGISTER } from "src/config-global";
+import { useAuthContext } from 'src/auth/hooks';
+import { PATH_AFTER_REGISTER } from 'src/config-global';
 
-import NavList from "./nav-list";
-import { NavProps, NavGroupProps } from "../types";
+import NavList from './nav-list';
+import { NavProps, NavGroupProps } from '../types';
 // ----------------------------------------------------------------------
 
 function NavSectionVertical({ data, slotProps, ...other }: NavProps) {
-  const [userRole, setUserRole] = useState("");
+  const [userRole, setUserRole] = useState('');
   const { user } = useAuthContext();
   const router = useRouter();
 
@@ -34,6 +34,7 @@ function NavSectionVertical({ data, slotProps, ...other }: NavProps) {
             key={group.subheader || index}
             subheader={group.subheader}
             roles={group.roles}
+            color={group.color}
             userRole={userRole}
             items={group.items}
             slotProps={slotProps}
@@ -48,13 +49,7 @@ export default memo(NavSectionVertical);
 
 // ----------------------------------------------------------------------
 
-function Group({
-  subheader,
-  roles,
-  userRole,
-  items,
-  slotProps,
-}: NavGroupProps) {
+function Group({ subheader, roles, color, userRole, items, slotProps }: NavGroupProps) {
   const [open, setOpen] = useState(true);
 
   const handleToggle = useCallback(() => {
@@ -62,13 +57,7 @@ function Group({
   }, []);
 
   const renderContent = items.map((list) => (
-    <NavList
-      key={list.title}
-      data={list}
-      userRole={userRole}
-      depth={1}
-      slotProps={slotProps}
-    />
+    <NavList key={list.title} data={list} userRole={userRole} depth={1} slotProps={slotProps} />
   ));
 
   if (roles && userRole) {
@@ -85,18 +74,18 @@ function Group({
                 onClick={handleToggle}
                 sx={{
                   fontSize: 11,
-                  cursor: "pointer",
-                  typography: "overline",
-                  display: "inline-flex",
-                  color: "text.disabled",
+                  cursor: 'pointer',
+                  typography: 'overline',
+                  display: 'inline-flex',
+                  color,
                   mb: `${slotProps?.gap || 4}px`,
                   p: (theme) => theme.spacing(2, 1, 1, 1.5),
                   transition: (theme) =>
-                    theme.transitions.create(["color"], {
+                    theme.transitions.create(['color'], {
                       duration: theme.transitions.duration.shortest,
                     }),
-                  "&:hover": {
-                    color: "text.primary",
+                  '&:hover': {
+                    color: 'text.primary',
                   },
                   ...slotProps?.subheader,
                 }}

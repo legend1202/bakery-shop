@@ -116,13 +116,13 @@ export default function MngProductListView() {
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Deliver"
+          label="Entregar"
           onClick={() => handleConfirmRow(params.row.id)}
         />,
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Cancel"
+          label="Cancelar"
           onClick={() => handleDeleteRow(params.row.id)}
         />,
       ];
@@ -131,7 +131,7 @@ export default function MngProductListView() {
       <GridActionsCellItem
         showInMenu
         icon={<Iconify icon="solar:eye-bold" />}
-        label="Cancel"
+        label="Cancelar"
         onClick={() => handleDeleteRow(params.row.id)}
       />,
     ];
@@ -141,7 +141,7 @@ export default function MngProductListView() {
     ? [
         {
           field: 'productId',
-          headerName: 'Product',
+          headerName: 'Producto',
           flex: 1,
           minWidth: 180,
           hideable: false,
@@ -149,7 +149,7 @@ export default function MngProductListView() {
         },
         {
           field: 'branchId',
-          headerName: 'Branch',
+          headerName: 'Sucursal',
           flex: 1,
           minWidth: 180,
           hideable: false,
@@ -157,19 +157,19 @@ export default function MngProductListView() {
         },
         {
           field: 'quantity',
-          headerName: 'Quantity',
+          headerName: 'Cantidad',
           minWidth: 100,
           renderCell: (params) => <RenderCellAmount params={params} productCount={productCount} />,
         },
         {
           field: 'bio',
-          headerName: 'Bio',
+          headerName: 'Biografía',
           minWidth: 180,
           renderCell: (params) => <RenderCellBio params={params} />,
         },
         {
           field: 'status',
-          headerName: 'Status',
+          headerName: 'Estado',
           minWidth: 100,
           renderCell: (params) => <RenderCellStatus params={params} />,
         },
@@ -189,7 +189,7 @@ export default function MngProductListView() {
     : [
         {
           field: 'productId',
-          headerName: 'Product',
+          headerName: 'Producto',
           flex: 1,
           minWidth: 180,
           hideable: false,
@@ -197,19 +197,19 @@ export default function MngProductListView() {
         },
         {
           field: 'quantity',
-          headerName: 'Quantity',
+          headerName: 'Cantidad',
           minWidth: 100,
           renderCell: (params) => <RenderCellAmount params={params} productCount={productCount} />,
         },
         {
           field: 'bio',
-          headerName: 'Bio',
+          headerName: 'Biografía',
           minWidth: 180,
           renderCell: (params) => <RenderCellBio params={params} />,
         },
         {
           field: 'status',
-          headerName: 'Status',
+          headerName: 'Estado',
           minWidth: 100,
           renderCell: (params) => <RenderCellStatus params={params} />,
         },

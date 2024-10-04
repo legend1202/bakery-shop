@@ -29,7 +29,7 @@ export default function PurchaseView() {
           my: { xs: 3, md: 5 },
         }}
       >
-        Shop
+        Productos
       </Typography>
 
       <ProductList products={products} loading={productsLoading} />

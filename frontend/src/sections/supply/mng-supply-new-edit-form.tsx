@@ -64,8 +64,7 @@ export default function MngSupplyNewEditForm({ afterSavebranch }: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const quantity = -values.quantity;
-      const saveData = { ...values, quantity };
+      const saveData = { ...values };
       const saveResults: any = await createMngSupply(saveData);
       if (saveResults.data?.success) {
         reset();
@@ -111,7 +110,7 @@ export default function MngSupplyNewEditForm({ afterSavebranch }: Props) {
             {supplies && (
               <RHFSelect
                 name="supplyId"
-                label="Supply"
+                label="Suministrar"
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
@@ -124,9 +123,9 @@ export default function MngSupplyNewEditForm({ afterSavebranch }: Props) {
               </RHFSelect>
             )}
 
-            <RHFTextField name="quantity" label="Quantity" />
+            <RHFTextField name="quantity" label="Cantidad" />
 
-            <RHFTextField name="bio" label="Bio" />
+            <RHFTextField name="bio" label="Biografía" />
 
             <LoadingButton
               type="submit"
@@ -138,7 +137,7 @@ export default function MngSupplyNewEditForm({ afterSavebranch }: Props) {
                 justifyContent: 'flex-end',
               }}
             >
-              Save
+              Ahorrar
             </LoadingButton>
           </Box>
         </Stack>

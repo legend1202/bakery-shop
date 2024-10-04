@@ -112,7 +112,7 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
             {products && (
               <RHFSelect
                 name="productId"
-                label="Product"
+                label="Producto"
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
@@ -125,9 +125,9 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
               </RHFSelect>
             )}
 
-            <RHFTextField name="quantity" label="Quantity" />
+            <RHFTextField name="quantity" label="Cantidad" />
 
-            <RHFTextField name="bio" label="Bio" />
+            <RHFTextField name="bio" label="Biografía" />
 
             <LoadingButton
               type="submit"
@@ -139,7 +139,7 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
                 justifyContent: 'flex-end',
               }}
             >
-              Save
+              Ahorrar
             </LoadingButton>
           </Box>
         </Stack>

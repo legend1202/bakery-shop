@@ -73,8 +73,8 @@ export default function SupplyListView() {
   const columns: GridColDef[] = [
     {
       field: 'supply',
-      headerName: 'Supply',
-      minWidth: 410,
+      headerName: 'Suministrar',
+      minWidth: 520,
       renderCell: (params) => <RenderCellName params={params} />,
     },
     /*  {
@@ -91,8 +91,8 @@ export default function SupplyListView() {
     }, */
     {
       field: 'bio',
-      headerName: 'Bio',
-      minWidth: 410,
+      headerName: 'Biografía',
+      minWidth: 520,
       renderCell: (params) => <RenderCellBio params={params} />,
     },
     {
@@ -109,7 +109,7 @@ export default function SupplyListView() {
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Delete"
+          label="Borrar"
           onClick={() => handleDeleteRow(params.row.id)}
         />,
       ],

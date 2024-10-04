@@ -47,7 +47,7 @@ export default function AttendanceTableRow({ row, selected, onSelectRow }: Props
 
       <TableCell>
         <ListItemText
-          primary={count * 200}
+          primary={count}
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           secondaryTypographyProps={{
             mt: 0.5,

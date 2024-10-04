@@ -1,5 +1,5 @@
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 
 // import { useMockedUser } from "src/hooks/use-mocked-user";
 
@@ -13,11 +13,11 @@ export default function NavUpgrade() {
       sx={{
         px: 2,
         py: 5,
-        textAlign: "center",
+        textAlign: 'center',
       }}
     >
       <Stack alignItems="center">
-        <Box sx={{ position: "relative" }}>Marco Campos</Box>
+        <Box sx={{ position: 'relative' }}>Copyright @2024</Box>
       </Stack>
     </Stack>
   );

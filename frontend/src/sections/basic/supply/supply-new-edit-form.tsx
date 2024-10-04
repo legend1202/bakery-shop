@@ -99,11 +99,11 @@ export default function SupplyNewEditForm({ afterSavebranch }: Props) {
                 ))}
               </RHFSelect>
             )} */}
-            <RHFTextField name="name" label="Name" />
+            <RHFTextField name="name" label="Nombre" />
 
             {/* <RHFTextField name="price" label="Price" /> */}
 
-            <RHFTextField name="bio" label="Bio" />
+            <RHFTextField name="bio" label="Biografía" />
 
             <LoadingButton
               type="submit"
@@ -115,7 +115,7 @@ export default function SupplyNewEditForm({ afterSavebranch }: Props) {
                 justifyContent: 'flex-end',
               }}
             >
-              Save
+              Ahorrar
             </LoadingButton>
           </Box>
         </Stack>

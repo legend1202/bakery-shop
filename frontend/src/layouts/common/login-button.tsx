@@ -20,7 +20,7 @@ export default function LoginButton({ sx }: Props) {
       color="info"
       sx={{ mr: 1 }}
     >
-      Login
+      Acceso
     </Button>
   );
 }

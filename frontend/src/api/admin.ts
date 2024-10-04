@@ -6,6 +6,7 @@ import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 import { IUserItem, IUserDelete, IUserRoleUpdate } from 'src/types/user';
 
 export const createUser = async (query: IUserItem) => {
+  console.log(query);
   const res = await axiosInstance.post(endpoints.admin.create, {
     user: query,
   });

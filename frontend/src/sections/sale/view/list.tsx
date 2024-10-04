@@ -86,7 +86,7 @@ export default function SaleMngView() {
   const columns: GridColDef[] = [
     {
       field: 'productId',
-      headerName: 'Product',
+      headerName: 'Producto',
       flex: 1,
       minWidth: 180,
       hideable: false,
@@ -94,25 +94,25 @@ export default function SaleMngView() {
     },
     {
       field: 'quantity',
-      headerName: 'Quantity',
+      headerName: 'Cantidad',
       minWidth: 180,
       renderCell: (params) => <RenderCellQuantity params={params} />,
     },
     {
       field: 'price',
-      headerName: 'Price',
+      headerName: 'Precio',
       minWidth: 180,
       renderCell: (params) => <RenderCellPrice params={params} />,
     },
     {
       field: 'createdAt',
-      headerName: 'Date',
+      headerName: 'Fecha',
       minWidth: 180,
       renderCell: (params) => <RenderCellDate params={params} />,
     },
     {
       field: 'bio',
-      headerName: 'Bio',
+      headerName: 'Biografía',
       minWidth: 220,
       renderCell: (params) => <RenderCellBio params={params} />,
     },
@@ -130,7 +130,7 @@ export default function SaleMngView() {
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Delete"
+          label="Borrar"
           onClick={() => handleDeleteRow(params.row)}
         />,
       ],
@@ -152,16 +152,16 @@ export default function SaleMngView() {
       }}
     >
       <CustomBreadcrumbs
-        heading="Sales"
+        heading="Ventas"
         links={[
           {
-            name: 'Saleperson',
+            name: 'Vendedora',
           },
           {
-            name: 'Sales',
+            name: 'Ventas',
           },
           {
-            name: 'List',
+            name: 'Lista',
           },
         ]}
         /* action={

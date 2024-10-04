@@ -92,7 +92,7 @@ export default function ProductListView() {
   const columns: GridColDef[] = [
     {
       field: 'product',
-      headerName: 'Product',
+      headerName: 'PRODUCTO',
       minWidth: 240,
       renderCell: (params) => <RenderCellName params={params} />,
     },
@@ -104,26 +104,26 @@ export default function ProductListView() {
     }, */
     {
       field: 'code',
-      headerName: 'Code',
-      minWidth: 140,
+      headerName: 'Código',
+      minWidth: 200,
       renderCell: (params) => <RenderCellCode params={params} />,
     },
     {
       field: 'size',
-      headerName: 'Size',
+      headerName: 'Tamaño',
       minWidth: 140,
       renderCell: (params) => <RenderCellSize params={params} />,
     },
     {
       field: 'price',
-      headerName: 'Price',
-      minWidth: 140,
+      headerName: 'Precio',
+      minWidth: 180,
       renderCell: (params) => <RenderCellPrice params={params} />,
     },
     {
       field: 'bio',
-      headerName: 'Bio',
-      minWidth: 140,
+      headerName: 'Biografía',
+      minWidth: 280,
       renderCell: (params) => <RenderCellBio params={params} />,
     },
     {
@@ -140,13 +140,13 @@ export default function ProductListView() {
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:pen-bold" />}
-          label="Edit"
+          label="Editar"
           onClick={() => handleEditRow(params.row)}
         />,
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Delete"
+          label="Borrar"
           onClick={() => handleDeleteRow(params.row.id)}
         />,
       ],
@@ -191,18 +191,18 @@ export default function ProductListView() {
         }}
       >
         <CustomBreadcrumbs
-          heading="List"
+          heading="LISTAR"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
             {
-              name: 'Product',
+              name: 'PRODUCTO',
               href: paths.product.list,
             },
-            { name: 'List' },
+            { name: 'LISTAR' },
           ]}
           action={
             <Button onClick={handleNewOwnerPopOver} variant="contained">
-              New Product
+              Nuevo producto
             </Button>
           }
           sx={{
@@ -252,7 +252,7 @@ export default function ProductListView() {
       </Container>
       <Dialog fullWidth maxWidth="md" open={openForm} onClose={onCloseForm}>
         <DialogTitle sx={{ minHeight: 76 }}>
-          {openForm && <> {currentProduct?.id ? 'Edit Product' : 'Add Product'}</>}
+          {openForm && <> {currentProduct?.id ? 'Editar producto' : 'Añadir Producto'}</>}
         </DialogTitle>
 
         <OwnerForm

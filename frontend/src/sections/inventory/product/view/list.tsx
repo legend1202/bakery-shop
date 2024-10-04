@@ -110,13 +110,13 @@ export default function MngProductListView() {
     <GridActionsCellItem
       showInMenu
       icon={<Iconify icon="solar:eye-bold" />}
-      label="Store"
+      label="Almacenar"
       onClick={() => handleConfirmRow(params.row.id)}
     />,
     <GridActionsCellItem
       showInMenu
       icon={<Iconify icon="solar:eye-bold" />}
-      label="Cancel"
+      label="Cancelar"
       onClick={() => handleDeleteRow(params.row.id)}
     />,
   ];
@@ -124,7 +124,7 @@ export default function MngProductListView() {
   const columns: GridColDef[] = [
     {
       field: 'productId',
-      headerName: 'Product',
+      headerName: 'Producto',
       flex: 1,
       minWidth: 180,
       hideable: false,
@@ -140,13 +140,13 @@ export default function MngProductListView() {
     }, */
     {
       field: 'quantity',
-      headerName: 'Quantity',
+      headerName: 'Cantidad',
       minWidth: 100,
       renderCell: (params) => <RenderCellAmount params={params} />,
     },
     {
       field: 'bio',
-      headerName: 'Bio',
+      headerName: 'Biografía',
       minWidth: 180,
       renderCell: (params) => <RenderCellBio params={params} />,
     },

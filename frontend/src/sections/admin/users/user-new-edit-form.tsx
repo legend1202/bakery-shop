@@ -42,8 +42,12 @@ export default function UserNewEditForm() {
     lastName: Yup.string().required('Location is required'),
     email: Yup.string().required('Images is required'),
     password: Yup.string().required('Content is required'),
-    /* branchId: Yup.string().required('Branch is required'),
-    role: Yup.string().required('Role is required'), */
+    startTime: Yup.string(),
+    endTime: Yup.string(),
+    payment: Yup.string(),
+    branchId: Yup.string(),
+    /* color: Yup.string(), */
+    role: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -52,8 +56,12 @@ export default function UserNewEditForm() {
       lastName: '',
       email: '',
       password: '',
-      /* branchId: '',
-      role: '', */
+      startTime: '',
+      endTime: '',
+      payment: '',
+      branchId: '',
+      role: '',
+      /* color: '', */
       bio: '',
     }),
     []
@@ -74,6 +82,7 @@ export default function UserNewEditForm() {
   const values = watch();
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log(values);
     try {
       const saveResults = await createUser(values);
       if (saveResults.data?.success) {
@@ -90,7 +99,7 @@ export default function UserNewEditForm() {
   const renderDetails = (
     <Grid xs={12} md={12}>
       <Card>
-        <CardHeader title={t('Details')} />
+        <CardHeader title={t('Detalles')} />
 
         <Stack spacing={3} sx={{ p: 3 }}>
           <Box
@@ -102,15 +111,15 @@ export default function UserNewEditForm() {
               sm: 'repeat(2, 1fr)',
             }}
           >
-            <RHFTextField name="firstName" label="First Name" />
+            <RHFTextField name="firstName" label="Nombre de pila" />
 
-            <RHFTextField name="lastName" label="Last Name" />
+            <RHFTextField name="lastName" label="Apellido" />
 
-            <RHFTextField name="email" label="Email address" />
+            <RHFTextField name="email" label="Correo electrónico" />
 
             <RHFTextField
               name="password"
-              label="Password"
+              label="Contraseña"
               type={password.value ? 'text' : 'password'}
               InputProps={{
                 endAdornment: (
@@ -125,7 +134,7 @@ export default function UserNewEditForm() {
             {user?.role === 'SUPERADMIN' && branches && (
               <RHFSelect
                 name="branchId"
-                label="Branch"
+                label="Sucursal"
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
@@ -153,9 +162,13 @@ export default function UserNewEditForm() {
                 ))}
               </RHFSelect>
             )}
+            <RHFTextField name="startTime" label="Hora de inicio" />
+            <RHFTextField name="endTime" label="Fin del tiempo" />
+            <RHFTextField name="payment" label="Tasa de pago" />
+            {/* <RHFTextField name="color" label="Color" /> */}
           </Box>
 
-          <RHFTextField name="bio" label="Bio" />
+          <RHFTextField name="bio" label="Biografía" />
         </Stack>
       </Card>
     </Grid>
@@ -168,7 +181,7 @@ export default function UserNewEditForm() {
       sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
     >
       <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-        Save
+        Ahorrar
       </LoadingButton>
     </Grid>
   );

@@ -37,8 +37,10 @@ export const createNewAttendance = async (
     const existingAttendance = await AttendancesModel.findOne({
       userId,
       branchId,
-      createdAt: { $gte: todayStart, $lte: todayEnd },
+      createdAt: { $gte: todayStart },
     });
+
+    console.log(existingAttendance);
 
     if (existingAttendance) {
       // If a record exists, do not save a new one

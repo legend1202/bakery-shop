@@ -13,6 +13,10 @@ export interface Users extends Document {
   role: 'ADMIN' | 'SALESPERSON' | 'SUPERADMIN';
   bio?: string;
   loginStatus: false;
+  startTime: string;
+  endTime: string;
+  payment: string;
+  color: string;
   createdAt: Date;
   updateAt: Date;
 }
@@ -35,6 +39,10 @@ const UsersSchema = new Schema<Users>(
     role: {
       type: String,
     },
+    startTime: { type: String },
+    endTime: { type: String },
+    payment: { type: String },
+    color: { type: String },
     bio: { type: String },
     loginStatus: { type: Boolean },
   },

@@ -20,7 +20,7 @@ import { isSuperAdminFn } from 'src/utils/role-check';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetBranchLists } from 'src/api/branch';
-import { useGetProductListsByUser, useGetMngProductListsByUser } from 'src/api/product';
+import { useGetProductListsByUser, useGetMngCustomerProductListsByUser } from 'src/api/product';
 
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
@@ -52,7 +52,7 @@ const TABLE_HEAD = [
 ];
 // ----------------------------------------------------------------------
 
-export default function ProductListView() {
+export default function CustomProductListView() {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -63,11 +63,11 @@ export default function ProductListView() {
 
   const { branches } = useGetBranchLists();
 
-  /*  const { inventory } = useGetInventoryOfBranchByUser(); */
+  /* const { inventory } = useGetInventoryOfBranchByUser(); */
 
   const { products: basicProducts } = useGetProductListsByUser();
 
-  const { products } = useGetMngProductListsByUser();
+  const { products } = useGetMngCustomerProductListsByUser();
 
   const table = useTable({ defaultOrderBy: 'createDate' });
 
@@ -102,9 +102,7 @@ export default function ProductListView() {
 
   useEffect(() => {
     if (products) {
-      const updatedTableData = products.filter(
-        (product) => product.customOrderFlag === false && product.quantity < 0
-      );
+      const updatedTableData = products.filter((product) => product.customOrderFlag === true);
       setTempTableData(updatedTableData);
     }
   }, [products]);
@@ -222,17 +220,17 @@ export default function ProductListView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="ÓRDENES DE PRODUCTO"
+        heading="ÓRDENES DE PEDIDO"
         links={[
           {
             name: 'Panel',
             href: paths.dashboard.root,
           },
           {
-            name: 'REPORTES ',
+            name: 'ÓRDENES',
           },
           {
-            name: 'PRODUCTO',
+            name: 'PEDIDO',
           },
         ]}
         action={
@@ -275,7 +273,7 @@ export default function ProductListView() {
                 sx={{ minWidth: 140 }}
               >
                 <MenuItem key="" value="">
-                  Toda
+                Toda
                 </MenuItem>
                 {basicProducts &&
                   basicProducts.map((product) => (

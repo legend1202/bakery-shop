@@ -44,13 +44,13 @@ import SupplyAnalytic from '../sale-analytic';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'productId', label: 'Product' },
-  { id: 'branchId', label: 'Branch' },
-  { id: 'quantity', label: 'Quantity' },
-  { id: 'price', label: 'Price' },
-  { id: 'createDate', label: 'Date' },
-  { id: 'status', label: 'Status' },
-  { id: 'bio', label: 'Bio', align: 'center' },
+  { id: 'productId', label: 'Producto' },
+  { id: 'branchId', label: 'Sucursal' },
+  { id: 'quantity', label: 'Cantidad' },
+  { id: 'price', label: 'Precio' },
+  { id: 'createDate', label: 'Fecha' },
+  { id: 'status', label: 'Estado' },
+  { id: 'bio', label: 'Biografía', align: 'center' },
 ];
 // ----------------------------------------------------------------------
 
@@ -145,14 +145,14 @@ export default function ReportSaleView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Report - Sale"
+        heading="VENTAS "
         links={[
           {
-            name: 'Report',
+            name: 'REPORTES',
             href: paths.dashboard.root,
           },
           {
-            name: 'Sale',
+            name: 'VENTAS',
           },
         ]}
         action={
@@ -168,7 +168,7 @@ export default function ReportSaleView() {
               {isSuperAdmin && (
                 <RHFSelect
                   name="branchId"
-                  label="Branch"
+                  label="Sucursal"
                   fullWidth
                   InputLabelProps={{ shrink: true }}
                   PaperPropsSx={{ textTransform: 'capitalize' }}
@@ -188,14 +188,14 @@ export default function ReportSaleView() {
 
               <RHFSelect
                 name="productId"
-                label="Product"
+                label="Producto"
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
                 sx={{ minWidth: 140 }}
               >
                 <MenuItem key="" value="">
-                  All
+                  Toda
                 </MenuItem>
                 {products &&
                   products.map((product) => (

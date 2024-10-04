@@ -168,15 +168,15 @@ export default function OwnerForm({ currentProduct, handleUpdateData, onClose }:
                 </RHFSelect>
               )} */}
 
-              <RHFTextField name="name" label="Name" />
+              <RHFTextField name="name" label="Nombre" />
 
-              <RHFTextField name="price" label="Price" type="number" />
+              <RHFTextField name="price" label="Precio" type="number" />
 
-              <RHFTextField name="code" label="Code" />
+              <RHFTextField name="code" label="Código" />
 
-              <RHFTextField name="size" label="Size" />
+              <RHFTextField name="size" label="Tamaño" />
 
-              <RHFTextField name="bio" label="Bio" />
+              <RHFTextField name="bio" label="Biografía" />
             </Box>
           </Stack>
         </Card>
@@ -193,7 +193,7 @@ export default function OwnerForm({ currentProduct, handleUpdateData, onClose }:
               }}
             >
               <Stack spacing={1.5}>
-                <Typography variant="subtitle2">Product Icon</Typography>
+                <Typography variant="subtitle2">Icono del producto</Typography>
                 <RHFUpload
                   multiple
                   thumbnail
@@ -212,11 +212,11 @@ export default function OwnerForm({ currentProduct, handleUpdateData, onClose }:
 
       <DialogActions>
         <Button variant="outlined" color="inherit" onClick={onClose}>
-          Cancel
+          Cancelar
         </Button>
 
         <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-          Save Changes
+          Guardar cambios
         </LoadingButton>
       </DialogActions>
     </FormProvider>

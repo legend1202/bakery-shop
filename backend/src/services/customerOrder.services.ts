@@ -70,10 +70,11 @@ export const handleGetMngCustomerOrderByUser = async (
     );
   } else {
     const userData = await UsersModel.findOne({ id: userId });
+
     if (userData?.role === 'ADMIN') {
       const products = await MngProductsModel.aggregate([
         {
-          $match: { userId: userId, customOrderFlag: true },
+          $match: { branchId: userData.branchId, customOrderFlag: true },
         },
         {
           $lookup: {

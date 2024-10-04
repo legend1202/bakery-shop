@@ -1,21 +1,16 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from 'react';
 
-import Collapse from "@mui/material/Collapse";
+import Collapse from '@mui/material/Collapse';
 
-import { usePathname } from "src/routes/hooks";
-import { useActiveLink } from "src/routes/hooks/use-active-link";
+import { usePathname } from 'src/routes/hooks';
+import { useActiveLink } from 'src/routes/hooks/use-active-link';
 
-import NavItem from "./nav-item";
-import { NavListProps, NavSubListProps } from "../types";
+import NavItem from './nav-item';
+import { NavListProps, NavSubListProps } from '../types';
 
 // ----------------------------------------------------------------------
 
-export default function NavList({
-  data,
-  userRole,
-  depth,
-  slotProps,
-}: NavListProps) {
+export default function NavList({ data, userRole, depth, slotProps }: NavListProps) {
   const pathname = usePathname();
 
   const active = useActiveLink(data.path, !!data.children);
@@ -50,16 +45,17 @@ export default function NavList({
         icon={data.icon}
         info={data.info}
         roles={data.roles}
+        color={data.color}
         caption={data.caption}
         disabled={data.disabled}
         //
         depth={depth}
         hasChild={!!data.children}
-        externalLink={data.path.includes("http")}
+        externalLink={data.path.includes('http')}
         currentRole={userRole}
         //
         active={active}
-        className={active ? "active" : ""}
+        className={active ? 'active' : ''}
         sx={{
           mb: `${slotProps?.gap}px`,
           ...(depth === 1 ? slotProps?.rootItem : slotProps?.subItem),
@@ -68,11 +64,7 @@ export default function NavList({
 
       {!!data.children && (
         <Collapse in={openMenu} unmountOnExit>
-          <NavSubList
-            data={data.children}
-            depth={depth}
-            slotProps={slotProps}
-          />
+          <NavSubList data={data.children} depth={depth} slotProps={slotProps} />
         </Collapse>
       )}
     </>
@@ -85,12 +77,7 @@ function NavSubList({ data, depth, slotProps }: NavSubListProps) {
   return (
     <>
       {data.map((list) => (
-        <NavList
-          key={list.title}
-          data={list}
-          depth={depth + 1}
-          slotProps={slotProps}
-        />
+        <NavList key={list.title} data={list} depth={depth + 1} slotProps={slotProps} />
       ))}
     </>
   );

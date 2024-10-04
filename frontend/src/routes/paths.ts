@@ -101,6 +101,7 @@ export const paths = {
   report: {
     root: `${ROOTS.REPORT}`,
     product: `${ROOTS.REPORT}/product`,
+    customproduct: `${ROOTS.REPORT}/customproduct`,
     supply: `${ROOTS.REPORT}/supply`,
     sale: `${ROOTS.REPORT}/sale`,
     attendance: `${ROOTS.REPORT}/attendance`,

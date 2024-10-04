@@ -52,127 +52,120 @@ export function useNavData() {
 
   const data = useMemo(
     () => [
-      /* {
-        subheader: t('overview'),
-        roles: ['ADMIN'],
-        items: [
-          {
-            title: t('welcome'),
-            path: paths.dashboard.root,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN'],
-          },
-        ],
-      }, */
-
       {
-        subheader: t('Administer'),
+        subheader: t('ADMINISTRAR'),
         roles: ['ADMIN', 'SUPERADMIN'],
+        color: '#ee575e',
         items: [
           // Create
           {
-            title: t('Branches'),
+            title: t('SUCURSAL'),
             path: paths.branches.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
+            color: '#ee575e',
           },
 
           {
-            title: t('Users'),
+            title: t('EMPLEADOS'),
             path: paths.admin.users.create,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
+            color: '#ee575e',
           },
           // List
           {
-            title: t('LIST EMPLOYEES'),
+            title: t('LISTAR EMPLEADOS'),
             path: paths.admin.users.list,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
+            color: '#ee575e',
           },
           // Product
           {
-            title: t('Product'),
+            title: t('AÑADIR NUEVO PRODUCTO'),
             path: paths.product.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
+            color: '#ee575e',
           },
-          // Supplies
+
           {
-            title: t('Supplies'),
-            path: paths.supplies.list,
+            title: t('ACTUALIZAR PRODUCTOS EN INVENTARIO'),
+            path: paths.inventory.product.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
+            color: '#ee575e',
           },
-          /* // Shift Criteria
-          {
-            title: t('Shift'),
-            path: paths.shift.list,
-            icon: ICONS.user,
-            roles: ['SUPERADMIN', 'ADMIN'],
-          }, */
         ],
       },
       {
         subheader: t('INSUMOS'),
         roles: ['SUPERADMIN'],
+        color: '#1D5DEC',
         items: [
-          // product
+          // Supplies
           {
-            title: t('Product'),
-            path: paths.inventory.product.list,
+            title: t('AÑADIR NUEVO INSUMOS'),
+            path: paths.supplies.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
+            color: '#1D5DEC',
           },
-          // Supply
           {
-            title: t('Supply'),
+            title: t('ACTUALIZAR INSUMOS'),
             path: paths.inventory.supply.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
-          },
-        ],
-      },
-      {
-        subheader: t('ORDENES'),
-        roles: ['ADMIN', 'SUPERADMIN'],
-        items: [
-          // product
-          {
-            title: t('Product'),
-            path: paths.mng.product.list,
-            icon: ICONS.user,
-            roles: ['ADMIN', 'SUPERADMIN'],
-          },
-          // Custome Product Order
-          {
-            title: t('Custom Order'),
-            path: paths.mng.customOrder.list,
-            icon: ICONS.user,
-            roles: ['ADMIN', 'SUPERADMIN'],
+            color: '#1D5DEC',
           },
           // Supply
           {
-            title: t('Supply'),
+            title: t('PROCESAR ORDEN DE INSUMOS'),
             path: paths.mng.supply.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
+            color: '#1D5DEC',
           },
         ],
       },
       {
-        subheader: t('Management'),
+        subheader: t('ÓRDENES'),
+        roles: ['ADMIN', 'SUPERADMIN'],
+        color: '#008f39',
+        items: [
+          // product
+          {
+            title: t('PROCESAR ÓRDEN'),
+            path: paths.mng.product.list,
+            icon: ICONS.user,
+            roles: ['ADMIN', 'SUPERADMIN'],
+            color: '#008f39',
+          },
+          // Custome Product Order
+          {
+            title: t('PEDIDO'),
+            path: paths.mng.customOrder.list,
+            icon: ICONS.user,
+            roles: ['ADMIN', 'SUPERADMIN'],
+            color: '#008f39',
+          },
+        ],
+      },
+      {
+        subheader: t('Gestión'),
         roles: ['SALESPERSON'],
+        color: '#ff8000',
         items: [
           // sale
           {
-            title: t('Purchase'),
+            title: t('Venta'),
             path: paths.sale.purchase,
             icon: ICONS.user,
             roles: ['SALESPERSON'],
           },
           {
-            title: t('List'),
+            title: t('Lista'),
             path: paths.sale.list,
             icon: ICONS.user,
             roles: ['SALESPERSON'],
@@ -180,35 +173,47 @@ export function useNavData() {
         ],
       },
       {
-        subheader: t('Report'),
+        subheader: t('REPORTES'),
         roles: ['ADMIN', 'SUPERADMIN'],
+        color: '#ff8000',
         items: [
           // sale
           {
-            title: t('Product'),
+            title: t('ÓRDENES DE PRODUCTO'),
             path: paths.report.product,
             icon: ICONS.user,
-            roles: ['SUPERADMIN'],
+            roles: ['SUPERADMIN', 'ADMIN'],
+            color: '#ff8000',
+          },
+          {
+            title: t('ÓRDENES DE PEDIDO'),
+            path: paths.report.customproduct,
+            icon: ICONS.user,
+            roles: ['SUPERADMIN', 'ADMIN'],
+            color: '#ff8000',
           },
           // sale
           {
-            title: t('Supply'),
+            title: t('ÓRDENES DE INSUMOS'),
             path: paths.report.supply,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
+            color: '#ff8000',
           },
           {
-            title: t('Sale'),
+            title: t('VENTAS'),
             path: paths.report.sale,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
+            color: '#ff8000',
           },
           // attendance
           {
-            title: t('Payroll'),
+            title: t('NÓMINA'),
             path: paths.report.attendance,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
+            color: '#ff8000',
           },
         ],
       },

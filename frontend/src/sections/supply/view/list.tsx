@@ -110,7 +110,7 @@ export default function MngSupplyListView() {
     }, */
     {
       field: 'supplyId',
-      headerName: 'Supply',
+      headerName: 'Suministrar',
       flex: 1,
       minWidth: 180,
       hideable: false,
@@ -118,25 +118,25 @@ export default function MngSupplyListView() {
     },
     {
       field: 'quantity',
-      headerName: 'Quantity',
+      headerName: 'Cantidad',
       minWidth: 100,
       renderCell: (params) => <RenderCellAmount params={params} supplyCount={supplyCount} />,
     },
     {
       field: 'createAt',
-      headerName: 'Date',
+      headerName: 'Fecha',
       minWidth: 140,
       renderCell: (params) => <RenderCellDate params={params} />,
     },
     {
       field: 'bio',
-      headerName: 'Bio',
+      headerName: 'Biografía',
       minWidth: 280,
       renderCell: (params) => <RenderCellBio params={params} />,
     },
     {
       field: 'status',
-      headerName: 'Status',
+      headerName: 'Estado',
       minWidth: 100,
       renderCell: (params) => <RenderCellStatus params={params} />,
     },
@@ -154,13 +154,13 @@ export default function MngSupplyListView() {
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Accept"
+          label="Aceptar"
           onClick={() => handleConfirmRow(params.row.id)}
         />,
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Delete"
+          label="Borrar"
           onClick={() => handleDeleteRow(params.row.id)}
         />,
       ],

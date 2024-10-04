@@ -103,7 +103,7 @@ export default function InventorySupplyListView() {
     }, */
     {
       field: 'supplyId',
-      headerName: 'Supply',
+      headerName: 'Suministrar',
       flex: 1,
       minWidth: 180,
       hideable: false,
@@ -111,13 +111,13 @@ export default function InventorySupplyListView() {
     },
     {
       field: 'quantity',
-      headerName: 'Quantity',
+      headerName: 'Cantidad',
       minWidth: 100,
       renderCell: (params) => <RenderCellAmount params={params} />,
     },
     {
       field: 'bio',
-      headerName: 'Bio',
+      headerName: 'Biografía',
       minWidth: 280,
       renderCell: (params) => <RenderCellBio params={params} />,
     },
@@ -141,13 +141,13 @@ export default function InventorySupplyListView() {
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Store"
+          label="Usada"
           onClick={() => handleConfirmRow(params.row.id)}
         />,
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Delete"
+          label="Borrar"
           onClick={() => handleDeleteRow(params.row.id)}
         />,
       ],

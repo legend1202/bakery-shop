@@ -82,11 +82,11 @@ export default function BranchNewEditForm({ afterSavebranch }: Props) {
               sm: 'repeat(4, 1fr)',
             }}
           >
-            <RHFTextField name="name" label="Branch name" />
+            <RHFTextField name="name" label="Sucursal" />
 
-            <RHFTextField name="location" label="location" />
+            <RHFTextField name="location" label="ubicación" />
 
-            <RHFTextField name="bio" label="bio" />
+            <RHFTextField name="bio" label="Color" />
 
             <LoadingButton
               type="submit"
@@ -98,7 +98,7 @@ export default function BranchNewEditForm({ afterSavebranch }: Props) {
                 justifyContent: 'flex-end',
               }}
             >
-              Save
+              Ahorrar
             </LoadingButton>
           </Box>
         </Stack>

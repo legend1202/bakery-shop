@@ -84,18 +84,17 @@ export default function BranchListView() {
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Delete"
+          label="Borrar"
           onClick={() => handleDeleteRow(params.row.id)}
         />,
       ];
-    } 
-      return [];
-    
+    }
+    return [];
   };
   const columns: GridColDef[] = [
     {
       field: 'name',
-      headerName: 'Name',
+      headerName: 'Nombre',
       flex: 1,
       minWidth: 280,
       hideable: false,
@@ -103,13 +102,13 @@ export default function BranchListView() {
     },
     {
       field: 'location',
-      headerName: 'Location',
+      headerName: 'Ubicación',
       minWidth: 280,
       renderCell: (params) => <RenderCellLocation params={params} />,
     },
     {
       field: 'bio',
-      headerName: 'Bio',
+      headerName: 'Color',
       minWidth: 280,
       renderCell: (params) => <RenderCellBio params={params} />,
     },

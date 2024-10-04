@@ -1,13 +1,13 @@
-import Container from "@mui/material/Container";
+import Container from '@mui/material/Container';
 
-import { paths } from "src/routes/paths";
+import { paths } from 'src/routes/paths';
 
-import { useTranslate } from "src/locales";
+import { useTranslate } from 'src/locales';
 
-import { useSettingsContext } from "src/components/settings";
-import CustomBreadcrumbs from "src/components/custom-breadcrumbs";
+import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import UserNewEditForm from "../user-new-edit-form";
+import UserNewEditForm from '../user-new-edit-form';
 
 export default function UserCreateView() {
   const settings = useSettingsContext();
@@ -15,13 +15,13 @@ export default function UserCreateView() {
   const { t } = useTranslate();
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : "lg"}>
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t("User")}
+        heading={t('EMPLEADOS ')}
         links={[
-          { name: t("User"), href: paths.admin.users.create },
+          { name: t('EMPLEADOS '), href: paths.admin.users.create },
           {
-            name: t("create"),
+            name: t('crear'),
             href: paths.admin.users.create,
           },
         ]}
