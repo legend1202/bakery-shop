@@ -21,7 +21,6 @@ import { IMSupply } from 'src/types/supply';
 
 import InventorySupplyNewEditForm from '../inventory-supply-new-edit-form';
 import {
-  RenderCellBio,
   RenderCellAmount,
   RenderCellStatus,
   RenderCellProduct,
@@ -115,12 +114,12 @@ export default function InventorySupplyListView() {
       minWidth: 100,
       renderCell: (params) => <RenderCellAmount params={params} />,
     },
-    {
+    /* {
       field: 'bio',
       headerName: 'Biografía',
       minWidth: 280,
       renderCell: (params) => <RenderCellBio params={params} />,
-    },
+    }, */
     {
       field: 'status',
       headerName: 'Status',

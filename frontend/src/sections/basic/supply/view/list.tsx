@@ -19,8 +19,8 @@ import { useSettingsContext } from 'src/components/settings';
 
 import { ISupply } from 'src/types/supply';
 
+import { RenderCellName } from '../supply-list-item';
 import SupplyNewEditForm from '../supply-new-edit-form';
-import { RenderCellBio, RenderCellName } from '../supply-list-item';
 
 const HIDE_COLUMNS = {
   category: false,
@@ -74,7 +74,7 @@ export default function SupplyListView() {
     {
       field: 'supply',
       headerName: 'Suministrar',
-      minWidth: 520,
+      minWidth: 1000,
       renderCell: (params) => <RenderCellName params={params} />,
     },
     /*  {
@@ -89,12 +89,12 @@ export default function SupplyListView() {
       minWidth: 200,
       renderCell: (params) => <RenderCellPrice params={params} />,
     }, */
-    {
+    /* {
       field: 'bio',
       headerName: 'Biografía',
       minWidth: 520,
       renderCell: (params) => <RenderCellBio params={params} />,
-    },
+    }, */
     {
       type: 'actions',
       field: 'actions',

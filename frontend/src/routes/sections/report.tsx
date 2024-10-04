@@ -14,6 +14,8 @@ const CustomProductListPage = lazy(() => import('src/pages/Report/customproduct/
 const SupplyReportPage = lazy(() => import('src/pages/Report/supply/list'));
 const SaleReportPage = lazy(() => import('src/pages/Report/sale/list'));
 const AttendanceReportPage = lazy(() => import('src/pages/Report/attendance/list'));
+const ProductInventoryPage = lazy(() => import('src/pages/totalinventory/product'));
+const SupplyInventoryPage = lazy(() => import('src/pages/totalinventory/supply'));
 
 export const reportRoutes = [
   {
@@ -32,6 +34,8 @@ export const reportRoutes = [
       { path: paths.report.supply, element: <SupplyReportPage /> },
       { path: paths.report.sale, element: <SaleReportPage /> },
       { path: paths.report.attendance, element: <AttendanceReportPage /> },
+      { path: paths.inventory.product.root, element: <ProductInventoryPage /> },
+      { path: paths.inventory.supply.root, element: <SupplyInventoryPage /> },
     ],
   },
 ];

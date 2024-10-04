@@ -98,7 +98,7 @@ export default function BranchNewEditForm({ afterSavebranch }: Props) {
                 justifyContent: 'flex-end',
               }}
             >
-              Ahorrar
+              guardar
             </LoadingButton>
           </Box>
         </Stack>

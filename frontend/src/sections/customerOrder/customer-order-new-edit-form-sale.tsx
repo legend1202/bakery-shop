@@ -137,7 +137,7 @@ export default function CustomerOrderEditFormSale({ afterSavebranch }: Props) {
           >
             <RHFTextField name="deliverDate" label="Deliver Date" type="Date" />
 
-            <RHFTextField name="bio" label="Description" />
+            {/* <RHFTextField name="bio" label="Description" /> */}
 
             <LoadingButton
               type="submit"

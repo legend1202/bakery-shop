@@ -36,7 +36,7 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
       /* branchId: '', */
       productId: '',
       quantity: 0,
-      bio: '',
+      /* bio: '', */
     }),
     []
   );
@@ -127,7 +127,7 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
 
             <RHFTextField name="quantity" label="Cantidad" />
 
-            <RHFTextField name="bio" label="Biografía" />
+            {/* <RHFTextField name="bio" label="Biografía" /> */}
 
             <LoadingButton
               type="submit"
@@ -139,7 +139,7 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
                 justifyContent: 'flex-end',
               }}
             >
-              Ahorrar
+              guardar
             </LoadingButton>
           </Box>
         </Stack>

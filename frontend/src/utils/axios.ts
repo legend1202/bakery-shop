@@ -96,5 +96,7 @@ export const endpoints = {
   upload: '/api/upload',
   inventory: {
     branch: '/api/inventory/branch',
+    product: '/api/inventory/product',
+    supply: '/api/inventory/supply',
   },
 };

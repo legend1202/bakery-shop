@@ -90,7 +90,7 @@ export default function InventorySupplyNewEditForm({ afterSavebranch }: Props) {
             display="grid"
             gridTemplateColumns={{
               xs: 'repeat(1, 1fr)',
-              sm: 'repeat(4, 1fr)',
+              sm: 'repeat(3, 1fr)',
             }}
           >
             {/* {branches && (
@@ -126,7 +126,7 @@ export default function InventorySupplyNewEditForm({ afterSavebranch }: Props) {
 
             <RHFTextField name="quantity" label="Cantidad" />
 
-            <RHFTextField name="bio" label="Biografía" />
+            {/* <RHFTextField name="bio" label="Biografía" /> */}
 
             <LoadingButton
               type="submit"

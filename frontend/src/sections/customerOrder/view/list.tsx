@@ -30,7 +30,6 @@ import { IMProduct, IProductCount } from 'src/types/product';
 import CustomerOrderNewEditForm from '../customer-order-new-edit-form';
 import CustomerOrderEditFormSale from '../customer-order-new-edit-form-sale';
 import {
-  RenderCellBio,
   RenderCellPrice,
   RenderCellStatus,
   RenderCellAmount,
@@ -187,12 +186,12 @@ export default function CustomerOrderListView() {
       minWidth: 140,
       renderCell: (params) => <RenderCellDeliverDate params={params} />,
     },
-    {
+    /* {
       field: 'bio',
       headerName: 'Biografía',
       minWidth: 100,
       renderCell: (params) => <RenderCellBio params={params} />,
-    },
+    }, */
     {
       field: 'status',
       headerName: 'Estado',

@@ -22,7 +22,6 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 import { ISale, IMSale } from 'src/types/sale';
 
 import {
-  RenderCellBio,
   RenderCellDate,
   RenderCellPrice,
   RenderCellProduct,
@@ -110,12 +109,12 @@ export default function SaleMngView() {
       minWidth: 180,
       renderCell: (params) => <RenderCellDate params={params} />,
     },
-    {
+    /* {
       field: 'bio',
       headerName: 'Biografía',
       minWidth: 220,
       renderCell: (params) => <RenderCellBio params={params} />,
-    },
+    }, */
     {
       type: 'actions',
       field: 'actions',

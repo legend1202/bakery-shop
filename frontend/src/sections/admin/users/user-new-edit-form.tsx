@@ -62,7 +62,7 @@ export default function UserNewEditForm() {
       branchId: '',
       role: '',
       /* color: '', */
-      bio: '',
+      /* bio: '', */
     }),
     []
   );
@@ -168,7 +168,7 @@ export default function UserNewEditForm() {
             {/* <RHFTextField name="color" label="Color" /> */}
           </Box>
 
-          <RHFTextField name="bio" label="Biografía" />
+          {/* <RHFTextField name="bio" label="Biografía" /> */}
         </Stack>
       </Card>
     </Grid>
@@ -181,7 +181,7 @@ export default function UserNewEditForm() {
       sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
     >
       <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-        Ahorrar
+        guardar
       </LoadingButton>
     </Grid>
   );

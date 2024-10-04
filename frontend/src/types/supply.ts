@@ -30,3 +30,9 @@ export type IMTSupply = {
   bio?: string;
   createdAt?: string;
 };
+
+export type ITSupply = {
+  totalQuantity: number;
+  supplyDetails: ISupply;
+  supplyId: string;
+};

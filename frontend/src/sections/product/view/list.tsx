@@ -26,7 +26,6 @@ import { IMProduct, IProductCount } from 'src/types/product';
 import MngProductNewEditForm from '../mng-product-new-edit-form';
 import MngProductNewEditFormSale from '../mng-product-new-edit-form-sale';
 import {
-  RenderCellBio,
   RenderCellStatus,
   RenderCellAmount,
   RenderCellBranch,
@@ -161,12 +160,12 @@ export default function MngProductListView() {
           minWidth: 100,
           renderCell: (params) => <RenderCellAmount params={params} productCount={productCount} />,
         },
-        {
+        /* {
           field: 'bio',
           headerName: 'Biografía',
           minWidth: 180,
           renderCell: (params) => <RenderCellBio params={params} />,
-        },
+        }, */
         {
           field: 'status',
           headerName: 'Estado',
@@ -201,12 +200,12 @@ export default function MngProductListView() {
           minWidth: 100,
           renderCell: (params) => <RenderCellAmount params={params} productCount={productCount} />,
         },
-        {
+        /* {
           field: 'bio',
           headerName: 'Biografía',
           minWidth: 180,
           renderCell: (params) => <RenderCellBio params={params} />,
-        },
+        }, */
         {
           field: 'status',
           headerName: 'Estado',

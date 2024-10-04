@@ -21,7 +21,6 @@ import { IMProduct } from 'src/types/product';
 
 import InventoryProductNewEditForm from '../inventory-product-new-edit-form';
 import {
-  RenderCellBio,
   RenderCellStatus,
   RenderCellAmount,
   RenderCellProduct,
@@ -144,12 +143,12 @@ export default function MngProductListView() {
       minWidth: 100,
       renderCell: (params) => <RenderCellAmount params={params} />,
     },
-    {
+    /* {
       field: 'bio',
       headerName: 'Biografía',
       minWidth: 180,
       renderCell: (params) => <RenderCellBio params={params} />,
-    },
+    }, */
     {
       field: 'status',
       headerName: 'Status',

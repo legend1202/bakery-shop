@@ -24,7 +24,6 @@ import { ISupplyCount } from 'src/types/product';
 
 import MngSupplyNewEditForm from '../mng-supply-new-edit-form';
 import {
-  RenderCellBio,
   RenderCellDate,
   RenderCellAmount,
   RenderCellStatus,
@@ -128,12 +127,12 @@ export default function MngSupplyListView() {
       minWidth: 140,
       renderCell: (params) => <RenderCellDate params={params} />,
     },
-    {
+    /* {
       field: 'bio',
       headerName: 'Biografía',
       minWidth: 280,
       renderCell: (params) => <RenderCellBio params={params} />,
-    },
+    }, */
     {
       field: 'status',
       headerName: 'Estado',

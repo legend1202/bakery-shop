@@ -32,7 +32,7 @@ const getStatusText = (status?: number, quantity?: number) => {
 };
 
 export default function SupplyTableRow({ row, selected, onSelectRow }: Props) {
-  const { supplyDetails, branchDetails, quantity, status, bio, createdAt } = row;
+  const { supplyDetails, branchDetails, quantity, status, createdAt } = row;
 
   return (
     <TableRow hover selected={selected}>
@@ -88,7 +88,7 @@ export default function SupplyTableRow({ row, selected, onSelectRow }: Props) {
         </Stack>
       </TableCell>
 
-      <TableCell align="center">{bio}</TableCell>
+      {/*  <TableCell align="center">{bio}</TableCell> */}
     </TableRow>
   );
 }

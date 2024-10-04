@@ -160,7 +160,7 @@ export default function CustomerOrderNewEditForm({ afterSavebranch }: Props) {
                 justifyContent: 'flex-end',
               }}
             >
-              Ahorrar
+              guardar
             </LoadingButton>
           </Box>
           <Box
@@ -176,7 +176,7 @@ export default function CustomerOrderNewEditForm({ afterSavebranch }: Props) {
 
             <RHFTextField name="deliverDate" label="Fecha de entrega" type="Date" />
 
-            <RHFTextField name="bio" label="Descripción" />
+            {/* <RHFTextField name="bio" label="Descripción" /> */}
           </Box>
         </Stack>
       </Card>

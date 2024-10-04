@@ -48,7 +48,7 @@ const TABLE_HEAD = [
   { id: 'quantity', label: 'Cantidad' },
   { id: 'price', label: 'Precio' },
   { id: 'status', label: 'Estado' },
-  { id: 'bio', label: 'Biografía', align: 'center' },
+  /* { id: 'bio', label: 'Biografía', align: 'center' }, */
 ];
 // ----------------------------------------------------------------------
 

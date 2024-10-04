@@ -25,7 +25,7 @@ import { IProduct } from 'src/types/product';
 
 import OwnerForm from '../product-new-edit-form-modal';
 import {
-  RenderCellBio,
+  /* RenderCellBio, */
   RenderCellCode,
   RenderCellSize,
   RenderCellName,
@@ -93,7 +93,7 @@ export default function ProductListView() {
     {
       field: 'product',
       headerName: 'PRODUCTO',
-      minWidth: 240,
+      minWidth: 280,
       renderCell: (params) => <RenderCellName params={params} />,
     },
     /*  {
@@ -105,27 +105,27 @@ export default function ProductListView() {
     {
       field: 'code',
       headerName: 'Código',
-      minWidth: 200,
+      minWidth: 280,
       renderCell: (params) => <RenderCellCode params={params} />,
     },
     {
       field: 'size',
       headerName: 'Tamaño',
-      minWidth: 140,
+      minWidth: 240,
       renderCell: (params) => <RenderCellSize params={params} />,
     },
     {
       field: 'price',
       headerName: 'Precio',
-      minWidth: 180,
+      minWidth: 240,
       renderCell: (params) => <RenderCellPrice params={params} />,
     },
-    {
+    /* {
       field: 'bio',
       headerName: 'Biografía',
       minWidth: 280,
       renderCell: (params) => <RenderCellBio params={params} />,
-    },
+    }, */
     {
       type: 'actions',
       field: 'actions',

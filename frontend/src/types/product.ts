@@ -30,6 +30,7 @@ export type IMProduct = {
   customOrderFlag?: boolean;
   bio?: string;
   status?: number;
+  totalQuantity?: number;
   createdAt?: string;
 };
 
@@ -44,7 +45,12 @@ export type IMTProduct = {
   createdAt?: string;
 };
 
+export type ITProduct = {
+  totalQuantity: number;
+  productDetails: IProduct;
+  productId: string;
+};
+
 export type IProductCount = { productId: string; quantity: number };
 
 export type ISupplyCount = { supplyId: string; quantity: number };
-

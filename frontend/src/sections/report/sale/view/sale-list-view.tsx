@@ -50,7 +50,7 @@ const TABLE_HEAD = [
   { id: 'price', label: 'Precio' },
   { id: 'createDate', label: 'Fecha' },
   { id: 'status', label: 'Estado' },
-  { id: 'bio', label: 'Biografía', align: 'center' },
+  /* { id: 'bio', label: 'Biografía', align: 'center' }, */
 ];
 // ----------------------------------------------------------------------
 

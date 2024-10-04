@@ -36,7 +36,7 @@ export default function OwnerForm({ currentProduct, handleUpdateData, onClose }:
     size: Yup.string(),
     price: Yup.number().required(),
     imageUrls: Yup.array().required(),
-    bio: Yup.string(),
+    /* bio: Yup.string(), */
   });
 
   const methods = useForm({
@@ -48,7 +48,7 @@ export default function OwnerForm({ currentProduct, handleUpdateData, onClose }:
       name: currentProduct?.name || '',
       code: currentProduct?.code || '',
       size: currentProduct?.size || '',
-      bio: currentProduct?.bio || '',
+      /* bio: currentProduct?.bio || '', */
     },
   });
 
@@ -154,7 +154,7 @@ export default function OwnerForm({ currentProduct, handleUpdateData, onClose }:
               display="grid"
               gridTemplateColumns={{
                 xs: 'repeat(1, 1fr)',
-                md: 'repeat(3, 1fr)',
+                md: 'repeat(4, 1fr)',
               }}
             >
               {/* {isAdmin && (
@@ -175,8 +175,8 @@ export default function OwnerForm({ currentProduct, handleUpdateData, onClose }:
               <RHFTextField name="code" label="Código" />
 
               <RHFTextField name="size" label="Tamaño" />
-
-              <RHFTextField name="bio" label="Biografía" />
+              {/* 
+              <RHFTextField name="bio" label="Biografía" /> */}
             </Box>
           </Stack>
         </Card>

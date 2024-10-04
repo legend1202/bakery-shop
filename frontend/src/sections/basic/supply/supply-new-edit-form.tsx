@@ -81,7 +81,7 @@ export default function SupplyNewEditForm({ afterSavebranch }: Props) {
             display="grid"
             gridTemplateColumns={{
               xs: 'repeat(1, 1fr)',
-              sm: 'repeat(3, 1fr)',
+              sm: 'repeat(2, 1fr)',
             }}
           >
             {/* {branches && (
@@ -103,7 +103,7 @@ export default function SupplyNewEditForm({ afterSavebranch }: Props) {
 
             {/* <RHFTextField name="price" label="Price" /> */}
 
-            <RHFTextField name="bio" label="Biografía" />
+            {/* <RHFTextField name="bio" label="Biografía" /> */}
 
             <LoadingButton
               type="submit"
@@ -115,7 +115,7 @@ export default function SupplyNewEditForm({ afterSavebranch }: Props) {
                 justifyContent: 'flex-end',
               }}
             >
-              Ahorrar
+              guardar
             </LoadingButton>
           </Box>
         </Stack>

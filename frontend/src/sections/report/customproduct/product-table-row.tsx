@@ -33,7 +33,7 @@ const getStatusText = (status?: number, quantity?: number) => {
 };
 
 export default function ProductTableRow({ row, selected, onSelectRow }: Props) {
-  const { productDetails, branchDetails, quantity, price, status, bio } = row;
+  const { productDetails, branchDetails, quantity, price, status } = row;
 
   let orderPrice = 0;
 
@@ -91,7 +91,7 @@ export default function ProductTableRow({ row, selected, onSelectRow }: Props) {
         </Stack>
       </TableCell>
 
-      <TableCell align="center">{bio}</TableCell>
+      {/* <TableCell align="center">{bio}</TableCell> */}
     </TableRow>
   );
 }

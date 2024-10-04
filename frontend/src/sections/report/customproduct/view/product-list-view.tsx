@@ -48,7 +48,7 @@ const TABLE_HEAD = [
   { id: 'quantity', label: 'Cantidad' },
   { id: 'price', label: 'Precio' },
   { id: 'status', label: 'Estado' },
-  { id: 'bio', label: 'Biografía', align: 'center' },
+  /* { id: 'bio', label: 'Biografía', align: 'center' }, */
 ];
 // ----------------------------------------------------------------------
 
@@ -273,7 +273,7 @@ export default function CustomProductListView() {
                 sx={{ minWidth: 140 }}
               >
                 <MenuItem key="" value="">
-                Toda
+                  Toda
                 </MenuItem>
                 {basicProducts &&
                   basicProducts.map((product) => (

@@ -34,7 +34,7 @@ export default function MngProductNewEditFormSale({ afterSavebranch }: Props) {
     () => ({
       productId: '',
       quantity: 0,
-      bio: '',
+      /* bio: '', */
     }),
     []
   );
@@ -102,7 +102,7 @@ export default function MngProductNewEditFormSale({ afterSavebranch }: Props) {
 
             <RHFTextField name="quantity" label="Quantity" />
 
-            <RHFTextField name="bio" label="Bio" />
+            {/*  <RHFTextField name="bio" label="Bio" /> */}
 
             <LoadingButton
               type="submit"

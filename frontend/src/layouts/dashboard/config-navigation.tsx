@@ -97,6 +97,14 @@ export function useNavData() {
             roles: ['SUPERADMIN'],
             color: '#ee575e',
           },
+
+          {
+            title: t('Productos en Inventario'),
+            path: paths.inventory.product.root,
+            icon: ICONS.user,
+            roles: ['SUPERADMIN', 'ADMIN'],
+            color: '#ee575e',
+          },
         ],
       },
       {
@@ -126,6 +134,13 @@ export function useNavData() {
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
             color: '#1D5DEC',
+          },
+          {
+            title: t('Insumos en Inventario'),
+            path: paths.inventory.supply.root,
+            icon: ICONS.user,
+            roles: ['SUPERADMIN', 'ADMIN'],
+            color: '#ee575e',
           },
         ],
       },

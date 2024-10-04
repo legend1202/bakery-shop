@@ -137,7 +137,7 @@ export default function MngSupplyNewEditForm({ afterSavebranch }: Props) {
                 justifyContent: 'flex-end',
               }}
             >
-              Ahorrar
+              guardar
             </LoadingButton>
           </Box>
         </Stack>
