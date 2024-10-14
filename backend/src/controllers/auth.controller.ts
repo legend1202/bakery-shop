@@ -11,9 +11,11 @@ import {
   handleAssignRole,
   handleUserDelete,
   handleUserCreation,
+  handleUserUpdate,
+  findOneUser,
 } from '../services/user.services';
 
-import { DecodedToken } from '../types/req.type';
+import { DecodedToken, TUserId } from '../types/req.type';
 
 export const create = async (
   req: Request & { userId?: DecodedToken['userId'] },
@@ -32,6 +34,25 @@ export const create = async (
     throw new RequestError(`${error}`, 500);
   }
 };
+
+export const update = async (
+  req: Request & { userId?: DecodedToken['userId'] },
+  res: Response
+) => {
+  const session: ClientSession = req.session!;
+
+  try {
+    const { user } = req.body;
+    const newUser = await handleUserUpdate(user, req.userId, session);
+    return sendResponse(res, 201, 'Created User Successfully', {
+      user_id: newUser.id,
+      email: newUser.email,
+    });
+  } catch (error) {
+    throw new RequestError(`${error}`, 500);
+  }
+};
+
 
 export const login = async (req: Request, res: Response) => {
   const session: ClientSession = req.session!;
@@ -92,6 +113,16 @@ export const assignRole = async (req: Request, res: Response) => {
       id: updatedUser.id,
       role: updatedUser.role,
     });
+  } catch (error) {
+    throw new RequestError(`${error}`, 500);
+  }
+};
+
+export const getUserById = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.query;
+    const existingUser = await findOneUser({ id: userId });
+    return sendResponse(res, 201, 'User found', existingUser);
   } catch (error) {
     throw new RequestError(`${error}`, 500);
   }

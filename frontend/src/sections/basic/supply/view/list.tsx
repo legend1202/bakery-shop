@@ -53,7 +53,7 @@ export default function SupplyListView() {
   }, [supplies]);
 
   const afterSavebranch = async (newProduct: ISupply) => {
-    enqueueSnackbar('Created Successfully');
+    enqueueSnackbar('Creado exitosamente');
     setTableData([...tableData, newProduct]);
   };
 
@@ -61,12 +61,12 @@ export default function SupplyListView() {
     const updateData = { id };
     const result = await SupplyDelete(updateData);
     if (result.data.success) {
-      enqueueSnackbar(t('Deleted'));
+      enqueueSnackbar(t('Eliminada'));
       const updatedProducts = tableData.filter((product) => product.id !== result.data.result.id);
       setTableData([...updatedProducts]);
       setReset(!reset);
     } else {
-      enqueueSnackbar('Update did not success');
+      enqueueSnackbar('La actualización no tuvo éxito');
     }
   };
 

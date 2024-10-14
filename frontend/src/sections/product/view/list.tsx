@@ -75,7 +75,7 @@ export default function MngProductListView() {
   }, [products]);
 
   const afterSavebranch = async (newProduct: IMProduct) => {
-    enqueueSnackbar('Created Successfully');
+    enqueueSnackbar('Creado exitosamente');
     setTableData([...tableData, newProduct]);
   };
 
@@ -83,14 +83,14 @@ export default function MngProductListView() {
     const updateData = { id };
     const result = await MngProductDelete(updateData);
     if (result.data) {
-      enqueueSnackbar(t('Updated'));
+      enqueueSnackbar(t('Actualizada'));
       const fixedProducts = tableData.filter((product) => product.id !== result.data.id);
       const updateProduct = tableData.filter((product) => product.id === result.data.id);
       const updatedProduct = { ...updateProduct[0], status: result.data.status };
       setTableData([...fixedProducts, updatedProduct]);
       setReset(!reset);
     } else {
-      enqueueSnackbar('Update did not success');
+      enqueueSnackbar('La actualización no tuvo éxito');
     }
   };
   const handleConfirmRow = async (id: string) => {
@@ -98,14 +98,14 @@ export default function MngProductListView() {
     const result = await MngProductConfirm(updateData);
 
     if (result.data) {
-      enqueueSnackbar(t('Updated'));
+      enqueueSnackbar(t('Actualizada'));
       const fixedProducts = tableData.filter((product) => product.id !== result.data.id);
       const updateProduct = tableData.filter((product) => product.id === result.data.id);
       const updatedProduct = { ...updateProduct[0], status: result.data.status };
       setTableData([...fixedProducts, updatedProduct]);
       setReset(!reset);
     } else {
-      enqueueSnackbar('Update did not success');
+      enqueueSnackbar('La actualización no tuvo éxito');
     }
   };
 

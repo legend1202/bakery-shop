@@ -17,6 +17,20 @@ export interface Users extends Document {
   endTime: string;
   payment: string;
   color: string;
+  mon_ini: string;
+  mon_end: string;
+  tue_ini: string;
+  tue_end: string;
+  wed_ini: string;
+  wed_end: string;
+  thu_ini: string;
+  thu_end: string;
+  fri_ini: string;
+  fri_end: string;
+  sat_ini: string;
+  sat_end: string;
+  sun_ini: string;
+  sun_end: string;
   createdAt: Date;
   updateAt: Date;
 }
@@ -39,12 +53,26 @@ const UsersSchema = new Schema<Users>(
     role: {
       type: String,
     },
-    startTime: { type: String },
-    endTime: { type: String },
+    startTime: { type: String, default: '9' },
+    endTime: { type: String, default: '17' },
     payment: { type: String },
     color: { type: String },
     bio: { type: String },
     loginStatus: { type: Boolean },
+    mon_ini: { type: String, default: '9' },
+    mon_end: { type: String, default: '17' },
+    tue_ini: { type: String, default: '9' },
+    tue_end: { type: String, default: '17' },
+    wed_ini: { type: String, default: '9' },
+    wed_end: { type: String, default: '17' },
+    thu_ini: { type: String, default: '9' },
+    thu_end: { type: String, default: '17' },
+    fri_ini: { type: String, default: '9' },
+    fri_end: { type: String, default: '17' },
+    sat_ini: { type: String, default: '9' },
+    sat_end: { type: String, default: '17' },
+    sun_ini: { type: String, default: '9' },
+    sun_end: { type: String, default: '17' },
   },
   {
     timestamps: true,

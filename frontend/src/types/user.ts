@@ -98,6 +98,7 @@ export type IUserItem = {
   lastName: string;
   email: string;
   password: string;
+  passwordStr?: string;
   branchId?: string;
   userId?: string;
   role?: string;
@@ -105,6 +106,20 @@ export type IUserItem = {
   startTime?: string;
   endTIme?: string;
   payment?: string;
+  mon_ini?: string;
+  mon_end?: string;
+  tue_ini?: string;
+  tue_end?: string;
+  wed_ini?: string;
+  wed_end?: string;
+  thu_ini?: string;
+  thu_end?: string;
+  fri_ini?: string;
+  fri_end?: string;
+  sat_ini?: string;
+  sat_end?: string;
+  sun_ini?: string;
+  sun_end?: string;
 };
 
 export type ITUserItem = {

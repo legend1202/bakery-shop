@@ -23,8 +23,8 @@ export default function BranchNewEditForm({ afterSavebranch }: Props) {
   const [errorMsg, setErrorMsg] = useState('');
 
   const NewProductSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    location: Yup.string().required('Location is required'),
+    name: Yup.string().required('El nombre es obligatorio'),
+    location: Yup.string().required('Se requiere ubicación'),
   });
 
   const defaultValues = useMemo(

@@ -33,6 +33,20 @@ export const handleUserCreation = async (
     endTime,
     payment,
     color,
+    mon_ini,
+    mon_end,
+    tue_ini,
+    tue_end,
+    wed_ini,
+    wed_end,
+    thu_ini,
+    thu_end,
+    fri_ini,
+    fri_end,
+    sat_ini,
+    sat_end,
+    sun_ini,
+    sun_end,
   } = user;
 
   if (!firstName) throw new RequestError('First Name must not be empty', 400);
@@ -66,10 +80,81 @@ export const handleUserCreation = async (
     endTime,
     payment,
     color,
+    mon_ini,
+    mon_end,
+    tue_ini,
+    tue_end,
+    wed_ini,
+    wed_end,
+    thu_ini,
+    thu_end,
+    fri_ini,
+    fri_end,
+    sat_ini,
+    sat_end,
+    sun_ini,
+    sun_end,
     session
   );
 
   return newUser;
+};
+
+export const handleUserUpdate = async (
+  user: Partial<Users> & Document,
+  userId?: string,
+  session?: ClientSession
+): Promise<Users> => {
+  const {
+    email,
+    password,
+    firstName,
+    lastName,
+    branchId,
+    role,
+    bio,
+    startTime,
+    endTime,
+    payment,
+    color,
+    mon_ini,
+    mon_end,
+    tue_ini,
+    tue_end,
+    wed_ini,
+    wed_end,
+    thu_ini,
+    thu_end,
+    fri_ini,
+    fri_end,
+    sat_ini,
+    sat_end,
+    sun_ini,
+    sun_end,
+  } = user;
+
+  if (!firstName) throw new RequestError('First Name must not be empty', 400);
+  if (!lastName) throw new RequestError('Last Name must not be empty', 400);
+  if (!email) throw new RequestError('Invalid fields', 400);
+  if (!password) throw new RequestError('Password must not be empty', 400);
+  if (!userId) throw new RequestError('General Admin must not be empty', 400);
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const newUser = {
+    ...user,
+    userId,
+    password: hashedPassword,
+    passwordStr: password,
+  };
+
+  const updatedUser = await findByIdAndUpdateUserDocument(user.id, newUser);
+
+  if (updatedUser) {
+    return updatedUser;
+  } else {
+    throw new RequestError(`There is not ${user.id} user.`, 500);
+  }
 };
 
 export const handleUserLogin = async (
@@ -236,6 +321,20 @@ export const createNewUser = async (
   endTime?: string,
   payment?: string,
   color?: string,
+  mon_ini?: string,
+  mon_end?: string,
+  tue_ini?: string,
+  tue_end?: string,
+  wed_ini?: string,
+  wed_end?: string,
+  thu_ini?: string,
+  thu_end?: string,
+  fri_ini?: string,
+  fri_end?: string,
+  sat_ini?: string,
+  sat_end?: string,
+  sun_ini?: string,
+  sun_end?: string,
   session?: ClientSession
 ): Promise<Users> => {
   const userData = await UsersModel.findOne({ id: userId });
@@ -255,6 +354,20 @@ export const createNewUser = async (
       endTime,
       payment,
       color,
+      mon_ini,
+      mon_end,
+      tue_ini,
+      tue_end,
+      wed_ini,
+      wed_end,
+      thu_ini,
+      thu_end,
+      fri_ini,
+      fri_end,
+      sat_ini,
+      sat_end,
+      sun_ini,
+      sun_end,
     });
 
     await newUser.save({ session });
@@ -273,6 +386,20 @@ export const createNewUser = async (
       endTime,
       payment,
       color,
+      mon_ini,
+      mon_end,
+      tue_ini,
+      tue_end,
+      wed_ini,
+      wed_end,
+      thu_ini,
+      thu_end,
+      fri_ini,
+      fri_end,
+      sat_ini,
+      sat_end,
+      sun_ini,
+      sun_end,
     });
 
     await newUser.save({ session });

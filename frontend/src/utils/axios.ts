@@ -32,7 +32,9 @@ export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
 export const endpoints = {
   admin: {
     create: '/api/auth/register',
+    update: '/api/auth/update',
     userList: '/api/auth/get-users',
+    userById: '/api/auth/get-user',
     userRoleUpdate: '/api/auth/assign-role',
     userDelete: '/api/auth/delete',
   },

@@ -24,7 +24,7 @@ export default function SupplyNewEditForm({ afterSavebranch }: Props) {
 
   const NewProductSchema = Yup.object().shape({
     /*  branchId: Yup.string().required('Branch is required'), */
-    name: Yup.string().required('Name is required'),
+    name: Yup.string().required(),
     /* price: Yup.number().required('Price is required'), */
   });
 

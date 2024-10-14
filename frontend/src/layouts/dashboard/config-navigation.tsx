@@ -53,13 +53,13 @@ export function useNavData() {
   const data = useMemo(
     () => [
       {
-        subheader: t('ADMINISTRAR'),
+        subheader: t('Administrar'),
         roles: ['ADMIN', 'SUPERADMIN'],
         color: '#ee575e',
         items: [
           // Create
           {
-            title: t('SUCURSAL'),
+            title: t('Sucursal'),
             path: paths.branches.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
@@ -67,7 +67,7 @@ export function useNavData() {
           },
 
           {
-            title: t('EMPLEADOS'),
+            title: t('Empleados'),
             path: paths.admin.users.create,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
@@ -75,7 +75,7 @@ export function useNavData() {
           },
           // List
           {
-            title: t('LISTAR EMPLEADOS'),
+            title: t('Listar empleados'),
             path: paths.admin.users.list,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
@@ -83,7 +83,7 @@ export function useNavData() {
           },
           // Product
           {
-            title: t('AÑADIR NUEVO PRODUCTO'),
+            title: t('Anadir nuevo producto'),
             path: paths.product.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
@@ -91,7 +91,7 @@ export function useNavData() {
           },
 
           {
-            title: t('ACTUALIZAR PRODUCTOS EN INVENTARIO'),
+            title: t('Actualizar productos en inventarto'),
             path: paths.inventory.product.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
@@ -99,7 +99,7 @@ export function useNavData() {
           },
 
           {
-            title: t('Productos en Inventario'),
+            title: t('Productos en inventario'),
             path: paths.inventory.product.root,
             icon: ICONS.user,
             roles: ['SUPERADMIN', 'ADMIN'],
@@ -108,20 +108,20 @@ export function useNavData() {
         ],
       },
       {
-        subheader: t('INSUMOS'),
+        subheader: t('Insumos'),
         roles: ['SUPERADMIN'],
         color: '#1D5DEC',
         items: [
           // Supplies
           {
-            title: t('AÑADIR NUEVO INSUMOS'),
+            title: t('Anadir nuevo insumos'),
             path: paths.supplies.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
             color: '#1D5DEC',
           },
           {
-            title: t('ACTUALIZAR INSUMOS'),
+            title: t('Actualizar insumos'),
             path: paths.inventory.supply.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
@@ -129,29 +129,29 @@ export function useNavData() {
           },
           // Supply
           {
-            title: t('PROCESAR ORDEN DE INSUMOS'),
+            title: t('Procesar orden de insumos'),
             path: paths.mng.supply.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
             color: '#1D5DEC',
           },
           {
-            title: t('Insumos en Inventario'),
+            title: t('Insumos en inventario'),
             path: paths.inventory.supply.root,
             icon: ICONS.user,
             roles: ['SUPERADMIN', 'ADMIN'],
-            color: '#ee575e',
+            color: '#1D5DEC',
           },
         ],
       },
       {
-        subheader: t('ÓRDENES'),
+        subheader: t('Ordenes'),
         roles: ['ADMIN', 'SUPERADMIN'],
         color: '#008f39',
         items: [
           // product
           {
-            title: t('PROCESAR ÓRDEN'),
+            title: t('Procesar orden'),
             path: paths.mng.product.list,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
@@ -159,7 +159,7 @@ export function useNavData() {
           },
           // Custome Product Order
           {
-            title: t('PEDIDO'),
+            title: t('Pedido'),
             path: paths.mng.customOrder.list,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
@@ -188,20 +188,20 @@ export function useNavData() {
         ],
       },
       {
-        subheader: t('REPORTES'),
+        subheader: t('Reportes'),
         roles: ['ADMIN', 'SUPERADMIN'],
         color: '#ff8000',
         items: [
           // sale
           {
-            title: t('ÓRDENES DE PRODUCTO'),
+            title: t('Órdenes de producto'),
             path: paths.report.product,
             icon: ICONS.user,
             roles: ['SUPERADMIN', 'ADMIN'],
             color: '#ff8000',
           },
           {
-            title: t('ÓRDENES DE PEDIDO'),
+            title: t('Órdenes de pedido'),
             path: paths.report.customproduct,
             icon: ICONS.user,
             roles: ['SUPERADMIN', 'ADMIN'],
@@ -209,14 +209,14 @@ export function useNavData() {
           },
           // sale
           {
-            title: t('ÓRDENES DE INSUMOS'),
+            title: t('Órdenes de insumos'),
             path: paths.report.supply,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
             color: '#ff8000',
           },
           {
-            title: t('VENTAS'),
+            title: t('Ventas'),
             path: paths.report.sale,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
@@ -224,7 +224,7 @@ export function useNavData() {
           },
           // attendance
           {
-            title: t('NÓMINA'),
+            title: t('Nomina'),
             path: paths.report.attendance,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],

@@ -6,9 +6,11 @@ import {
   login,
   logout,
   create,
+  update,
   getUsers,
   assignRole,
   userDelete,
+  getUserById,
 } from '../controllers/auth.controller';
 
 import { errorWrap } from '../utils/error.utils';
@@ -20,6 +22,12 @@ router.post(
   '/register',
   errorWrap(verifyToken, 'Could not verify JWT token'),
   errorWrap(create, 'Could not create user')
+);
+
+router.post(
+  '/update',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  errorWrap(update, 'Could not create user')
 );
 
 router.post(
@@ -50,6 +58,13 @@ router.get(
   errorWrap(verifyToken, 'Could not verify JWT token'),
   /* errorWrap(verifyAdmin, `Admin can get users only. This user can't get users`), */
   withTransaction(errorWrap(getUsers, 'Could not get users'))
+);
+
+router.get(
+  '/get-user',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  /* errorWrap(verifyAdmin, `Admin can get users only. This user can't get users`), */
+  withTransaction(errorWrap(getUserById, 'Could not get users'))
 );
 
 export default router;

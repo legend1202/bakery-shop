@@ -14,6 +14,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 const UserCreatePage = lazy(() => import('src/pages/admin/user/create'));
 const UserListPage = lazy(() => import('src/pages/admin/user/list'));
+const UserEditPage = lazy(() => import('src/pages/admin/user/edit'));
 
 export const adminRoutes = [
   {
@@ -31,6 +32,7 @@ export const adminRoutes = [
       { element: <IndexPage />, index: true },
       { path: paths.admin.users.create, element: <UserCreatePage /> },
       { path: paths.admin.users.list, element: <UserListPage /> },
+      { path: 'users/:id/edit', element: <UserEditPage /> },
     ],
   },
 ];

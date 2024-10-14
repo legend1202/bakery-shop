@@ -78,7 +78,7 @@ export default function OwnerForm({ currentProduct, handleUpdateData, onClose }:
 
         const saveResult = await createProduct(saveData);
         if (saveResult?.data?.success) {
-          enqueueSnackbar('Create success!');
+          enqueueSnackbar('¡Crea éxito!');
           handleUpdateData(saveResult.data.result);
         }
       } else {
@@ -90,7 +90,7 @@ export default function OwnerForm({ currentProduct, handleUpdateData, onClose }:
         const updateResult = await updateProduct(updateData);
 
         if (updateResult?.data?.success) {
-          enqueueSnackbar('Create success!');
+          enqueueSnackbar('¡Crea éxito!');
           handleUpdateData(updateResult.data.result);
         }
       }

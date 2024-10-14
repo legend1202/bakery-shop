@@ -1,5 +1,5 @@
 // import isEqual from "lodash/isEqual";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
@@ -13,6 +13,7 @@ import {
 } from '@mui/x-data-grid';
 
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 import { useTranslate } from 'src/locales';
 import { UserDelete, useGetUserLists } from 'src/api/admin';
@@ -32,7 +33,6 @@ import {
   RenderCellBranch,
   RenderCellPayRate,
   RenderCellPassword,
-  RenderCellWorkTime,
 } from '../user-list-items';
 
 const HIDE_COLUMNS = {
@@ -49,6 +49,8 @@ export default function UserListView() {
   const settings = useSettingsContext();
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const router = useRouter();
 
   const { users, usersLoading } = useGetUserLists();
 
@@ -69,14 +71,21 @@ export default function UserListView() {
     const updateData = { id };
     const result = await UserDelete(updateData);
     if (result.data.success) {
-      enqueueSnackbar(t('Deleted'));
+      enqueueSnackbar(t('Eliminada'));
       const updatedUsers = users.filter((user) => user.id !== result.data.result.id);
       setTableData([...updatedUsers]);
       setReset(!reset);
     } else {
-      enqueueSnackbar('Update did not success');
+      enqueueSnackbar('La actualización no tuvo éxito');
     }
   };
+
+  const handleEditRow = useCallback(
+    (id: string) => {
+      router.push(paths.admin.users.edit(id));
+    },
+    [router]
+  );
 
   const columns: GridColDef[] = [
     {
@@ -111,16 +120,16 @@ export default function UserListView() {
       minWidth: 140,
       renderCell: (params) => <RenderCellRole params={params} />,
     },
-    {
+    /* {
       field: 'startTime',
       headerName: 'Tiempo de trabajo',
       minWidth: 100,
       renderCell: (params) => <RenderCellWorkTime params={params} />,
-    },
+    }, */
     {
       field: 'payment',
       headerName: 'Tasa de pago',
-      minWidth: 140,
+      minWidth: 100,
       renderCell: (params) => <RenderCellPayRate params={params} />,
     },
     {
@@ -134,6 +143,12 @@ export default function UserListView() {
       filterable: false,
       disableColumnMenu: true,
       getActions: (params) => [
+        <GridActionsCellItem
+          showInMenu
+          icon={<Iconify icon="solar:eye-bold" />}
+          label="Editar"
+          onClick={() => handleEditRow(params.row.id)}
+        />,
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}

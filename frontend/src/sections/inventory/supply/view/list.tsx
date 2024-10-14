@@ -58,7 +58,7 @@ export default function InventorySupplyListView() {
   }, [supplies]);
 
   const afterSavebranch = async (newProduct: IMSupply) => {
-    enqueueSnackbar('Created Successfully');
+    enqueueSnackbar('Creado exitosamente');
     setTableData([...tableData, newProduct]);
   };
 
@@ -66,12 +66,12 @@ export default function InventorySupplyListView() {
     const updateData = { id };
     const result = await MngSupplyDelete(updateData);
     if (result.data.success) {
-      enqueueSnackbar(t('Deleted'));
+      enqueueSnackbar(t('Eliminada'));
       const updatedProducts = tableData.filter((product) => product.id !== result.data.result.id);
       setTableData([...updatedProducts]);
       setReset(!reset);
     } else {
-      enqueueSnackbar('Update did not success');
+      enqueueSnackbar('La actualización no tuvo éxito');
     }
   };
 
@@ -80,14 +80,14 @@ export default function InventorySupplyListView() {
     const result = await MngSupplyConfirm(updateData);
 
     if (result.data) {
-      enqueueSnackbar(t('Updated'));
+      enqueueSnackbar(t('Actualizada'));
       const fixedSupply = tableData.filter((supply) => supply.id !== result.data.id);
       const updateSupply = tableData.filter((supply) => supply.id === result.data.id);
       const updatedSupply = { ...updateSupply[0], status: result.data.status };
       setTableData([...fixedSupply, updatedSupply]);
       setReset(!reset);
     } else {
-      enqueueSnackbar('Update did not success');
+      enqueueSnackbar('La actualización no tuvo éxito');
     }
   };
 

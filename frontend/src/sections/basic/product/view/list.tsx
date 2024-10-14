@@ -84,7 +84,7 @@ export default function ProductListView() {
       setTableData([...updatedProducts]);
       setReset(!reset);
     } else {
-      enqueueSnackbar('Update did not success');
+      enqueueSnackbar('La actualización no tuvo éxito');
     }
     settableLoading(false);
   };

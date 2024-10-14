@@ -6,8 +6,19 @@ import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 import { IUserItem, IUserDelete, IUserRoleUpdate } from 'src/types/user';
 
 export const createUser = async (query: IUserItem) => {
-  console.log(query);
   const res = await axiosInstance.post(endpoints.admin.create, {
+    user: query,
+  });
+
+  const memoizedValue = {
+    data: res?.data || [],
+  };
+
+  return memoizedValue;
+};
+
+export const updateUser = async (query: IUserItem) => {
+  const res = await axiosInstance.post(endpoints.admin.update, {
     user: query,
   });
 
@@ -26,6 +37,23 @@ export function useGetUserLists() {
   const memoizedValue = useMemo(
     () => ({
       users: data?.result.users as IUserItem[],
+      usersLoading: isLoading,
+      usersError: error,
+      usersValidating: isValidating,
+    }),
+    [data?.result, error, isLoading, isValidating]
+  );
+  return memoizedValue;
+}
+
+export function useGetUserById(userId: string) {
+  const URL = userId ? [endpoints.admin.userById, { userId }] : '';
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      currentUser: data?.result as IUserItem,
       usersLoading: isLoading,
       usersError: error,
       usersValidating: isValidating,

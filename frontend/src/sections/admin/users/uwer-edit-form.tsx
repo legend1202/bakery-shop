@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -16,7 +16,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useTranslate } from 'src/locales';
-import { createUser } from 'src/api/admin';
+import { updateUser } from 'src/api/admin';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetBranchLists } from 'src/api/branch';
 
@@ -25,9 +25,15 @@ import Label from 'src/components/label/label';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
+import { IUserItem } from 'src/types/user';
+
 const roles = ['ADMIN', 'SALESPERSON'];
 
-export default function UserNewEditForm() {
+type Props = {
+  currentUser: IUserItem;
+};
+
+export default function UserEditForm({ currentUser }: Props) {
   const { t } = useTranslate();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -104,15 +110,45 @@ export default function UserNewEditForm() {
   const {
     reset,
     watch,
+    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
   const values = watch();
 
+  useEffect(() => {
+    if (currentUser?.firstName) {
+      console.log(currentUser);
+      setValue('firstName', currentUser.firstName);
+      setValue('lastName', currentUser.lastName);
+      setValue('email', currentUser.email);
+      setValue('password', currentUser?.passwordStr || '');
+      setValue('payment', currentUser.payment);
+      setValue('branchId', currentUser.branchId);
+      setValue('role', currentUser.role);
+      setValue('mon_ini', currentUser.mon_ini);
+      setValue('mon_end', currentUser.mon_end);
+      setValue('tue_ini', currentUser.tue_ini);
+      setValue('tue_end', currentUser.tue_end);
+      setValue('wed_ini', currentUser.wed_ini);
+      setValue('wed_end', currentUser.wed_end);
+
+      setValue('thu_ini', currentUser.thu_ini);
+      setValue('thu_end', currentUser.thu_end);
+      setValue('fri_ini', currentUser.fri_ini);
+      setValue('fri_end', currentUser.fri_end);
+      setValue('sat_ini', currentUser.sat_ini);
+      setValue('sat_end', currentUser.sat_end);
+      setValue('sun_ini', currentUser.sun_ini);
+      setValue('sun_end', currentUser.sun_end);
+    }
+  }, [currentUser, setValue]);
+
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const saveResults = await createUser(values);
+      const saveData = { ...values, id: currentUser.id };
+      const saveResults = await updateUser(saveData);
       if (saveResults.data?.success) {
         reset();
         enqueueSnackbar('¡Crea éxito!');

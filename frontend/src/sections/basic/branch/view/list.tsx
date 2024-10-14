@@ -61,7 +61,7 @@ export default function BranchListView() {
   }, [branches]);
 
   const afterSavebranch = async (newbranch: IBranch) => {
-    enqueueSnackbar('Created Successfully');
+    enqueueSnackbar('Creado exitosamente');
     setTableData([...tableData, newbranch]);
   };
 
@@ -69,12 +69,12 @@ export default function BranchListView() {
     const updateData = { id };
     const result = await BranchDelete(updateData);
     if (result.data.success) {
-      enqueueSnackbar(t('Deleted'));
+      enqueueSnackbar(t('Eliminada'));
       const updatedUsers = tableData.filter((branch) => branch.id !== result.data.result.id);
       setTableData([...updatedUsers]);
       setReset(!reset);
     } else {
-      enqueueSnackbar('Update did not success');
+      enqueueSnackbar('La actualización no tuvo éxito');
     }
   };
 

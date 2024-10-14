@@ -40,6 +40,7 @@ export const paths = {
       root: `${ROOTS.ADMIN}/users`,
       create: `${ROOTS.ADMIN}/users/create`,
       list: `${ROOTS.ADMIN}/users/list`,
+      edit: (id: string) => `${ROOTS.ADMIN}/users/${id}/edit`,
     },
   },
   branches: {
