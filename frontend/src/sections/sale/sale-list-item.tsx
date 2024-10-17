@@ -10,7 +10,7 @@ type ParamsProps = {
 export function RenderCellProduct({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.productDetails.name}
+      primary={params.row.id}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
@@ -24,7 +24,7 @@ export function RenderCellProduct({ params }: ParamsProps) {
 export function RenderCellQuantity({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.quantity}
+      primary={params.row.totalItems}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
@@ -38,7 +38,7 @@ export function RenderCellQuantity({ params }: ParamsProps) {
 export function RenderCellPrice({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.price}
+      primary={params.row.total}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

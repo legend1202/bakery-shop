@@ -27,15 +27,6 @@ export const handleGetSaleByUser = async (
       },
       {
         $lookup: {
-          from: ProductsModel.collection.name,
-          localField: 'productId',
-          foreignField: 'id',
-          as: 'productDetails',
-        },
-      },
-      { $unwind: '$productDetails' },
-      {
-        $lookup: {
           from: BranchesModel.collection.name,
           localField: 'branchId',
           foreignField: 'id',
@@ -43,6 +34,15 @@ export const handleGetSaleByUser = async (
         },
       },
       { $unwind: '$branchDetails' },
+      {
+        $lookup: {
+          from: UsersModel.collection.name,
+          localField: 'userId',
+          foreignField: 'id',
+          as: 'userDetails',
+        },
+      },
+      { $unwind: '$userDetails' },
     ]);
 
     return sales;
@@ -53,15 +53,6 @@ export const handleGetSaleByUser = async (
       },
       {
         $lookup: {
-          from: ProductsModel.collection.name,
-          localField: 'productId',
-          foreignField: 'id',
-          as: 'productDetails',
-        },
-      },
-      { $unwind: '$productDetails' },
-      {
-        $lookup: {
           from: BranchesModel.collection.name,
           localField: 'branchId',
           foreignField: 'id',
@@ -76,15 +67,6 @@ export const handleGetSaleByUser = async (
     const sales = await SalesModel.aggregate([
       {
         $lookup: {
-          from: ProductsModel.collection.name,
-          localField: 'productId',
-          foreignField: 'id',
-          as: 'productDetails',
-        },
-      },
-      { $unwind: '$productDetails' },
-      {
-        $lookup: {
           from: BranchesModel.collection.name,
           localField: 'branchId',
           foreignField: 'id',
@@ -92,6 +74,15 @@ export const handleGetSaleByUser = async (
         },
       },
       { $unwind: '$branchDetails' },
+      {
+        $lookup: {
+          from: UsersModel.collection.name,
+          localField: 'userId',
+          foreignField: 'id',
+          as: 'userDetails',
+        },
+      },
+      { $unwind: '$userDetails' },
     ]);
 
     return sales;
@@ -99,16 +90,11 @@ export const handleGetSaleByUser = async (
 };
 
 export const handleSaleCreation = async (
-  sales: Partial<Sales> & Document,
+  products: Partial<Sales> & Document,
   userId?: string,
   session?: ClientSession
 ): Promise<Sales> => {
-  const { productId, quantity, price, bio } = sales;
-
   if (!userId) throw new RequestError('Proudct name must not be empty', 400);
-  if (!productId) throw new RequestError('Proudct name must not be empty', 400);
-  if (!quantity) throw new RequestError('Price must not be empty', 400);
-
   const existingUser = await UsersModel.findOne({ id: userId });
 
   const branchId = existingUser?.branchId;
@@ -119,15 +105,7 @@ export const handleSaleCreation = async (
       500
     );
   } else {
-    const newSale = await createNewSale(
-      branchId,
-      productId,
-      userId,
-      quantity,
-      price,
-      bio,
-      session
-    );
+    const newSale = await createNewSale(branchId, userId, products, session);
 
     return newSale;
   }
@@ -143,20 +121,16 @@ export async function findOneProduct(
 
 export const createNewSale = async (
   branchId: string,
-  productId: string,
   userId: string,
-  quantity: number,
-  price?: number,
-  bio?: string,
+  products: any,
   session?: ClientSession
 ): Promise<Sales> => {
   const newProduct = new SalesModel({
     userId,
-    productId,
     branchId,
-    quantity,
-    price,
-    bio,
+    products: products.products,
+    totalItems: products.totalItems,
+    total: products.total,
   });
 
   await newProduct.save({ session });

@@ -1,4 +1,5 @@
 import { IBranch } from './branch';
+import { IUserItem } from './user';
 import { IProduct } from './product';
 
 export type ISale = {
@@ -17,14 +18,10 @@ export type ISale = {
 
 export type IMSale = {
   id: string;
-  productId: string;
   branchId?: string;
-  userId?: string;
-  productDetails?: IProduct;
   branchDetails?: IBranch;
-  quantity: number;
-  price?: number;
-  status?: boolean;
-  bio?: string;
+  userDetails?: IUserItem;
+  total: number;
+  totalItems: number;
   createdAt?: string;
 };

@@ -91,7 +91,8 @@ export const paths = {
   sale: {
     root: `${ROOTS.SALE}`,
     create: `${ROOTS.SALE}/create`,
-    purchase: `${ROOTS.SALE}/purchase`,
+    purchase: `${ROOTS.SALE}/purchase`, // cart
+    checkout: `${ROOTS.SALE}/checkout`,
     list: `${ROOTS.SALE}/list`,
   },
   attendance: {

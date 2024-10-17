@@ -19,6 +19,7 @@ import SnackbarProvider from 'src/components/snackbar/snackbar-provider';
 import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 
 import { AuthProvider } from 'src/auth/context/jwt';
+import { CheckoutProvider } from './sections/sale/context';
 
 // ----------------------------------------------------------------------
 
@@ -75,9 +76,11 @@ export default function App() {
           <ThemeProvider>
             <MotionLazy>
               <SnackbarProvider>
-                <SettingsDrawer />
-                <ProgressBar />
-                <Router />
+                <CheckoutProvider>
+                  <SettingsDrawer />
+                  <ProgressBar />
+                  <Router />
+                </CheckoutProvider>
               </SnackbarProvider>
             </MotionLazy>
           </ThemeProvider>

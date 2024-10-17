@@ -3,8 +3,9 @@ import { useMemo } from 'react';
 
 import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
-import { ISale, IMSale } from 'src/types/sale';
+import { IMSale } from 'src/types/sale';
 import { IBranchDelete } from 'src/types/branch';
+import { ICheckoutValue } from 'src/types/checkout';
 
 export function useGetSaleListsByUser() {
   const URL = endpoints.sale.listByUser;
@@ -23,9 +24,9 @@ export function useGetSaleListsByUser() {
   return memoizedValue;
 }
 
-export const createSale = async (query: ISale) => {
+export const createSale = async (query: ICheckoutValue) => {
   const res = await axiosInstance.post(endpoints.sale.create, {
-    sales: query,
+    products: query,
   });
 
   const memoizedValue = {

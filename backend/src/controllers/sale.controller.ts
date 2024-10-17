@@ -37,18 +37,9 @@ export const createSale = async (
   const session: ClientSession = req.session!;
 
   try {
-    const { sales } = req.body;
-    const newSale = await handleSaleCreation(sales, req.userId, session);
-    const prductData = await ProductsModel.findOne({
-      id: newSale.productId,
-    });
-    return sendResponse(res, 201, 'Created Branch Successfully', {
-      id: newSale.id,
-      productDetails: prductData,
-      quantity: newSale.quantity,
-      price: newSale.price,
-      bio: newSale.bio,
-    });
+    const { products } = req.body;
+    const newSale = await handleSaleCreation(products, req.userId, session);
+    return sendResponse(res, 201, 'Created Branch Successfully', newSale);
   } catch (error) {
     throw new RequestError(`${error}`, 500);
   }

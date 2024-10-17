@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
+import { Button } from '@mui/material';
 import Container from '@mui/material/Container';
 import {
   DataGrid,
@@ -9,8 +10,7 @@ import {
   GridColumnVisibilityModel,
 } from '@mui/x-data-grid';
 
-import { useTranslate } from 'src/locales';
-import { SaleDelete, useGetSaleListsByUser } from 'src/api/sale';
+import { createSale } from 'src/api/sale';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -18,14 +18,10 @@ import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-import { IMSale } from 'src/types/sale';
+import { ICheckoutItem } from 'src/types/checkout';
 
-import {
-  RenderCellDate,
-  RenderCellPrice,
-  RenderCellProduct,
-  RenderCellQuantity,
-} from '../sale-list-item';
+import { useCheckoutContext } from '../context';
+import { RenderCellPrice, RenderCellProduct, RenderCellQuantity } from '../sale-list-item';
 
 const HIDE_COLUMNS = {
   category: false,
@@ -35,45 +31,55 @@ const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
 
 // ----------------------------------------------------------------------
 
-export default function SaleMngView() {
-  const { t } = useTranslate();
-
+export default function CheckoutView() {
   const settings = useSettingsContext();
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { sales, salesLoading } = useGetSaleListsByUser();
+  const checkout = useCheckoutContext();
 
-  const [tableData, setTableData] = useState<IMSale[]>([]);
-
-  const [reset, setReset] = useState(false);
+  const [tableData, setTableData] = useState<ICheckoutItem[]>([]);
 
   const [columnVisibilityModel, setColumnVisibilityModel] =
     useState<GridColumnVisibilityModel>(HIDE_COLUMNS);
 
   useEffect(() => {
-    if (sales) {
-      setTableData(sales);
+    if (checkout.items) {
+      setTableData(checkout.items);
     }
-  }, [sales]);
+  }, [checkout.items]);
 
-  const handleDeleteRow = async (row: IMSale) => {
-    const updateData = { id: row.id };
-    const result = await SaleDelete(updateData);
-    if (result.data.success) {
-      enqueueSnackbar(t('Deleted'));
-      const updatedProducts = tableData.filter((product) => product.id !== result.data.result.id);
-      setTableData([...updatedProducts]);
-      setReset(!reset);
-    } else {
-      enqueueSnackbar('Update did not success');
+  /* useEffect(() => {
+    if (inventory) {
+      setCurrentInventory(inventory);
     }
+  }, [inventory]); */
+
+  const handlePurchaseBtn = async () => {
+    if (checkout.items.length > 0) {
+      const saveData = {
+        items: checkout.items,
+        totalItems: checkout.totalItems,
+        total: checkout.total,
+      };
+      const saveResults: any = await createSale(saveData);
+      if (saveResults.data?.success) {
+        enqueueSnackbar('Created Successfully');
+        checkout.onReset();
+      } else {
+        console.log(saveResults?.message);
+      }
+    }
+  };
+
+  const handleDeleteRow = async (row: ICheckoutItem) => {
+    checkout.onDeleteCart(row.productId);
   };
 
   const columns: GridColDef[] = [
     {
-      field: 'id',
-      headerName: 'Id',
+      field: 'name',
+      headerName: 'Producto',
       flex: 1,
       minWidth: 180,
       hideable: false,
@@ -91,18 +97,6 @@ export default function SaleMngView() {
       minWidth: 180,
       renderCell: (params) => <RenderCellPrice params={params} />,
     },
-    {
-      field: 'createdAt',
-      headerName: 'Fecha',
-      minWidth: 180,
-      renderCell: (params) => <RenderCellDate params={params} />,
-    },
-    /* {
-      field: 'bio',
-      headerName: 'Biografía',
-      minWidth: 220,
-      renderCell: (params) => <RenderCellBio params={params} />,
-    }, */
     {
       type: 'actions',
       field: 'actions',
@@ -148,10 +142,10 @@ export default function SaleMngView() {
             name: 'Ventas',
           },
           {
-            name: 'Lista',
+            name: 'Checkout',
           },
         ]}
-        /* action={
+        action={
           <Card
             sx={{
               padding: 1,
@@ -160,15 +154,28 @@ export default function SaleMngView() {
               flexDirection: 'row',
             }}
           >
-            Inventory: {currentInventory}
+            <Button
+              sx={{
+                marginX: 2,
+              }}
+            >
+              total: {checkout.total}
+            </Button>
+            <Button
+              sx={{
+                marginX: 2,
+                backgroundColor: 'green',
+              }}
+              onClick={handlePurchaseBtn}
+            >
+              Purchase
+            </Button>
           </Card>
-        } */
+        }
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
-      {/* <MngProductNewEditForm afterSavebranch={afterSavebranch} />
-       */}
       <Card
         sx={{
           mt: { xs: 2, md: 1 },
@@ -184,7 +191,7 @@ export default function SaleMngView() {
           }}
           rows={tableData}
           columns={columns}
-          loading={salesLoading}
+          getRowId={(row) => row.productId}
           getRowHeight={() => 'auto'}
           pageSizeOptions={[5, 10, 25]}
           initialState={{

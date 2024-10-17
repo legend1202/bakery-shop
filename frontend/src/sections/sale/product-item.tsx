@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useSnackbar } from 'notistack';
 
 import Fab from '@mui/material/Fab';
 import Box from '@mui/material/Box';
@@ -10,14 +9,14 @@ import { Button, Typography } from '@mui/material';
 
 import { fCurrency } from 'src/utils/format-number';
 
-import { createSale } from 'src/api/sale';
-
 import Label from 'src/components/label';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 
-import { ISale } from 'src/types/sale';
 import { IProduct } from 'src/types/product';
+import { ICheckoutItem } from 'src/types/checkout';
+
+import { useCheckoutContext } from './context';
 
 // ----------------------------------------------------------------------
 
@@ -28,23 +27,30 @@ type Props = {
 export default function ProductItem({ product }: Props) {
   const { id, name, imageUrls, price, size } = product;
 
-  const { enqueueSnackbar } = useSnackbar();
+  const checkout = useCheckoutContext();
 
   const [count, setCount] = useState(0);
 
   const handleAddCart = async () => {
     try {
       const saveData = {
+        name,
         productId: id,
         quantity: count,
         price: price && price * count,
-      } as ISale;
-      const saveResults: any = await createSale(saveData);
+      } as ICheckoutItem;
+
+      if (count > 0) {
+        checkout.onAddToCart(saveData);
+      } else if (id) {
+        checkout.onDeleteCart(id);
+      }
+      /* const saveResults: any = await createSale(saveData);
       if (saveResults.data?.success) {
         enqueueSnackbar('Created Successfully');
       } else {
         console.log(saveResults?.message);
-      }
+      } */
     } catch (error) {
       console.error(error);
     }

@@ -1,17 +1,39 @@
 import { Document, model, Schema } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
+export interface Product {
+  productId: string;
+  quantity: number;
+  price: number;
+}
+
 export interface Sales extends Document {
   id: string;
   userId: string;
-  productId: string;
   branchId: string;
-  quantity: number;
-  price: number;
+  products: Product[];
+  totalItems: number;
+  total: number;
   bio: string;
   createdAt: Date;
   updateAt: Date;
 }
+
+const ProductSchema = new Schema<Product>({
+  productId: {
+    type: String,
+    ref: 'Products',
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+});
 
 const SalesSchema = new Schema<Sales>(
   {
@@ -25,18 +47,16 @@ const SalesSchema = new Schema<Sales>(
       type: String,
       ref: 'users',
     },
-    productId: {
-      type: String,
-      ref: 'Products',
-    },
     branchId: {
       type: String,
       ref: 'Branches',
     },
-    price: {
-      type: Number,
+    products: {
+      type: [ProductSchema],
+      required: true,
     },
-    quantity: { type: Number },
+    totalItems: { type: Number },
+    total: { type: Number },
     bio: { type: String },
   },
   {

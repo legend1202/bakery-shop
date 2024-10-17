@@ -5,12 +5,16 @@ import { useGetProductListsByUser } from 'src/api/product';
 
 import { useSettingsContext } from 'src/components/settings';
 
+import CartIcon from '../cart-icon';
 import ProductList from '../product-list';
+import { useCheckoutContext } from '../context';
 
 // ----------------------------------------------------------------------
 
 export default function PurchaseView() {
   const settings = useSettingsContext();
+
+  const checkout = useCheckoutContext();
 
   const { products, productsLoading } = useGetProductListsByUser();
 
@@ -21,7 +25,7 @@ export default function PurchaseView() {
         mb: 15,
       }}
     >
-      {/* <CartIcon totalItems={0} /> */}
+      <CartIcon totalItems={checkout.totalItems} />
 
       <Typography
         variant="h4"

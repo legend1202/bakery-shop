@@ -40,8 +40,6 @@ export const createNewAttendance = async (
       createdAt: { $gte: todayStart },
     });
 
-    console.log(existingAttendance);
-
     if (existingAttendance) {
       // If a record exists, do not save a new one
       return existingAttendance;

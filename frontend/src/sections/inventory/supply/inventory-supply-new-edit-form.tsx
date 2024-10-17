@@ -138,7 +138,7 @@ export default function InventorySupplyNewEditForm({ afterSavebranch }: Props) {
                 justifyContent: 'flex-end',
               }}
             >
-              Agregar
+              Deducir
             </LoadingButton>
           </Box>
         </Stack>
