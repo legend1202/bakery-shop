@@ -6,18 +6,18 @@ import ListItemText from '@mui/material/ListItemText';
 
 import { fDate, fTime } from 'src/utils/format-time';
 
-import { ISale } from 'src/types/sale';
+import { IMSale } from 'src/types/sale';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: ISale;
+  row: IMSale;
   selected: boolean;
   onSelectRow: VoidFunction;
 };
 
 export default function SaleTableRow({ row, selected, onSelectRow }: Props) {
-  const { productDetails, branchDetails, quantity, price, createdAt } = row;
+  const { branchDetails, totalItems, total, createdAt } = row;
 
   return (
     <TableRow hover selected={selected}>
@@ -25,7 +25,7 @@ export default function SaleTableRow({ row, selected, onSelectRow }: Props) {
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell>
+      {/* <TableCell>
         <ListItemText
           disableTypography
           primary={
@@ -34,7 +34,7 @@ export default function SaleTableRow({ row, selected, onSelectRow }: Props) {
             </Typography>
           }
         />
-      </TableCell>
+      </TableCell> */}
 
       <TableCell>
         <ListItemText
@@ -47,9 +47,9 @@ export default function SaleTableRow({ row, selected, onSelectRow }: Props) {
         />
       </TableCell>
 
-      <TableCell>{quantity}</TableCell>
+      <TableCell>{totalItems}</TableCell>
 
-      <TableCell>{price}</TableCell>
+      <TableCell>{total}</TableCell>
 
       <TableCell>
         <ListItemText

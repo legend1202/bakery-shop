@@ -21,7 +21,6 @@ import { isSuperAdminFn } from 'src/utils/role-check';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetBranchLists } from 'src/api/branch';
 import { useGetSaleListsByUser } from 'src/api/sale';
-import { useGetProductListsByUser } from 'src/api/product';
 
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
@@ -44,7 +43,7 @@ import SupplyAnalytic from '../sale-analytic';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'productId', label: 'Producto' },
+  /* { id: 'productId', label: 'Producto' }, */
   { id: 'branchId', label: 'Sucursal' },
   { id: 'quantity', label: 'Cantidad' },
   { id: 'price', label: 'Precio' },
@@ -65,8 +64,6 @@ export default function ReportSaleView() {
 
   const { branches } = useGetBranchLists();
 
-  const { products } = useGetProductListsByUser();
-
   const { sales } = useGetSaleListsByUser();
 
   const table = useTable({ defaultOrderBy: 'createDate' });
@@ -79,13 +76,13 @@ export default function ReportSaleView() {
 
   const NewProductSchema = Yup.object().shape({
     branchId: Yup.string().required('Name is required'),
-    productId: Yup.string().required('Name is required'),
+    /*  productId: Yup.string().required('Name is required'), */
   });
 
   const defaultValues = useMemo(
     () => ({
       branchId: '',
-      productId: '',
+      /* productId: '', */
     }),
     []
   );
@@ -106,7 +103,11 @@ export default function ReportSaleView() {
   }, [sales]);
 
   useEffect(() => {
-    if (values.branchId && values.productId) {
+    if (values.branchId) {
+      const updatedTableData = sales.filter((sale) => sale.branchId === values.branchId);
+      setTableData(updatedTableData);
+    } else {
+      /*  if (values.branchId && values.productId) {
       const updatedTableData = sales.filter(
         (sale) => sale.branchId === values.branchId && sale.productId === values.productId
       );
@@ -120,24 +121,23 @@ export default function ReportSaleView() {
         const updatedTableData = sales.filter((sale) => sale.productId === values.productId);
         setTableData(updatedTableData);
       }
-    }
-    if (!values.branchId && !values.productId) {
+    } */
       setTableData(sales);
     }
   }, [values, sales]);
 
   const getTotalQuantity = () =>
     sumBy(tableData, (sale) => {
-      if (sale.quantity && sale.quantity !== undefined) {
-        return sale.quantity;
+      if (sale.totalItems && sale.totalItems !== undefined) {
+        return sale.totalItems;
       }
       return 0;
     });
 
   const getTotalAmountPrice = () =>
     sumBy(tableData, (sale) => {
-      if (sale.price && sale.price !== undefined) {
-        return sale.price;
+      if (sale.total && sale.total !== undefined) {
+        return sale.total;
       }
       return 0;
     });
@@ -186,7 +186,7 @@ export default function ReportSaleView() {
                 </RHFSelect>
               )}
 
-              <RHFSelect
+              {/*  <RHFSelect
                 name="productId"
                 label="Producto"
                 fullWidth
@@ -203,7 +203,7 @@ export default function ReportSaleView() {
                       {product.name}
                     </MenuItem>
                   ))}
-              </RHFSelect>
+              </RHFSelect> */}
             </Card>
           </FormProvider>
         }
