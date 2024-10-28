@@ -16,7 +16,6 @@ export default function ProductList({ products, loading, ...other }: Props) {
   const renderList = (
     <>{products && products.map((product) => <ProductItem key={product.id} product={product} />)}</>
   );
-
   return (
     <>
       <Box

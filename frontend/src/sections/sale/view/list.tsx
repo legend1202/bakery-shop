@@ -23,8 +23,8 @@ import { IMSale } from 'src/types/sale';
 import {
   RenderCellDate,
   RenderCellPrice,
-  RenderCellProduct,
   RenderCellQuantity,
+  RenderCellProductId,
 } from '../sale-list-item';
 
 const HIDE_COLUMNS = {
@@ -77,7 +77,7 @@ export default function SaleMngView() {
       flex: 1,
       minWidth: 180,
       hideable: false,
-      renderCell: (params) => <RenderCellProduct params={params} />,
+      renderCell: (params) => <RenderCellProductId params={params} />,
     },
     {
       field: 'quantity',

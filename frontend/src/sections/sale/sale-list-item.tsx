@@ -7,10 +7,24 @@ type ParamsProps = {
   params: GridCellParams;
 };
 
-export function RenderCellProduct({ params }: ParamsProps) {
+export function RenderCellProductId({ params }: ParamsProps) {
   return (
     <ListItemText
       primary={params.row.id}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
+export function RenderCellProductName({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.name}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
@@ -35,10 +49,38 @@ export function RenderCellQuantity({ params }: ParamsProps) {
   );
 }
 
+export function RenderCellCheckoutQuantity({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.quantity}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
 export function RenderCellPrice({ params }: ParamsProps) {
   return (
     <ListItemText
       primary={params.row.total}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
+export function RenderCellCheckoutPrice({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.price}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

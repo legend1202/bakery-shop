@@ -21,7 +21,11 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 import { ICheckoutItem } from 'src/types/checkout';
 
 import { useCheckoutContext } from '../context';
-import { RenderCellPrice, RenderCellProduct, RenderCellQuantity } from '../sale-list-item';
+import {
+  RenderCellProductName,
+  RenderCellCheckoutPrice,
+  RenderCellCheckoutQuantity,
+} from '../sale-list-item';
 
 const HIDE_COLUMNS = {
   category: false,
@@ -83,19 +87,19 @@ export default function CheckoutView() {
       flex: 1,
       minWidth: 180,
       hideable: false,
-      renderCell: (params) => <RenderCellProduct params={params} />,
+      renderCell: (params) => <RenderCellProductName params={params} />,
     },
     {
       field: 'quantity',
       headerName: 'Cantidad',
       minWidth: 180,
-      renderCell: (params) => <RenderCellQuantity params={params} />,
+      renderCell: (params) => <RenderCellCheckoutQuantity params={params} />,
     },
     {
       field: 'price',
       headerName: 'Precio',
       minWidth: 180,
-      renderCell: (params) => <RenderCellPrice params={params} />,
+      renderCell: (params) => <RenderCellCheckoutPrice params={params} />,
     },
     {
       type: 'actions',
