@@ -32,7 +32,7 @@ export const allLangs = [
     icon: 'flagpack:no',
     numberFormat: {
       code: 'zh-CN',
-      currency: 'NOK',
+      currency: 'MXN',
     },
   },
 ];
