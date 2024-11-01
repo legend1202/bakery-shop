@@ -94,30 +94,35 @@ export default function UserListView() {
       flex: 1,
       minWidth: 140,
       hideable: false,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellName params={params} />,
     },
     {
       field: 'email',
       headerName: 'Correo electrónico',
       minWidth: 220,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellEmail params={params} />,
     },
     {
       field: 'password',
       headerName: 'Contraseña',
       minWidth: 140,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellPassword params={params} />,
     },
     {
       field: 'branch',
       headerName: 'Sucursal',
       minWidth: 140,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellBranch params={params} />,
     },
     {
       field: 'role',
       headerName: 'Role',
       minWidth: 140,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellRole params={params} />,
     },
     /* {
@@ -130,6 +135,7 @@ export default function UserListView() {
       field: 'payment',
       headerName: 'Tasa de pago',
       minWidth: 100,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellPayRate params={params} />,
     },
     {

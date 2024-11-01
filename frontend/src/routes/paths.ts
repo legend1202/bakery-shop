@@ -99,6 +99,8 @@ export const paths = {
     root: `${ROOTS.ATTENDANCE}`,
     create: `${ROOTS.ATTENDANCE}/create`,
     list: `${ROOTS.ATTENDANCE}/list`,
+    start: `${ROOTS.AUTH}/jwt/start`,
+    end: `${ROOTS.AUTH}/jwt/end`,
   },
   report: {
     root: `${ROOTS.REPORT}`,

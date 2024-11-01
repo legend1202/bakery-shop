@@ -76,12 +76,14 @@ export default function AttendanceListView() {
       field: 'attendDate',
       headerName: 'Attend Date',
       minWidth: 520,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellAttendDate params={params} />,
     },
     {
       field: 'bio',
       headerName: 'Bio',
       minWidth: 520,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellBio params={params} />,
     },
     {

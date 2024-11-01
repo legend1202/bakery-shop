@@ -77,24 +77,28 @@ export default function SaleMngView() {
       flex: 1,
       minWidth: 180,
       hideable: false,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellProductId params={params} />,
     },
     {
       field: 'quantity',
       headerName: 'Cantidad',
       minWidth: 180,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellQuantity params={params} />,
     },
     {
       field: 'price',
       headerName: 'Precio',
       minWidth: 180,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellPrice params={params} />,
     },
     {
       field: 'createdAt',
       headerName: 'Fecha',
       minWidth: 180,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellDate params={params} />,
     },
     /* {

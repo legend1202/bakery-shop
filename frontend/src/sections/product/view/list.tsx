@@ -66,6 +66,7 @@ export default function MngProductListView() {
 
   useEffect(() => {
     if (products) {
+      console.log(products);
       setProductCount(sumByProductId(products));
       const filteredProducts = products.filter(
         (product) => product.quantity < 0 && !product?.customOrderFlag
@@ -144,6 +145,7 @@ export default function MngProductListView() {
           flex: 1,
           minWidth: 180,
           hideable: false,
+          disableColumnMenu: true,
           renderCell: (params) => <RenderCellProduct params={params} />,
         },
         {
@@ -152,12 +154,14 @@ export default function MngProductListView() {
           flex: 1,
           minWidth: 180,
           hideable: false,
+          disableColumnMenu: true,
           renderCell: (params) => <RenderCellBranch params={params} />,
         },
         {
           field: 'quantity',
           headerName: 'Cantidad',
           minWidth: 100,
+          disableColumnMenu: true,
           renderCell: (params) => <RenderCellAmount params={params} productCount={productCount} />,
         },
         /* {
@@ -170,6 +174,7 @@ export default function MngProductListView() {
           field: 'status',
           headerName: 'Estado',
           minWidth: 100,
+          disableColumnMenu: true,
           renderCell: (params) => <RenderCellStatus params={params} />,
         },
         {
@@ -192,12 +197,14 @@ export default function MngProductListView() {
           flex: 1,
           minWidth: 180,
           hideable: false,
+          disableColumnMenu: true,
           renderCell: (params) => <RenderCellProduct params={params} />,
         },
         {
           field: 'quantity',
           headerName: 'Cantidad',
           minWidth: 100,
+          disableColumnMenu: true,
           renderCell: (params) => <RenderCellAmount params={params} productCount={productCount} />,
         },
         /* {
@@ -210,6 +217,7 @@ export default function MngProductListView() {
           field: 'status',
           headerName: 'Estado',
           minWidth: 100,
+          disableColumnMenu: true,
           renderCell: (params) => <RenderCellStatus params={params} />,
         },
         {
@@ -258,32 +266,34 @@ export default function MngProductListView() {
           flexDirection: { md: 'column' },
         }}
       >
-        <DataGrid
-          sx={{
-            px: { xs: 1, md: 2 },
-          }}
-          rows={tableData}
-          columns={columns}
-          loading={productsLoading}
-          getRowHeight={() => 'auto'}
-          pageSizeOptions={[5, 10, 25]}
-          initialState={{
-            pagination: {
-              paginationModel: { pageSize: 10 },
-            },
-          }}
-          columnVisibilityModel={columnVisibilityModel}
-          onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-          slots={{
-            noRowsOverlay: () => <EmptyContent title="No Data" />,
-            noResultsOverlay: () => <EmptyContent title="No results found" />,
-          }}
-          slotProps={{
-            columnsPanel: {
-              getTogglableColumns,
-            },
-          }}
-        />
+        {tableData && (
+          <DataGrid
+            sx={{
+              px: { xs: 1, md: 2 },
+            }}
+            rows={tableData}
+            columns={columns}
+            loading={productsLoading}
+            getRowHeight={() => 'auto'}
+            pageSizeOptions={[5, 10, 25]}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 10 },
+              },
+            }}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+            slots={{
+              noRowsOverlay: () => <EmptyContent title="No Data" />,
+              noResultsOverlay: () => <EmptyContent title="No results found" />,
+            }}
+            slotProps={{
+              columnsPanel: {
+                getTogglableColumns,
+              },
+            }}
+          />
+        )}
       </Card>
     </Container>
   );

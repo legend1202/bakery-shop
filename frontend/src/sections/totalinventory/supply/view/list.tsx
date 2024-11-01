@@ -22,7 +22,6 @@ const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
 // ----------------------------------------------------------------------
 
 export default function MngProductListView() {
-
   const settings = useSettingsContext();
   const { products, productsLoading } = useGetInventoryOfSupply();
 
@@ -44,12 +43,14 @@ export default function MngProductListView() {
       flex: 1,
       minWidth: 320,
       hideable: false,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
     {
       field: 'quantity',
       headerName: 'Cantidad',
       minWidth: 500,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellAmount params={params} />,
     },
   ];

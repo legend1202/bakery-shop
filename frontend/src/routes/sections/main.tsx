@@ -6,6 +6,7 @@ import CompactLayout from 'src/layouts/compact';
 
 import { SplashScreen } from 'src/components/loading-screen';
 
+
 // ----------------------------------------------------------------------
 
 export const HomePage = lazy(() => import('src/pages/home'));

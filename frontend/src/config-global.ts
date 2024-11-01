@@ -43,3 +43,7 @@ export const PATH_AFTER_REGISTER = paths.auth.jwt.login; // as '/dashboard'
 export const PATH_LOGIN = paths.auth.jwt.login;
 
 export const PATH_REGESTER_ATTENDANCE = paths.attendance.list;
+
+export const PATH_START_ATTENDANCE = paths.attendance.start;
+
+export const PATH_END_ATTENDANCE = paths.attendance.end;

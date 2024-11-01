@@ -1,9 +1,9 @@
-import useSWR from "swr";
-import { useMemo } from "react";
+import useSWR from 'swr';
+import { useMemo } from 'react';
 
-import axiosInstance, { fetcher, endpoints } from "src/utils/axios";
+import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
-import { IBranch, IBranchDelete } from "src/types/branch";
+import { IBranch, IBranchDelete } from 'src/types/branch';
 
 export function useGetBranchLists() {
   const URL = endpoints.branch.list;
@@ -17,13 +17,25 @@ export function useGetBranchLists() {
       brachesError: error,
       brachesValidating: isValidating,
     }),
-    [data?.result, error, isLoading, isValidating],
+    [data?.result, error, isLoading, isValidating]
   );
   return memoizedValue;
 }
 
 export const createBranch = async (query: IBranch) => {
   const res = await axiosInstance.post(endpoints.branch.create, {
+    branch: query,
+  });
+
+  const memoizedValue = {
+    data: res?.data || [],
+  };
+
+  return memoizedValue;
+};
+
+export const udpateBranch = async (query: IBranch) => {
+  const res = await axiosInstance.post(endpoints.branch.update, {
     branch: query,
   });
 

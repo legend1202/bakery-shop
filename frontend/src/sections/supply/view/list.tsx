@@ -113,18 +113,21 @@ export default function MngSupplyListView() {
       flex: 1,
       minWidth: 180,
       hideable: false,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
     {
       field: 'quantity',
       headerName: 'Cantidad',
       minWidth: 100,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellAmount params={params} supplyCount={supplyCount} />,
     },
     {
       field: 'createAt',
       headerName: 'Fecha',
       minWidth: 140,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellDate params={params} />,
     },
     /* {
@@ -137,6 +140,7 @@ export default function MngSupplyListView() {
       field: 'status',
       headerName: 'Estado',
       minWidth: 100,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellStatus params={params} />,
     },
     {

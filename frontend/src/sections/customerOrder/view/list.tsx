@@ -152,6 +152,7 @@ export default function CustomerOrderListView() {
       flex: 1,
       minWidth: 180,
       hideable: false,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
     {
@@ -160,30 +161,35 @@ export default function CustomerOrderListView() {
       flex: 1,
       minWidth: 180,
       hideable: false,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellBranch params={params} />,
     },
     {
       field: 'quantity',
       headerName: 'Cantidad',
       minWidth: 100,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellAmount params={params} productCount={productCount} />,
     },
     {
       field: 'price',
       headerName: 'Precio',
       minWidth: 100,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellPrice params={params} />,
     },
     {
       field: 'address',
       headerName: 'DIRECCIÓN',
       minWidth: 100,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellAddress params={params} />,
     },
     {
       field: 'deliverDate',
       headerName: 'Fecha de entrega',
       minWidth: 140,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellDeliverDate params={params} />,
     },
     /* {
@@ -196,6 +202,7 @@ export default function CustomerOrderListView() {
       field: 'status',
       headerName: 'Estado',
       minWidth: 100,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellStatus params={params} />,
     },
     {

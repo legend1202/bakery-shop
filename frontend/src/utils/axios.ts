@@ -40,6 +40,7 @@ export const endpoints = {
   },
   branch: {
     create: '/api/branch/register',
+    update: '/api/branch/update',
     list: '/api/branch/get-branches',
     delete: '/api/branch/delete',
   },

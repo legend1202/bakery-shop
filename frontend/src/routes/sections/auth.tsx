@@ -1,19 +1,24 @@
-import { lazy, Suspense } from "react";
-import { Outlet } from "react-router-dom";
+import { lazy, Suspense } from 'react';
+import { Outlet } from 'react-router-dom';
 
-import { GuestGuard } from "src/auth/guard";
-import AuthClassicLayout from "src/layouts/auth/classic";
+import { GuestGuard } from 'src/auth/guard';
+import AuthClassicLayout from 'src/layouts/auth/classic';
 
-import { SplashScreen } from "src/components/loading-screen";
+import { SplashScreen } from 'src/components/loading-screen';
+
+import { paths } from '../paths';
 
 // JWT
-const JwtLoginPage = lazy(() => import("src/pages/auth/jwt/login"));
-const JwtRegisterPage = lazy(() => import("src/pages/auth/jwt/register"));
+const JwtLoginPage = lazy(() => import('src/pages/auth/jwt/login'));
+const JwtRegisterPage = lazy(() => import('src/pages/auth/jwt/register'));
+
+const StartPage = lazy(() => import('src/pages/attendance/start'));
+const EndPage = lazy(() => import('src/pages/attendance/end'));
 
 // ----------------------------------------------------------------------
 
 const authJwt = {
-  path: "jwt",
+  path: 'jwt',
   element: (
     <Suspense fallback={<SplashScreen />}>
       <Outlet />
@@ -21,7 +26,7 @@ const authJwt = {
   ),
   children: [
     {
-      path: "login",
+      path: 'login',
       element: (
         <GuestGuard>
           <AuthClassicLayout>
@@ -31,7 +36,7 @@ const authJwt = {
       ),
     },
     {
-      path: "register",
+      path: 'register',
       element: (
         <GuestGuard>
           <AuthClassicLayout title="Please register for more details!">
@@ -40,12 +45,28 @@ const authJwt = {
         </GuestGuard>
       ),
     },
+    {
+      path: paths.attendance.start,
+      element: (
+          <AuthClassicLayout title="Please register for more details!">
+            <StartPage />
+          </AuthClassicLayout>
+      ),
+    },
+    {
+      path: paths.attendance.end,
+      element: (
+          <AuthClassicLayout title="Please register for more details!">
+            <EndPage />
+          </AuthClassicLayout>
+      ),
+    },
   ],
 };
 
 export const authRoutes = [
   {
-    path: "auth",
+    path: 'auth',
     children: [authJwt],
   },
 ];

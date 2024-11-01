@@ -75,6 +75,7 @@ export default function SupplyListView() {
       field: 'supply',
       headerName: 'Suministrar',
       minWidth: 1000,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellName params={params} />,
     },
     /*  {

@@ -20,7 +20,7 @@ type ParamsCountProps = {
 export function RenderCellBranch({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.branchDetails.name}
+      primary={params.row?.branchDetails?.name || ''}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

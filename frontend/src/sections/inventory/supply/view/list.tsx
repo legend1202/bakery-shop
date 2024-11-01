@@ -106,12 +106,14 @@ export default function InventorySupplyListView() {
       flex: 1,
       minWidth: 180,
       hideable: false,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
     {
       field: 'quantity',
       headerName: 'Cantidad',
       minWidth: 100,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellAmount params={params} />,
     },
     /* {
@@ -124,6 +126,7 @@ export default function InventorySupplyListView() {
       field: 'status',
       headerName: 'Status',
       minWidth: 100,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellStatus params={params} />,
     },
     {

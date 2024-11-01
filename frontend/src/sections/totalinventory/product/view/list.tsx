@@ -2,11 +2,7 @@ import { useState, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
-import {
-  DataGrid,
-  GridColDef,
-  GridColumnVisibilityModel,
-} from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridColumnVisibilityModel } from '@mui/x-data-grid';
 
 import { useGetInventoryOfProduct } from 'src/api/inventory';
 
@@ -15,10 +11,7 @@ import { useSettingsContext } from 'src/components/settings';
 
 import { ITProduct } from 'src/types/product';
 
-import {
-  RenderCellAmount,
-  RenderCellProduct,
-} from '../inventory-product-list-item';
+import { RenderCellAmount, RenderCellProduct } from '../inventory-product-list-item';
 
 const HIDE_COLUMNS = {
   category: false,
@@ -29,7 +22,6 @@ const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
 // ----------------------------------------------------------------------
 
 export default function MngProductListView() {
-
   const settings = useSettingsContext();
   const { products, productsLoading } = useGetInventoryOfProduct();
 
@@ -51,12 +43,14 @@ export default function MngProductListView() {
       flex: 1,
       minWidth: 320,
       hideable: false,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
     {
       field: 'quantity',
       headerName: 'Cantidad',
       minWidth: 500,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellAmount params={params} />,
     },
   ];

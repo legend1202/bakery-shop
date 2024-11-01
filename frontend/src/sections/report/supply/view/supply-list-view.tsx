@@ -235,7 +235,7 @@ export default function ReportSupplyView() {
                   headLabel={TABLE_HEAD}
                   rowCount={tableData.length}
                   numSelected={table.selected.length}
-                  onSort={table.onSort}
+                  /* onSort={table.onSort} */
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(checked, tableData?.map((row) => row.id))
                   }

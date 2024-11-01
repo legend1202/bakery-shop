@@ -23,6 +23,7 @@ import { useSettingsContext } from 'src/components/settings';
 
 import { IBranch } from 'src/types/branch';
 
+import BranchEditForm from '../branch-update-form';
 import BranchNewEditForm from '../branch-new-edit-form';
 import { RenderCellBio, RenderCellName, RenderCellLocation } from '../branch-list-item';
 
@@ -48,6 +49,10 @@ export default function BranchListView() {
   const { branches, brachesLoading } = useGetBranchLists();
 
   const [tableData, setTableData] = useState<IBranch[]>([]);
+
+  const [formStatus, setFormStatus] = useState<boolean>(true);
+
+  const [selectedBranch, setSelectedBranch] = useState<IBranch>();
 
   const [reset, setReset] = useState(false);
 
@@ -78,9 +83,26 @@ export default function BranchListView() {
     }
   };
 
+  const afterUpdateBranch = async (newbranch: IBranch) => {
+    enqueueSnackbar('actualizar exitosamente');
+    const updatedUsers = tableData.filter((branch) => branch.id !== newbranch.id);
+    setTableData([...updatedUsers, newbranch]);
+    setFormStatus(true);
+  };
+  const handleUpdateRow = async (branch: IBranch) => {
+    setSelectedBranch(branch);
+    setFormStatus(false);
+  };
+
   const actions = (params: any) => {
     if (isSuperAdmin) {
       return [
+        <GridActionsCellItem
+          showInMenu
+          icon={<Iconify icon="solar:eye-bold" />}
+          label="Actualizar"
+          onClick={() => handleUpdateRow(params.row)}
+        />,
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
@@ -97,19 +119,21 @@ export default function BranchListView() {
       headerName: 'Nombre',
       flex: 1,
       minWidth: 280,
-      hideable: false,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellName params={params} />,
     },
     {
       field: 'location',
       headerName: 'Ubicación',
       minWidth: 280,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellLocation params={params} />,
     },
     {
       field: 'bio',
       headerName: 'Color',
       minWidth: 280,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellBio params={params} />,
     },
     {
@@ -140,7 +164,11 @@ export default function BranchListView() {
         flexDirection: 'column',
       }}
     >
-      {isSuperAdmin && <BranchNewEditForm afterSavebranch={afterSavebranch} />}
+      {isSuperAdmin && formStatus && <BranchNewEditForm afterSavebranch={afterSavebranch} />}
+
+      {isSuperAdmin && !formStatus && (
+        <BranchEditForm branch={selectedBranch} afterUpdateBranch={afterUpdateBranch} />
+      )}
 
       <Card
         sx={{

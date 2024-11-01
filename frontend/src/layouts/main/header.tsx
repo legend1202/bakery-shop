@@ -1,4 +1,3 @@
-import { useSnackbar } from 'notistack';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -16,9 +15,9 @@ import { RouterLink } from 'src/routes/components';
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 
 import { bgBlur } from 'src/theme/css';
-import { UserLogout } from 'src/api/admin';
-import { useAuthContext } from 'src/auth/hooks';
-import { PATH_AFTER_LOGIN } from 'src/config-global';
+/* import { UserLogout } from 'src/api/admin';
+import { useAuthContext } from 'src/auth/hooks'; */
+import { PATH_START_ATTENDANCE } from 'src/config-global';
 
 import Logo from 'src/components/logo';
 
@@ -33,11 +32,11 @@ import SettingsButton from '../common/settings-button';
 export default function Header() {
   const theme = useTheme();
 
-  const { logout } = useAuthContext();
+  /* const { logout } = useAuthContext(); */
   const offsetTop = useOffSetTop(HEADER.H_DESKTOP);
-  const { enqueueSnackbar } = useSnackbar();
+  /* const { enqueueSnackbar } = useSnackbar(); */
 
-  const handleLogout = async () => {
+  /* const handleLogout = async () => {
     try {
       await UserLogout();
       await logout();
@@ -47,7 +46,7 @@ export default function Header() {
       enqueueSnackbar('Unable to logout!', { variant: 'error' });
     }
   };
-
+ */
   return (
     <AppBar>
       <Toolbar
@@ -95,12 +94,18 @@ export default function Header() {
           <Box sx={{ flexGrow: 1 }} />
 
           <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
-            <Button onClick={handleLogout} variant="outlined" color="warning" sx={{ mr: 1 }}>
+            <Button
+              component={RouterLink}
+              href={PATH_START_ATTENDANCE}
+              variant="outlined"
+              color="warning"
+              sx={{ mr: 1 }}
+            >
               Fin del turno
             </Button>
             <Button
               component={RouterLink}
-              href={PATH_AFTER_LOGIN}
+              href={PATH_START_ATTENDANCE}
               variant="outlined"
               color="secondary"
               sx={{ mr: 1 }}

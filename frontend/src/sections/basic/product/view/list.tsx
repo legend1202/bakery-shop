@@ -94,6 +94,7 @@ export default function ProductListView() {
       field: 'product',
       headerName: 'PRODUCTO',
       minWidth: 280,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellName params={params} />,
     },
     /*  {
@@ -106,18 +107,21 @@ export default function ProductListView() {
       field: 'code',
       headerName: 'Código',
       minWidth: 280,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellCode params={params} />,
     },
     {
       field: 'size',
       headerName: 'Tamaño',
       minWidth: 240,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellSize params={params} />,
     },
     {
       field: 'price',
       headerName: 'Precio',
       minWidth: 240,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellPrice params={params} />,
     },
     /* {

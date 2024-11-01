@@ -127,6 +127,7 @@ export default function MngProductListView() {
       flex: 1,
       minWidth: 180,
       hideable: false,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
     /* {
@@ -141,6 +142,7 @@ export default function MngProductListView() {
       field: 'quantity',
       headerName: 'Cantidad',
       minWidth: 100,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellAmount params={params} />,
     },
     /* {
@@ -153,6 +155,7 @@ export default function MngProductListView() {
       field: 'status',
       headerName: 'Status',
       minWidth: 100,
+      disableColumnMenu: true,
       renderCell: (params) => <RenderCellStatus params={params} />,
     },
     {
