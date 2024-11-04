@@ -17,11 +17,11 @@ export default function UserCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t('EMPLEADOS ')}
+        heading={t('EMPLEADOS')}
         links={[
-          { name: t('EMPLEADOS '), href: paths.admin.users.create },
+          { name: t('EMPLEADOS'), href: paths.admin.users.create },
           {
-            name: t('crear'),
+            name: t('Crear'),
             href: paths.admin.users.create,
           },
         ]}

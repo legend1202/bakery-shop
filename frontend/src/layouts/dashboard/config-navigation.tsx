@@ -60,6 +60,7 @@ export function useNavData() {
           // Create
           {
             title: t('Sucursal'),
+            /* title: t('Branch'), */
             path: paths.branches.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
@@ -68,6 +69,7 @@ export function useNavData() {
 
           {
             title: t('Empleados'),
+            /* title: t('Employees'), */
             path: paths.admin.users.create,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
@@ -76,6 +78,7 @@ export function useNavData() {
           // List
           {
             title: t('Listar empleados'),
+            /* title: t('List employees'), */
             path: paths.admin.users.list,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
@@ -84,6 +87,7 @@ export function useNavData() {
           // Product
           {
             title: t('Anadir nuevo producto'),
+            /* title: t('Add new product'), */
             path: paths.product.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
@@ -92,6 +96,7 @@ export function useNavData() {
 
           {
             title: t('Actualizar productos en inventarto'),
+            /* title: t('Update products in inventarto'), */
             path: paths.inventory.product.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
@@ -100,6 +105,7 @@ export function useNavData() {
 
           {
             title: t('Productos en inventario'),
+            /* title: t('Products in inventory'), */
             path: paths.inventory.product.root,
             icon: ICONS.user,
             roles: ['SUPERADMIN', 'ADMIN'],
@@ -109,49 +115,56 @@ export function useNavData() {
       },
       {
         subheader: t('Insumos'),
+        /* subheader: t('Inputs'), */
         roles: ['SUPERADMIN'],
         color: '#1D5DEC',
         items: [
           // Supplies
           {
             title: t('Anadir nuevo insumos'),
+            /* title: t('Add new inputs'), */
             path: paths.supplies.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
             color: '#1D5DEC',
           },
           {
-            title: t('Actualizar insumos'),
-            path: paths.inventory.supply.list,
+            title: t('Insumos en inventario'),
+            /* title: t('Supplies in inventory'), */
+            path: paths.inventory.supply.root,
             icon: ICONS.user,
-            roles: ['SUPERADMIN'],
+            roles: ['SUPERADMIN', 'ADMIN'],
             color: '#1D5DEC',
           },
           // Supply
           {
             title: t('Procesar orden de insumos'),
+            /* title: t('Process supply order'), */
             path: paths.mng.supply.list,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
             color: '#1D5DEC',
           },
           {
-            title: t('Insumos en inventario'),
-            path: paths.inventory.supply.root,
+            title: t('Actualizar insumos'),
+            /* title: t('Update inputs'), */
+            path: paths.inventory.supply.list,
             icon: ICONS.user,
-            roles: ['SUPERADMIN', 'ADMIN'],
+            roles: ['SUPERADMIN'],
             color: '#1D5DEC',
           },
         ],
       },
       {
         subheader: t('Ordenes'),
+        /* subheader: t('Orders'), */
         roles: ['ADMIN', 'SUPERADMIN'],
         color: '#008f39',
         items: [
           // product
           {
             title: t('Procesar orden'),
+            /* title: t('Process order'), */
             path: paths.mng.product.list,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
@@ -160,6 +173,7 @@ export function useNavData() {
           // Custome Product Order
           {
             title: t('Pedido'),
+            /* title: t('Order'), */
             path: paths.mng.customOrder.list,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
@@ -169,18 +183,21 @@ export function useNavData() {
       },
       {
         subheader: t('Gestión'),
+        /* subheader: t('Management'), */
         roles: ['SALESPERSON'],
         color: '#ff8000',
         items: [
           // sale
           {
             title: t('Venta'),
+            /* title: t('Sale'), */
             path: paths.sale.purchase,
             icon: ICONS.user,
             roles: ['SALESPERSON'],
           },
           {
             title: t('Lista'),
+            /* title: t('List'), */
             path: paths.sale.list,
             icon: ICONS.user,
             roles: ['SALESPERSON'],
@@ -189,12 +206,14 @@ export function useNavData() {
       },
       {
         subheader: t('Reportes'),
+        /* subheader: t('Reports'), */
         roles: ['ADMIN', 'SUPERADMIN'],
         color: '#ff8000',
         items: [
           // sale
           {
             title: t('Órdenes de producto'),
+            /* title: t('Product Orders'), */
             path: paths.report.product,
             icon: ICONS.user,
             roles: ['SUPERADMIN', 'ADMIN'],
@@ -202,6 +221,7 @@ export function useNavData() {
           },
           {
             title: t('Órdenes de pedido'),
+            /* title: t('Purchase orders'), */
             path: paths.report.customproduct,
             icon: ICONS.user,
             roles: ['SUPERADMIN', 'ADMIN'],
@@ -210,6 +230,7 @@ export function useNavData() {
           // sale
           {
             title: t('Órdenes de insumos'),
+            /* title: t('Orders for supplies'), */
             path: paths.report.supply,
             icon: ICONS.user,
             roles: ['SUPERADMIN'],
@@ -217,6 +238,7 @@ export function useNavData() {
           },
           {
             title: t('Ventas'),
+            /* title: t('Sales'), */
             path: paths.report.sale,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],
@@ -225,6 +247,7 @@ export function useNavData() {
           // attendance
           {
             title: t('Nomina'),
+            /* title: t('Appointment'), */
             path: paths.report.attendance,
             icon: ICONS.user,
             roles: ['ADMIN', 'SUPERADMIN'],

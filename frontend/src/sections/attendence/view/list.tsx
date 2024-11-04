@@ -54,7 +54,7 @@ export default function AttendanceListView() {
   }, [products]);
 
   const afterSavebranch = async (newProduct: IAttendance) => {
-    enqueueSnackbar('Created Successfully');
+    enqueueSnackbar('Creado exitosamente');
     setTableData([...tableData, newProduct]);
   };
 
@@ -62,26 +62,26 @@ export default function AttendanceListView() {
     const updateData = { id };
     const result = await AttendanceDelete(updateData);
     if (result.data.success) {
-      enqueueSnackbar(t('Deleted'));
+      enqueueSnackbar(t('Eliminada'));
       const updatedProducts = tableData.filter((product) => product.id !== result.data.result.id);
       setTableData([...updatedProducts]);
       setReset(!reset);
     } else {
-      enqueueSnackbar('Update did not success');
+      enqueueSnackbar('La actualización no tuvo éxito');
     }
   };
 
   const columns: GridColDef[] = [
     {
       field: 'attendDate',
-      headerName: 'Attend Date',
+      headerName: 'Fecha de asistencia',
       minWidth: 520,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellAttendDate params={params} />,
     },
     {
       field: 'bio',
-      headerName: 'Bio',
+      headerName: 'Biografía',
       minWidth: 520,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellBio params={params} />,
@@ -100,7 +100,7 @@ export default function AttendanceListView() {
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Delete"
+          label="Borrar"
           onClick={() => handleDeleteRow(params.row.id)}
         />,
       ],
@@ -122,11 +122,11 @@ export default function AttendanceListView() {
       }}
     >
       <CustomBreadcrumbs
-        heading={t('Attendance')}
+        heading={t('Asistencia')}
         links={[
-          { name: t('User') },
+          { name: t('Usuaria') },
           {
-            name: t('Attendance'),
+            name: t('Asistencia'),
           },
         ]}
         sx={{
@@ -160,9 +160,15 @@ export default function AttendanceListView() {
           }}
           columnVisibilityModel={columnVisibilityModel}
           onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+          localeText={{
+            MuiTablePagination: {
+              labelRowsPerPage: 'Filas por página',
+            },
+            toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
+          }}
           slots={{
-            noRowsOverlay: () => <EmptyContent title="No Data" />,
-            noResultsOverlay: () => <EmptyContent title="No results found" />,
+            noRowsOverlay: () => <EmptyContent title="Sin datos" />,
+            noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
           }}
           slotProps={{
             columnsPanel: {

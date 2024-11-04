@@ -61,12 +61,12 @@ export default function SaleMngView() {
     const updateData = { id: row.id };
     const result = await SaleDelete(updateData);
     if (result.data.success) {
-      enqueueSnackbar(t('Deleted'));
+      enqueueSnackbar(t('Eliminada'));
       const updatedProducts = tableData.filter((product) => product.id !== result.data.result.id);
       setTableData([...updatedProducts]);
       setReset(!reset);
     } else {
-      enqueueSnackbar('Update did not success');
+      enqueueSnackbar('La actualización no tuvo éxito');
     }
   };
 
@@ -198,9 +198,15 @@ export default function SaleMngView() {
           }}
           columnVisibilityModel={columnVisibilityModel}
           onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+          localeText={{
+            MuiTablePagination: {
+              labelRowsPerPage: 'Filas por página',
+            },
+            toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
+          }}
           slots={{
-            noRowsOverlay: () => <EmptyContent title="No Data" />,
-            noResultsOverlay: () => <EmptyContent title="No results found" />,
+            noRowsOverlay: () => <EmptyContent title="Sin datos" />,
+            noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
           }}
           slotProps={{
             columnsPanel: {

@@ -24,9 +24,9 @@ export default function UserEditView({ id }: Props) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t('EMPLEADOS ')}
+        heading={t('EMPLEADOS')}
         links={[
-          { name: t('EMPLEADOS '), href: paths.admin.users.create },
+          { name: t('EMPLEADOS'), href: paths.admin.users.create },
           {
             name: t('Editar'),
             href: paths.admin.users.create,

@@ -94,9 +94,15 @@ export default function MngProductListView() {
           }}
           columnVisibilityModel={columnVisibilityModel}
           onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+          localeText={{
+            MuiTablePagination: {
+              labelRowsPerPage: 'Filas por página',
+            },
+            toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
+          }}
           slots={{
-            noRowsOverlay: () => <EmptyContent title="No Data" />,
-            noResultsOverlay: () => <EmptyContent title="No results found" />,
+            noRowsOverlay: () => <EmptyContent title="Sin datos" />,
+            noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
           }}
           slotProps={{
             columnsPanel: {

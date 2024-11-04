@@ -59,13 +59,13 @@ export default function MngSupplyListView() {
   useEffect(() => {
     if (supplies) {
       setSupplyCount(sumBySupplyId(supplies));
-      const filteredProducts = supplies.filter((product) => product.quantity < 0);
+      const filteredProducts = supplies.filter((product) => product.quantity > 0);
       setTableData(filteredProducts);
     }
   }, [supplies]);
 
   const afterSavebranch = async (newProduct: IMSupply) => {
-    enqueueSnackbar('Created Successfully');
+    enqueueSnackbar('Creado exitosamente');
     setTableData([...tableData, newProduct]);
   };
 
@@ -73,12 +73,12 @@ export default function MngSupplyListView() {
     const updateData = { id };
     const result = await MngSupplyDelete(updateData);
     if (result.data.success) {
-      enqueueSnackbar(t('Deleted'));
+      enqueueSnackbar(t('Eliminada'));
       const updatedProducts = tableData.filter((product) => product.id !== result.data.result.id);
       setTableData([...updatedProducts]);
       setReset(!reset);
     } else {
-      enqueueSnackbar('Update did not success');
+      enqueueSnackbar('La actualización no tuvo éxito');
     }
   };
 
@@ -87,14 +87,14 @@ export default function MngSupplyListView() {
     const result = await MngSupplyConfirm(updateData);
 
     if (result.data) {
-      enqueueSnackbar(t('Updated'));
+      enqueueSnackbar(t('Actualizada'));
       const fixedSupply = tableData.filter((supply) => supply.id !== result.data.id);
       const updateSupply = tableData.filter((supply) => supply.id === result.data.id);
       const updatedSupply = { ...updateSupply[0], status: result.data.status };
       setTableData([...fixedSupply, updatedSupply]);
       setReset(!reset);
     } else {
-      enqueueSnackbar('Update did not success');
+      enqueueSnackbar('La actualización no tuvo éxito');
     }
   };
 
@@ -211,9 +211,15 @@ export default function MngSupplyListView() {
           }}
           columnVisibilityModel={columnVisibilityModel}
           onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+          localeText={{
+            MuiTablePagination: {
+              labelRowsPerPage: 'Filas por página',
+            },
+            toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
+          }}
           slots={{
-            noRowsOverlay: () => <EmptyContent title="No Data" />,
-            noResultsOverlay: () => <EmptyContent title="No results found" />,
+            noRowsOverlay: () => <EmptyContent title="Sin datos" />,
+            noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
           }}
           slotProps={{
             columnsPanel: {

@@ -39,7 +39,7 @@ const HIDE_COLUMNS = {
   category: false,
 };
 
-const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
+const HIDE_COLUMNS_TOGGLABLE = ['categoría', 'comportamiento'];
 
 // ----------------------------------------------------------------------
 
@@ -213,14 +213,20 @@ export default function UserListView() {
           }}
           columnVisibilityModel={columnVisibilityModel}
           onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+          localeText={{
+            MuiTablePagination: {
+              labelRowsPerPage: 'Filas por página',
+            },
+            toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
+          }}
           slots={{
             toolbar: () => (
               <GridToolbarContainer>
                 <GridToolbarQuickFilter />
               </GridToolbarContainer>
             ),
-            noRowsOverlay: () => <EmptyContent title="No Data" />,
-            noResultsOverlay: () => <EmptyContent title="No results found" />,
+            noRowsOverlay: () => <EmptyContent title="Sin datos" />,
+            noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
           }}
           slotProps={{
             columnsPanel: {

@@ -68,7 +68,7 @@ export default function CheckoutView() {
       };
       const saveResults: any = await createSale(saveData);
       if (saveResults.data?.success) {
-        enqueueSnackbar('Created Successfully');
+        enqueueSnackbar('Creado exitosamente');
         checkout.onReset();
       } else {
         console.log(saveResults?.message);
@@ -163,7 +163,7 @@ export default function CheckoutView() {
                 marginX: 2,
               }}
             >
-              total: {checkout.total}
+              Total: {checkout.total}
             </Button>
             <Button
               sx={{
@@ -172,7 +172,7 @@ export default function CheckoutView() {
               }}
               onClick={handlePurchaseBtn}
             >
-              Purchase
+              Compra
             </Button>
           </Card>
         }
@@ -206,8 +206,8 @@ export default function CheckoutView() {
           columnVisibilityModel={columnVisibilityModel}
           onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
           slots={{
-            noRowsOverlay: () => <EmptyContent title="No Data" />,
-            noResultsOverlay: () => <EmptyContent title="No results found" />,
+            noRowsOverlay: () => <EmptyContent title="Sin datos" />,
+            noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
           }}
           slotProps={{
             columnsPanel: {
