@@ -112,12 +112,12 @@ export function RenderCellDeliverDate({ params }: ParamsProps) {
 export function RenderCellStatus({ params }: ParamsProps) {
   const getStatusText = (status: number) => {
     if (status === 0) {
-      return 'Pending';
+      return 'Pendiente';
     }
     if (status === 1) {
-      return 'Delivered';
+      return 'Entregada';
     }
-    return 'Cancelled';
+    return 'Cancelada';
   };
 
   return (

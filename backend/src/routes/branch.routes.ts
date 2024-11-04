@@ -30,7 +30,7 @@ router.get(
   withTransaction(errorWrap(getBranches, 'Could not get branches'))
 );
 
-router.put(
+router.post(
   '/update',
   errorWrap(verifyToken, 'Could not verify JWT token'),
   /*  errorWrap(

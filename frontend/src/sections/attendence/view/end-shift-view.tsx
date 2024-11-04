@@ -35,8 +35,8 @@ export default function ShiftEndView() {
   const password = useBoolean();
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string().required('Password is required'),
+    email: Yup.string().required('Se requiere correo electrónico').email('El correo electrónico debe ser una dirección de correo electrónico válida'),
+    password: Yup.string().required('Se requiere contraseña'),
   });
 
   const defaultValues = {

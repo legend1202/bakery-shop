@@ -154,41 +154,127 @@ export const handleGetInventoryOfProduct = async (
       500
     );
   } else {
-    const result = await MngProductsModel.aggregate([
-      {
-        // Match only documents with status = 1 (confirmed)
-        $match: { status: 1 },
-      },
-      {
-        $group: {
-          _id: '$productId', // Group by productId
-          totalQuantity: { $sum: '$quantity' }, // Sum quantity for each productId
+    const userData = await UsersModel.findOne({ id: userId });
+    if (userData?.role === 'SUPERADMIN') {
+      const result = await MngProductsModel.aggregate([
+        {
+          // Match only documents with status = 1 (confirmed)
+          $match: { status: 1 },
         },
-      },
-      {
-        // Lookup product details from ProductsModel
-        $lookup: {
-          from: 'products', // The collection name for ProductsModel
-          localField: '_id', // _id contains the productId
-          foreignField: 'id', // 'id' field in ProductsModel
-          as: 'productDetails',
+        {
+          $group: {
+            _id: '$productId', // Group by productId
+            totalQuantity: { $sum: '$quantity' }, // Sum quantity for each productId
+          },
         },
-      },
-      {
-        // Unwind productDetails array to get individual product objects
-        $unwind: '$productDetails',
-      },
-      {
-        $project: {
-          id: '$_id', // Exclude _id field from the output
-          productId: '$_id', // Rename _id to productId
-          totalQuantity: 1, // Include totalQuantity in the output
-          'productDetails.name': 1, // Include product name
-          'productDetails.price': 1, // Include product price
+        {
+          // Lookup product details from ProductsModel
+          $lookup: {
+            from: 'products', // The collection name for ProductsModel
+            localField: '_id', // _id contains the productId
+            foreignField: 'id', // 'id' field in ProductsModel
+            as: 'productDetails',
+          },
         },
-      },
-    ]);
-    return result;
+        {
+          // Unwind productDetails array to get individual product objects
+          $unwind: '$productDetails',
+        },
+        {
+          $project: {
+            id: '$_id', // Exclude _id field from the output
+            productId: '$_id', // Rename _id to productId
+            totalQuantity: 1, // Include totalQuantity in the output
+            'productDetails.name': 1, // Include product name
+            'productDetails.price': 1, // Include product price
+          },
+        },
+      ]);
+      return result;
+    } else {
+      const result = await MngProductsModel.aggregate([
+        {
+          // Match only documents with status = 1 (confirmed)
+          $match: { status: 1, branchId: userData?.branchId },
+        },
+        {
+          $group: {
+            _id: '$productId', // Group by productId
+            mngTotalQuantity: { $sum: '$quantity' }, // Sum quantity for each productId in MngProducts
+          },
+        },
+        {
+          // Lookup sales details from SalesModel to get quantities for each productId
+          $lookup: {
+            from: 'sales', // The collection name for SalesModel
+            localField: '_id', // _id contains the productId
+            foreignField: 'products.productId', // Match with productId in sales products array
+            as: 'salesDetails',
+          },
+        },
+        {
+          // Unwind the salesDetails array to process each sale record individually
+          $unwind: {
+            path: '$salesDetails',
+            preserveNullAndEmptyArrays: true, // Retain products without sales records
+          },
+        },
+        {
+          // Calculate the total quantity in sales for each product
+          $addFields: {
+            salesQuantity: {
+              $sum: {
+                $map: {
+                  input: '$salesDetails.products',
+                  as: 'saleProduct',
+                  in: {
+                    $cond: [
+                      { $eq: ['$$saleProduct.productId', '$_id'] }, // Match specific productId
+                      '$$saleProduct.quantity', // Use quantity from matched sale
+                      0,
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        },
+        {
+          // Calculate the combined quantity by adding MngProducts and sales quantities and reversing the sign
+          $addFields: {
+            totalQuantity: {
+              $multiply: [
+                { $add: ['$mngTotalQuantity', '$salesQuantity'] },
+                -1,
+              ],
+            },
+          },
+        },
+        {
+          // Lookup product details from ProductsModel
+          $lookup: {
+            from: 'products', // The collection name for ProductsModel
+            localField: '_id', // _id contains the productId
+            foreignField: 'id', // 'id' field in ProductsModel
+            as: 'productDetails',
+          },
+        },
+        {
+          // Unwind productDetails array to get individual product objects
+          $unwind: '$productDetails',
+        },
+        {
+          $project: {
+            id: '$_id', // Rename _id to productId
+            productId: '$_id',
+            totalQuantity: 1, // Include the calculated total quantity
+            'productDetails.name': 1, // Include product name
+            'productDetails.price': 1, // Include product price
+          },
+        },
+      ]);
+      return result;
+    }
   }
 };
 

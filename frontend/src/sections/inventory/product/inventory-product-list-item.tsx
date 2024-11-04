@@ -52,12 +52,12 @@ export function RenderCellAmount({ params }: ParamsProps) {
 export function RenderCellStatus({ params }: ParamsProps) {
   const getStatusText = (status: number) => {
     if (status === 0) {
-      return 'Pending';
+      return 'Pendiente';
     }
     if (status === 1) {
-      return 'Stored';
+      return 'Almacenada';
     }
-    return 'Cancelled';
+    return 'Cancelada';
   };
 
   return (

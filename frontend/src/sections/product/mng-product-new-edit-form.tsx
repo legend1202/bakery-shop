@@ -27,8 +27,8 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
 
   const NewProductSchema = Yup.object().shape({
     /* branchId: Yup.string().required('Branch is required'), */
-    productId: Yup.string().required('Product is required'),
-    quantity: Yup.number().required('Quantity is required'),
+    productId: Yup.string().required('El producto es obligatorio'),
+    quantity: Yup.number().required('Se requiere cantidad'),
   });
 
   const defaultValues = useMemo(

@@ -128,10 +128,10 @@ export const handleGetMngProductsByUser = async (
       ]);
       return products; */
     /* } else  */
-    if (userData?.role === 'ADMIN') {
+    if (userData?.role === 'SUPERADMIN') {
       const products = await MngProductsModel.aggregate([
         {
-          $match: { branchId: userData.branchId, customOrderFlag: false },
+          $match: { customOrderFlag: false },
         },
         {
           $lookup: {
@@ -165,7 +165,7 @@ export const handleGetMngProductsByUser = async (
     } else {
       const products = await MngProductsModel.aggregate([
         {
-          $match: { customOrderFlag: false },
+          $match: { branchId: userData?.branchId, customOrderFlag: false },
         },
         {
           $lookup: {

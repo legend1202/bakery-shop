@@ -128,7 +128,7 @@ export const createNewSale = async (
   const newProduct = new SalesModel({
     userId,
     branchId,
-    products: products.products,
+    products: products.items,
     totalItems: products.totalItems,
     total: products.total,
   });

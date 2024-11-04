@@ -78,7 +78,7 @@ export default function MngProductNewEditForm({ afterSavebranch }: Props) {
                 justifyContent: 'flex-end',
               }}
             >
-              Attend
+              Asistir
             </LoadingButton>
           </Box>
         </Stack>

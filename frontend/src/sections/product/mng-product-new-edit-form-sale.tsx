@@ -26,8 +26,8 @@ export default function MngProductNewEditFormSale({ afterSavebranch }: Props) {
   const { products } = useGetProductListsByUser();
 
   const NewProductSchema = Yup.object().shape({
-    productId: Yup.string().required('Product is required'),
-    quantity: Yup.number().required('Quantity is required'),
+    productId: Yup.string().required('El producto es obligatorio'),
+    quantity: Yup.number().required('Se requiere cantidad'),
   });
 
   const defaultValues = useMemo(
@@ -87,7 +87,7 @@ export default function MngProductNewEditFormSale({ afterSavebranch }: Props) {
             {products && (
               <RHFSelect
                 name="productId"
-                label="Product"
+                label="Producto"
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
@@ -100,7 +100,7 @@ export default function MngProductNewEditFormSale({ afterSavebranch }: Props) {
               </RHFSelect>
             )}
 
-            <RHFTextField name="quantity" label="Quantity" />
+            <RHFTextField name="quantity" label="Cantidad" />
 
             {/*  <RHFTextField name="bio" label="Bio" /> */}
 
@@ -114,7 +114,7 @@ export default function MngProductNewEditFormSale({ afterSavebranch }: Props) {
                 justifyContent: 'flex-end',
               }}
             >
-              Save
+              Ahorrar
             </LoadingButton>
           </Box>
         </Stack>

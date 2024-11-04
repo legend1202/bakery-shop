@@ -27,8 +27,8 @@ export default function InventorySupplyNewEditForm({ afterSavebranch }: Props) {
 
   const NewProductSchema = Yup.object().shape({
     /* branchId: Yup.string().required('Branch is required'), */
-    supplyId: Yup.string().required('Supply is required'),
-    quantity: Yup.number().required('Quantity is required'),
+    supplyId: Yup.string().required('Se requiere suministro'),
+    quantity: Yup.number().required('Se requiere cantidad'),
   });
 
   const defaultValues = useMemo(
