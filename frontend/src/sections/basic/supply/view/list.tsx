@@ -73,7 +73,7 @@ export default function SupplyListView() {
   const columns: GridColDef[] = [
     {
       field: 'supply',
-      headerName: 'Suministrar',
+      headerName: 'Insumos',
       minWidth: 1000,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellName params={params} />,
@@ -161,6 +161,8 @@ export default function SupplyListView() {
           localeText={{
             MuiTablePagination: {
               labelRowsPerPage: 'Filas por página',
+              labelDisplayedRows: ({ from, to, count }) =>
+                `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
             },
             toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
           }}

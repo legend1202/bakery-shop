@@ -45,10 +45,10 @@ import SupplyAnalytic from '../sale-analytic';
 const TABLE_HEAD = [
   /* { id: 'productId', label: 'Producto' }, */
   { id: 'branchId', label: 'Sucursal' },
-  { id: 'quantity', label: 'Cantidad' },
-  { id: 'price', label: 'Precio' },
+  { id: 'id', label: 'Identificador' },
+  { id: 'price', label: 'Total' },
   { id: 'createDate', label: 'Fecha' },
-  { id: 'status', label: 'Estado' },
+  { id: 'status', label: 'Estatus' },
   /* { id: 'bio', label: 'Biografía', align: 'center' }, */
 ];
 // ----------------------------------------------------------------------

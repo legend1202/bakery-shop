@@ -21,18 +21,18 @@ type Props = {
 
 const getStatusText = (status?: number, quantity?: number) => {
   if (!status) {
-    return 'Pending';
+    return 'Pendiente';
   }
   if (status) {
     if (quantity && quantity > 0) {
-      return 'Stored';
+      return 'Almacenado';
     }
   }
-  return 'Used';
+  return 'Usado';
 };
 
 export default function SupplyTableRow({ row, selected, onSelectRow }: Props) {
-  const { supplyDetails, branchDetails, quantity, status, createdAt } = row;
+  const { supplyDetails, quantity, status, createdAt } = row;
 
   return (
     <TableRow hover selected={selected}>
@@ -46,17 +46,6 @@ export default function SupplyTableRow({ row, selected, onSelectRow }: Props) {
           primary={
             <Typography variant="body2" noWrap>
               {supplyDetails?.name}
-            </Typography>
-          }
-        />
-      </TableCell>
-
-      <TableCell>
-        <ListItemText
-          disableTypography
-          primary={
-            <Typography variant="body2" noWrap>
-              {branchDetails?.name}
             </Typography>
           }
         />

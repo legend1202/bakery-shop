@@ -47,7 +47,7 @@ const TABLE_HEAD = [
   { id: 'branchId', label: 'Sucursal' },
   { id: 'quantity', label: 'Cantidad' },
   { id: 'price', label: 'Precio' },
-  { id: 'status', label: 'Estado' },
+  { id: 'status', label: 'Estatus' },
   /* { id: 'bio', label: 'Biografía', align: 'center' }, */
 ];
 // ----------------------------------------------------------------------

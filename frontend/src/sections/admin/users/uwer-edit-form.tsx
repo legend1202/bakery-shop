@@ -163,7 +163,7 @@ export default function UserEditForm({ currentUser }: Props) {
   const renderDetails = (
     <Grid xs={12} md={12}>
       <Card>
-        <CardHeader title={t('Detalles')} />
+        <CardHeader title={t('Información')} />
 
         <Stack spacing={3} sx={{ p: 3 }}>
           <Box

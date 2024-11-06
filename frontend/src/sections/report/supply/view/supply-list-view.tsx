@@ -40,10 +40,9 @@ import SupplyTableRow from '../supply-table-row';
 
 const TABLE_HEAD = [
   { id: 'productId', label: 'Producto' },
-  { id: 'branchId', label: 'Sucursal' },
   { id: 'quantity', label: 'Cantidad' },
   { id: 'createDate', label: 'Fecha' },
-  { id: 'status', label: 'Estado' },
+  { id: 'status', label: 'Estatus' },
   /* { id: 'bio', label: 'Biografía', align: 'center' }, */
 ];
 // ----------------------------------------------------------------------

@@ -17,7 +17,7 @@ type Props = {
 };
 
 export default function SaleTableRow({ row, selected, onSelectRow }: Props) {
-  const { branchDetails, totalItems, total, createdAt } = row;
+  const { id, branchDetails, total, createdAt } = row;
 
   return (
     <TableRow hover selected={selected}>
@@ -47,7 +47,7 @@ export default function SaleTableRow({ row, selected, onSelectRow }: Props) {
         />
       </TableCell>
 
-      <TableCell>{totalItems}</TableCell>
+      <TableCell>{id}</TableCell>
 
       <TableCell>{total}</TableCell>
 

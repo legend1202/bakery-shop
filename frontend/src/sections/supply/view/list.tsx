@@ -109,7 +109,7 @@ export default function MngSupplyListView() {
     }, */
     {
       field: 'supplyId',
-      headerName: 'Suministrar',
+      headerName: 'Insumo',
       flex: 1,
       minWidth: 180,
       hideable: false,
@@ -138,7 +138,7 @@ export default function MngSupplyListView() {
     }, */
     {
       field: 'status',
-      headerName: 'Estado',
+      headerName: 'Estatus',
       minWidth: 100,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellStatus params={params} />,
@@ -214,6 +214,8 @@ export default function MngSupplyListView() {
           localeText={{
             MuiTablePagination: {
               labelRowsPerPage: 'Filas por página',
+              labelDisplayedRows: ({ from, to, count }) =>
+                `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
             },
             toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
           }}

@@ -104,6 +104,13 @@ export default function ProductListView() {
       renderCell: (params) => <RenderCellBranch params={params} />,
     }, */
     {
+      field: 'price',
+      headerName: 'Precio',
+      minWidth: 240,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellPrice params={params} />,
+    },
+    {
       field: 'code',
       headerName: 'Código',
       minWidth: 280,
@@ -117,13 +124,7 @@ export default function ProductListView() {
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellSize params={params} />,
     },
-    {
-      field: 'price',
-      headerName: 'Precio',
-      minWidth: 240,
-      disableColumnMenu: true,
-      renderCell: (params) => <RenderCellPrice params={params} />,
-    },
+
     /* {
       field: 'bio',
       headerName: 'Biografía',
@@ -245,6 +246,8 @@ export default function ProductListView() {
             localeText={{
               MuiTablePagination: {
                 labelRowsPerPage: 'Filas por página',
+                labelDisplayedRows: ({ from, to, count }) =>
+                  `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
               },
               toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
             }}

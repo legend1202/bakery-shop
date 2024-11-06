@@ -127,7 +127,7 @@ export default function UserNewEditForm() {
   const renderDetails = (
     <Grid xs={12} md={12}>
       <Card>
-        <CardHeader title={t('Detalles')} />
+        <CardHeader title={t('Información')} />
 
         <Stack spacing={3} sx={{ p: 3 }}>
           <Box
@@ -139,9 +139,9 @@ export default function UserNewEditForm() {
               sm: 'repeat(2, 1fr)',
             }}
           >
-            <RHFTextField name="firstName" label="Nombre de pila" />
+            <RHFTextField name="firstName" label="Nombres" />
 
-            <RHFTextField name="lastName" label="Apellido" />
+            <RHFTextField name="lastName" label="Apellidos" />
 
             <RHFTextField name="email" label="Correo electrónico" />
 
@@ -178,7 +178,7 @@ export default function UserNewEditForm() {
             {user?.role === 'SUPERADMIN' && branches && (
               <RHFSelect
                 name="role"
-                label="Role"
+                label="Rol"
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}

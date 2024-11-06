@@ -1,18 +1,29 @@
 import merge from 'lodash/merge';
-// date fns
-import { nb as nbAdapter, enUS as enUSAdapter } from 'date-fns/locale';
+// date-fns
+import { es as esAdapter, enUS as enUSAdapter } from 'date-fns/locale';
 
 // core (MUI)
-import { enUS as enUSCore, nbNO as nbNOCore } from '@mui/material/locale';
+import { enUS as enUSCore, esES as esESCore } from '@mui/material/locale';
 // data grid (MUI)
-import { enUS as enUSDataGrid, nbNO as nbNODataGrid } from '@mui/x-data-grid';
+import { enUS as enUSDataGrid, esES as esESDataGrid } from '@mui/x-data-grid';
 // date pickers (MUI)
-import { enUS as enUSDate, nbNO as nbNODate } from '@mui/x-date-pickers/locales';
+import { enUS as enUSDate, esES as esESDate } from '@mui/x-date-pickers/locales';
 
 // PLEASE REMOVE `LOCAL STORAGE` WHEN YOU CHANGE SETTINGS.
 // ----------------------------------------------------------------------
 
 export const allLangs = [
+  {
+    label: 'Spanish',
+    value: 'es',
+    systemValue: merge(esESDate, esESDataGrid, esESCore),
+    adapterLocale: esAdapter,
+    icon: 'flagpack:es',
+    numberFormat: {
+      code: 'es-MX',
+      currency: 'MXN',
+    },
+  },
   {
     label: 'English',
     value: 'en',
@@ -24,20 +35,9 @@ export const allLangs = [
       currency: 'USD',
     },
   },
-  {
-    label: 'Spanish',
-    value: 'nor',
-    systemValue: merge(nbNODate, nbNODataGrid, nbNOCore),
-    adapterLocale: nbAdapter,
-    icon: 'flagpack:no',
-    numberFormat: {
-      code: 'zh-CN',
-      currency: 'MXN',
-    },
-  },
 ];
 
-export const defaultLang = allLangs[1]; // English
+export const defaultLang = allLangs[0]; // English
 
 // GET MORE COUNTRY FLAGS
 // https://icon-sets.iconify.design/flagpack/

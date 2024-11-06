@@ -172,7 +172,7 @@ export default function MngProductListView() {
         }, */
         {
           field: 'status',
-          headerName: 'Estado',
+          headerName: 'Estatus',
           minWidth: 100,
           disableColumnMenu: true,
           renderCell: (params) => <RenderCellStatus params={params} />,
@@ -215,7 +215,7 @@ export default function MngProductListView() {
         }, */
         {
           field: 'status',
-          headerName: 'Estado',
+          headerName: 'Estatus',
           minWidth: 100,
           disableColumnMenu: true,
           renderCell: (params) => <RenderCellStatus params={params} />,
@@ -286,6 +286,8 @@ export default function MngProductListView() {
             localeText={{
               MuiTablePagination: {
                 labelRowsPerPage: 'Filas por página',
+                labelDisplayedRows: ({ from, to, count }) =>
+                  `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
               },
               toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
             }}

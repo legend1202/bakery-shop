@@ -102,7 +102,7 @@ export default function InventorySupplyListView() {
     }, */
     {
       field: 'supplyId',
-      headerName: 'Suministrar',
+      headerName: 'Insumo',
       flex: 1,
       minWidth: 180,
       hideable: false,
@@ -124,7 +124,7 @@ export default function InventorySupplyListView() {
     }, */
     {
       field: 'status',
-      headerName: 'Estado',
+      headerName: 'Estatus',
       minWidth: 100,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellStatus params={params} />,
@@ -143,7 +143,7 @@ export default function InventorySupplyListView() {
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
-          label="Usada"
+          label="usado"
           onClick={() => handleConfirmRow(params.row.id)}
         />,
         <GridActionsCellItem
@@ -200,6 +200,8 @@ export default function InventorySupplyListView() {
           localeText={{
             MuiTablePagination: {
               labelRowsPerPage: 'Filas por página',
+              labelDisplayedRows: ({ from, to, count }) =>
+                `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
             },
             toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
           }}

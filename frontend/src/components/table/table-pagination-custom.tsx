@@ -28,6 +28,10 @@ export default function TablePaginationCustom({
         sx={{
           borderTopColor: 'transparent',
         }}
+        labelRowsPerPage="Filas por página" // Translation for "Rows per page"
+        labelDisplayedRows={({ from, to, count }) =>
+          `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`
+        } // Translation for "of" in displayed rows
       />
 
       {onChangeDense && (

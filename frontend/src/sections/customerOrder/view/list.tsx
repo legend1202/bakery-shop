@@ -200,7 +200,7 @@ export default function CustomerOrderListView() {
     }, */
     {
       field: 'status',
-      headerName: 'Estado',
+      headerName: 'Estatus',
       minWidth: 100,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellStatus params={params} />,
@@ -270,6 +270,8 @@ export default function CustomerOrderListView() {
           localeText={{
             MuiTablePagination: {
               labelRowsPerPage: 'Filas por página',
+              labelDisplayedRows: ({ from, to, count }) =>
+                `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
             },
             toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
           }}

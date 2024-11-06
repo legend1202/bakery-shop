@@ -201,6 +201,8 @@ export default function SaleMngView() {
           localeText={{
             MuiTablePagination: {
               labelRowsPerPage: 'Filas por página',
+              labelDisplayedRows: ({ from, to, count }) =>
+                `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
             },
             toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
           }}

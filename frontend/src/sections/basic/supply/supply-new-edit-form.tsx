@@ -99,7 +99,7 @@ export default function SupplyNewEditForm({ afterSavebranch }: Props) {
                 ))}
               </RHFSelect>
             )} */}
-            <RHFTextField name="name" label="Nombre" />
+            <RHFTextField name="name" label="Insumo" />
 
             {/* <RHFTextField name="price" label="Price" /> */}
 

@@ -59,7 +59,7 @@ export function useNavData() {
         items: [
           // Create
           {
-            title: t('Sucursal'),
+            title: t('Sucursales'),
             /* title: t('Branch'), */
             path: paths.branches.list,
             icon: ICONS.user,
@@ -68,7 +68,7 @@ export function useNavData() {
           },
 
           {
-            title: t('Empleados'),
+            title: t('Personal'),
             /* title: t('Employees'), */
             path: paths.admin.users.create,
             icon: ICONS.user,
@@ -86,7 +86,7 @@ export function useNavData() {
           },
           // Product
           {
-            title: t('Anadir nuevo producto'),
+            title: t('Nuevo Producto'),
             /* title: t('Add new product'), */
             path: paths.product.list,
             icon: ICONS.user,
@@ -95,7 +95,7 @@ export function useNavData() {
           },
 
           {
-            title: t('Actualizar productos en inventarto'),
+            title: t('Actualizar inventario'),
             /* title: t('Update products in inventarto'), */
             path: paths.inventory.product.list,
             icon: ICONS.user,
@@ -104,7 +104,7 @@ export function useNavData() {
           },
 
           {
-            title: t('Productos en inventario'),
+            title: t('Inventario'),
             /* title: t('Products in inventory'), */
             path: paths.inventory.product.root,
             icon: ICONS.user,
@@ -121,7 +121,7 @@ export function useNavData() {
         items: [
           // Supplies
           {
-            title: t('Anadir nuevo insumos'),
+            title: t('Nuevo insumo'),
             /* title: t('Add new inputs'), */
             path: paths.supplies.list,
             icon: ICONS.user,
@@ -138,7 +138,7 @@ export function useNavData() {
           },
           // Supply
           {
-            title: t('Procesar orden de insumos'),
+            title: t('Órdenes de insumos'),
             /* title: t('Process supply order'), */
             path: paths.mng.supply.list,
             icon: ICONS.user,
@@ -146,7 +146,7 @@ export function useNavData() {
             color: '#1D5DEC',
           },
           {
-            title: t('Actualizar insumos'),
+            title: t('Deducir insumos'),
             /* title: t('Update inputs'), */
             path: paths.inventory.supply.list,
             icon: ICONS.user,
@@ -163,7 +163,7 @@ export function useNavData() {
         items: [
           // product
           {
-            title: t('Procesar orden'),
+            title: t('Órdenes de productos'),
             /* title: t('Process order'), */
             path: paths.mng.product.list,
             icon: ICONS.user,
@@ -172,7 +172,7 @@ export function useNavData() {
           },
           // Custome Product Order
           {
-            title: t('Pedido'),
+            title: t('Órdenes de pedidos'),
             /* title: t('Order'), */
             path: paths.mng.customOrder.list,
             icon: ICONS.user,
@@ -246,7 +246,7 @@ export function useNavData() {
           },
           // attendance
           {
-            title: t('Nomina'),
+            title: t('Nómina'),
             /* title: t('Appointment'), */
             path: paths.report.attendance,
             icon: ICONS.user,

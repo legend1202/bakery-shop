@@ -125,7 +125,7 @@ export default function MngSupplyNewEditForm({ afterSavebranch }: Props) {
 
             <RHFTextField name="quantity" label="Cantidad" />
 
-            <RHFTextField name="bio" label="Biografía" />
+            <RHFTextField name="bio" label="Costo unitario" />
 
             <LoadingButton
               type="submit"
