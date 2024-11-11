@@ -5,14 +5,12 @@ import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
-import Table from '@mui/material/Table';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
-import TableBody from '@mui/material/TableBody';
 import { useTheme } from '@mui/material/styles';
-import TableContainer from '@mui/material/TableContainer';
+import { DataGrid, GridColDef, GridColumnVisibilityModel } from '@mui/x-data-grid';
 
 import { paths } from 'src/routes/paths';
 
@@ -26,30 +24,27 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
-import {
-  useTable,
-  emptyRows,
-  TableNoData,
-  TableEmptyRows,
-  TableHeadCustom,
-  TablePaginationCustom,
-} from 'src/components/table';
+import EmptyContent from 'src/components/empty-content/empty-content';
 
 import { IMProduct } from 'src/types/product';
 
 import ProductAnalytic from '../product-analytic';
-import ProductTableRow from '../product-table-row';
+import {
+  RenderCellPrice,
+  RenderCellBranch,
+  RenderCellStatus,
+  RenderCellProduct,
+  RenderCellQuantity,
+} from '../reposrt-customProduct-list-item';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  { id: 'productId', label: 'Producto' },
-  { id: 'branchId', label: 'Sucursal' },
-  { id: 'quantity', label: 'Cantidad' },
-  { id: 'price', label: 'Precio' },
-  { id: 'status', label: 'Estatus' },
-  /* { id: 'bio', label: 'Biografía', align: 'center' }, */
-];
+
+const HIDE_COLUMNS = {
+  category: false,
+};
+
+const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
 // ----------------------------------------------------------------------
 
 export default function CustomProductListView() {
@@ -63,20 +58,15 @@ export default function CustomProductListView() {
 
   const { branches } = useGetBranchLists();
 
-  /* const { inventory } = useGetInventoryOfBranchByUser(); */
-
   const { products: basicProducts } = useGetProductListsByUser();
 
-  const { products } = useGetMngCustomerProductListsByUser();
+  const { products, productsLoading } = useGetMngCustomerProductListsByUser();
 
-  const table = useTable({ defaultOrderBy: 'createDate' });
+  const [columnVisibilityModel, setColumnVisibilityModel] =
+    useState<GridColumnVisibilityModel>(HIDE_COLUMNS);
 
   const [tableData, setTableData] = useState<IMProduct[]>([]);
   const [temptableData, setTempTableData] = useState<IMProduct[]>([]);
-
-  const denseHeight = table.dense ? 56 : 56 + 20;
-
-  const notFound = tableData && !tableData.length;
 
   const NewProductSchema = Yup.object().shape({
     branchId: Yup.string().required('Name is required'),
@@ -131,27 +121,6 @@ export default function CustomProductListView() {
       setTableData(temptableData);
     }
   }, [values, temptableData]);
-
-  /* const getTotalAmountPrice = () =>
-    sumBy(tableData, (product) => {
-      if (
-        product.price &&
-        product.status === 1 &&
-        product.quantity &&
-        product.quantity !== undefined
-      ) {
-        return product.price;
-      }
-      if (
-        product.status === 1 &&
-        product.quantity &&
-        product.quantity !== undefined &&
-        product?.productDetails?.price
-      ) {
-        return product.quantity * product.productDetails.price;
-      }
-      return 0;
-    }); */
 
   const deliveryAmountProducts = () =>
     sumBy(tableData, (product) => {
@@ -216,6 +185,59 @@ export default function CustomProductListView() {
       }
       return 0;
     });
+
+  const columns: GridColDef[] = [
+    {
+      field: 'productId',
+      headerName: 'Producto',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellProduct params={params} />,
+    },
+    {
+      field: 'branchId',
+      headerName: 'Sucursal',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellBranch params={params} />,
+    },
+    {
+      field: 'quantity',
+      headerName: 'Cantidad',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellQuantity params={params} />,
+    },
+    {
+      field: 'price',
+      headerName: 'Precio',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellPrice params={params} />,
+    },
+    {
+      field: 'status',
+      headerName: 'Estatus',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellStatus params={params} />,
+    },
+  ];
+
+  const getTogglableColumns = () =>
+    columns
+      .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
+      .map((column) => column.field);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -339,56 +361,50 @@ export default function CustomProductListView() {
         </Scrollbar>
       </Card>
 
-      <Card>
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-              {tableData && (
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
-                  numSelected={table.selected.length}
-                  /* onSort={table.onSort} */
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(checked, tableData?.map((row) => row.id))
-                  }
-                />
-              )}
-              {tableData && (
-                <TableBody>
-                  {tableData.map((row) => (
-                    <ProductTableRow
-                      key={row.id}
-                      row={row}
-                      selected={table.selected.includes(row.id)}
-                      onSelectRow={() => table.onSelectRow(row.id)}
-                    />
-                  ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
-                  />
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              )}
-            </Table>
-          </Scrollbar>
-        </TableContainer>
-
+      <Card
+        sx={{
+          height: { xs: 800, md: 400 },
+          mt: { xs: 2, md: 1 },
+          flexGrow: { md: 1 },
+          display: { md: 'flex' },
+          flexDirection: { md: 'column' },
+        }}
+      >
         {tableData && (
-          <TablePaginationCustom
-            count={tableData.length}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
+          <DataGrid
+            rows={tableData}
+            columns={columns}
+            loading={productsLoading}
+            getRowHeight={() => 'auto'}
+            pageSizeOptions={[5, 10, 25]}
+            sx={{
+              px: { xs: 1, md: 2 },
+              height: '100%', // Use 100% to fill the parent height
+            }}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 10 },
+              },
+            }}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+            localeText={{
+              MuiTablePagination: {
+                labelRowsPerPage: 'Filas por página',
+                labelDisplayedRows: ({ from, to, count }) =>
+                  `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
+              },
+              toolbarQuickFilterPlaceholder: 'Buscar…',
+            }}
+            slots={{
+              noRowsOverlay: () => <EmptyContent title="Sin datos" />,
+              noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
+            }}
+            slotProps={{
+              columnsPanel: {
+                getTogglableColumns,
+              },
+            }}
           />
         )}
       </Card>

@@ -21,6 +21,9 @@ import { IMProduct } from 'src/types/product';
 
 import InventoryProductNewEditForm from '../inventory-product-new-edit-form';
 import {
+  RenderCellCode,
+  RenderCellSize,
+  RenderCellPrice,
   RenderCellStatus,
   RenderCellAmount,
   RenderCellProduct,
@@ -53,18 +56,6 @@ export default function MngProductListView() {
   useEffect(() => {
     if (products) {
       const storedProducts = products.filter((product) => product.quantity > 0);
-      /* const deliveredProducts = products.filter(
-        (product) => product.quantity < 0 && product.status === '1'
-      ); */
-      /* const storedQuantity = storedProducts.reduce(
-        (sum, product) => (product.status === '1' ? sum + product.quantity : 0),
-        0
-      );
-
-      const deliveredQuantity = deliveredProducts.reduce(
-        (sum, product) => sum + product.quantity,
-        0
-      ); */
 
       setTableData(storedProducts);
     }
@@ -130,14 +121,27 @@ export default function MngProductListView() {
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
-    /* {
-      field: 'branchId',
-      headerName: 'Branch',
-      flex: 1,
-      minWidth: 180,
-      hideable: false,
-      renderCell: (params) => <RenderCellBranch params={params} />,
-    }, */
+    {
+      field: 'price',
+      headerName: 'Precio',
+      minWidth: 100,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellPrice params={params} />,
+    },
+    {
+      field: 'code',
+      headerName: 'código',
+      minWidth: 100,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellCode params={params} />,
+    },
+    {
+      field: 'size',
+      headerName: 'tamaño',
+      minWidth: 100,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellSize params={params} />,
+    },
     {
       field: 'quantity',
       headerName: 'Cantidad',

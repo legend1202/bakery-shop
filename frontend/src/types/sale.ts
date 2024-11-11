@@ -21,7 +21,14 @@ export type IMSale = {
   branchId?: string;
   branchDetails?: IBranch;
   userDetails?: IUserItem;
+  products: ISubProduct[];
   total: number;
   totalItems: number;
   createdAt?: string;
+};
+
+export type ISubProduct = {
+  productId: string;
+  quantity: number;
+  price: number;
 };

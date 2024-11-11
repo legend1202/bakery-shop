@@ -7,6 +7,7 @@ import {
   getBranches,
   updateBranch,
   deleteBranch,
+  getDetailbybranchId,
 } from '../controllers/branch.controller';
 
 import { errorWrap } from '../utils/error.utils';
@@ -28,6 +29,12 @@ router.get(
   '/get-branches',
   errorWrap(verifyToken, 'Could not verify JWT token'),
   withTransaction(errorWrap(getBranches, 'Could not get branches'))
+);
+
+router.get(
+  '/get-detail-branchId/:branchId',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  withTransaction(errorWrap(getDetailbybranchId, 'Could not get branches'))
 );
 
 router.post(

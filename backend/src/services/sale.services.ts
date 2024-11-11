@@ -14,7 +14,7 @@ import { Branches, BranchesModel } from '../models/branch.model';
 import { Sales, SalesModel } from '../models/sale.model';
 import { Products, ProductsModel } from '../models/product.model';
 
-export const handleGetSaleByUser = async (
+/* export const handleGetSaleByUser = async (
   userId?: string,
   session?: ClientSession
 ): Promise<Sales[]> => {
@@ -88,6 +88,81 @@ export const handleGetSaleByUser = async (
     return sales;
   }
 };
+ */
+export const handleGetSaleByUser = async (
+  userId?: string,
+  session?: ClientSession
+): Promise<Sales[]> => {
+  const existingUser = await UsersModel.findOne({ id: userId });
+
+  const commonPipeline = [
+    {
+      $lookup: {
+        from: BranchesModel.collection.name,
+        localField: 'branchId',
+        foreignField: 'id',
+        as: 'branchDetails',
+      },
+    },
+    { $unwind: '$branchDetails' },
+    {
+      $lookup: {
+        from: UsersModel.collection.name,
+        localField: 'userId',
+        foreignField: 'id',
+        as: 'userDetails',
+      },
+    },
+    { $unwind: '$userDetails' },
+    {
+      $unwind: '$products',
+    },
+    {
+      $lookup: {
+        from: ProductsModel.collection.name,
+        localField: 'products.productId',
+        foreignField: 'id',
+        as: 'products.productDetails',
+      },
+    },
+    { $unwind: '$products.productDetails' },
+    {
+      $group: {
+        _id: '$_id',
+        id: { $first: '$id' },
+        userId: { $first: '$userId' },
+        branchId: { $first: '$branchId' },
+        products: { $push: '$products' },
+        totalItems: { $first: '$totalItems' },
+        total: { $first: '$total' },
+        bio: { $first: '$bio' },
+        createdAt: { $first: '$createdAt' },
+        updatedAt: { $first: '$updatedAt' },
+        branchDetails: { $first: '$branchDetails' },
+        userDetails: { $first: '$userDetails' },
+      },
+    },
+  ];
+
+  if (existingUser?.role === 'ADMIN') {
+    return await SalesModel.aggregate([
+      {
+        $match: { branchId: existingUser.branchId },
+      },
+      ...commonPipeline,
+    ]);
+  } else if (existingUser?.role === 'SALESPERSON') {
+    return await SalesModel.aggregate([
+      {
+        $match: { userId },
+      },
+      ...commonPipeline,
+    ]);
+  } else {
+    return await SalesModel.aggregate(commonPipeline);
+  }
+};
+
 
 export const handleSaleCreation = async (
   products: Partial<Sales> & Document,

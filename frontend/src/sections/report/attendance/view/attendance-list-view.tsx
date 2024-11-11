@@ -4,11 +4,9 @@ import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
-import Table from '@mui/material/Table';
 import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
-import TableBody from '@mui/material/TableBody';
-import TableContainer from '@mui/material/TableContainer';
+import { DataGrid, GridColDef, GridColumnVisibilityModel } from '@mui/x-data-grid';
 
 import { paths } from 'src/routes/paths';
 
@@ -19,30 +17,27 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useGetBranchLists } from 'src/api/branch';
 import { useGetAttendance } from 'src/api/attendance';
 
-import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import EmptyContent from 'src/components/empty-content/empty-content';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import {
-  useTable,
-  emptyRows,
-  TableNoData,
-  TableEmptyRows,
-  TableHeadCustom,
-  TablePaginationCustom,
-} from 'src/components/table';
 
 import { ResultItem } from 'src/types/attendance';
 
-import AttendanceTableRow from '../attendance-table-row';
+import {
+  RenderCellName,
+  RenderCellBranch,
+  RenderCellPayroll,
+} from '../report-attendance-list-item';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  { id: 'name', label: 'Nombre' },
-  { id: 'branchId', label: 'Sucursal' },
-  { id: 'payroll', label: 'Cantidad' },
-];
+const HIDE_COLUMNS = {
+  category: false,
+};
+
+const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
+
 // ----------------------------------------------------------------------
 
 export default function ReportSaleView() {
@@ -54,15 +49,12 @@ export default function ReportSaleView() {
 
   const { branches } = useGetBranchLists();
 
-  const { attendances } = useGetAttendance();
-
-  const table = useTable({ defaultOrderBy: 'createDate' });
+  const { attendances, attendancesLoading } = useGetAttendance();
 
   const [tableData, setTableData] = useState<ResultItem[]>([]);
 
-  const denseHeight = table.dense ? 56 : 56 + 20;
-
-  const notFound = tableData && !tableData.length;
+  const [columnVisibilityModel, setColumnVisibilityModel] =
+    useState<GridColumnVisibilityModel>(HIDE_COLUMNS);
 
   const NewProductSchema = Yup.object().shape({
     branchId: Yup.string().required('Name is required'),
@@ -114,6 +106,7 @@ export default function ReportSaleView() {
             // Initialize the count for this userId if not already done
             if (!acc[userId]) {
               acc[userId] = {
+                id: item.id,
                 userId,
                 userName,
                 branchName,
@@ -154,6 +147,7 @@ export default function ReportSaleView() {
             // Initialize the count for this userId if not already done
             if (!acc[userId]) {
               acc[userId] = {
+                id: item.id,
                 userId,
                 userName,
                 branchName,
@@ -173,6 +167,41 @@ export default function ReportSaleView() {
       setTableData(result);
     }
   }, [values.branchId, values.month, attendances]);
+
+  const columns: GridColDef[] = [
+    {
+      field: 'userName',
+      headerName: 'Nombre',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellName params={params} />,
+    },
+    {
+      field: 'branchName',
+      headerName: 'Sucursal',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellBranch params={params} />,
+    },
+    {
+      field: 'count',
+      headerName: 'Cantidad',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellPayroll params={params} />,
+    },
+  ];
+
+  const getTogglableColumns = () =>
+    columns
+      .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
+      .map((column) => column.field);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -230,56 +259,50 @@ export default function ReportSaleView() {
         }}
       />
 
-      <Card>
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-              {tableData && (
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
-                  numSelected={table.selected.length}
-                  /* onSort={table.onSort} */
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(checked, tableData?.map((row) => row.userId))
-                  }
-                />
-              )}
-              {tableData && (
-                <TableBody>
-                  {tableData.map((row) => (
-                    <AttendanceTableRow
-                      key={row.userId}
-                      row={row}
-                      selected={table.selected.includes(row.userId)}
-                      onSelectRow={() => table.onSelectRow(row.userId)}
-                    />
-                  ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
-                  />
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              )}
-            </Table>
-          </Scrollbar>
-        </TableContainer>
-
+      <Card
+        sx={{
+          height: { xs: 800, md: 400 },
+          mt: { xs: 2, md: 1 },
+          flexGrow: { md: 1 },
+          display: { md: 'flex' },
+          flexDirection: { md: 'column' },
+        }}
+      >
         {tableData && (
-          <TablePaginationCustom
-            count={tableData.length}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
+          <DataGrid
+            rows={tableData}
+            columns={columns}
+            loading={attendancesLoading}
+            getRowHeight={() => 'auto'}
+            pageSizeOptions={[5, 10, 25]}
+            sx={{
+              px: { xs: 1, md: 2 },
+              height: '100%', // Use 100% to fill the parent height
+            }}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 10 },
+              },
+            }}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+            localeText={{
+              MuiTablePagination: {
+                labelRowsPerPage: 'Filas por página',
+                labelDisplayedRows: ({ from, to, count }) =>
+                  `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
+              },
+              toolbarQuickFilterPlaceholder: 'Buscar…',
+            }}
+            slots={{
+              noRowsOverlay: () => <EmptyContent title="Sin datos" />,
+              noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
+            }}
+            slotProps={{
+              columnsPanel: {
+                getTogglableColumns,
+              },
+            }}
           />
         )}
       </Card>

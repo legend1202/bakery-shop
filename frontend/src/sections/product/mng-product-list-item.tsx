@@ -43,6 +43,47 @@ export function RenderCellProduct({ params }: ParamsProps) {
     />
   );
 }
+export function RenderCellProductPrice({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.productDetails.price}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
+export function RenderCellProductCode({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.productDetails.code}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
+export function RenderCellProductSize({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.productDetails.size}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
 
 export function RenderCellAmount({ params, productCount }: ParamsCountProps) {
   const totolQuantity = getQuantityByProductId(productCount, params.row.productId);

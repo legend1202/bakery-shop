@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Stack } from '@mui/system';
 import { GridCellParams } from '@mui/x-data-grid';
 import ListItemText from '@mui/material/ListItemText';
 
@@ -11,7 +11,7 @@ type ParamsProps = {
 export function RenderCellBranch({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.branchDetails.name}
+      primary={params.row?.branchDetails?.name || ''}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
@@ -35,10 +35,34 @@ export function RenderCellProduct({ params }: ParamsProps) {
   );
 }
 
+export function RenderCellQuantity({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={Math.abs(params.row.quantity)}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
 export function RenderCellPrice({ params }: ParamsProps) {
+  const { productDetails, quantity, price } = params.row;
+
+  let orderPrice = 0;
+
+  if (price) {
+    orderPrice = price;
+    /* orderPrice = -quantity * (productDetails?.price ? productDetails?.price : 0); */
+  } else if (productDetails?.price !== undefined && productDetails?.price !== null) {
+    orderPrice = quantity * productDetails.price;
+  }
   return (
     <ListItemText
-      primary={params.row.productDetails.price}
+      primary={Math.abs(orderPrice)}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
@@ -49,59 +73,22 @@ export function RenderCellPrice({ params }: ParamsProps) {
   );
 }
 
-export function RenderCellCode({ params }: ParamsProps) {
-  return (
-    <ListItemText
-      primary={params.row.productDetails.code}
-      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-      secondaryTypographyProps={{
-        mt: 0.5,
-        component: 'span',
-        typography: 'caption',
-      }}
-    />
-  );
-}
-
-export function RenderCellSize({ params }: ParamsProps) {
-  return (
-    <ListItemText
-      primary={params.row.productDetails.size}
-      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-      secondaryTypographyProps={{
-        mt: 0.5,
-        component: 'span',
-        typography: 'caption',
-      }}
-    />
-  );
-}
-
-export function RenderCellAmount({ params }: ParamsProps) {
-  return (
-    <ListItemText
-      primary={params.row.quantity}
-      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-      secondaryTypographyProps={{
-        mt: 0.5,
-        component: 'span',
-        typography: 'caption',
-      }}
-    />
-  );
-}
-
-export function RenderCellStatus({ params }: ParamsProps) {
-  const getStatusText = (status: number) => {
-    if (status === 0) {
-      return 'Pendiente';
-    }
-    if (status === 1) {
+const getStatusText = (status?: number, quantity?: number) => {
+  if (status === 0) {
+    return 'Pendiente';
+  }
+  if (status === 1) {
+    if (quantity && quantity > 0) {
       return 'Almacenada';
     }
-    return 'Cancelada';
-  };
+    if (quantity && quantity < 0) {
+      return 'Entregada';
+    }
+  }
+  return 'Cancelada';
+};
 
+export function RenderCellStatus({ params }: ParamsProps) {
   return (
     <Stack direction="row" alignItems="center" sx={{ py: 1, width: 1 }}>
       <Label
@@ -113,22 +100,8 @@ export function RenderCellStatus({ params }: ParamsProps) {
           'default'
         }
       >
-        {getStatusText(params.row.status)}
+        {getStatusText(params.row.status, params.row.quantity)}
       </Label>
     </Stack>
-  );
-}
-
-export function RenderCellBio({ params }: ParamsProps) {
-  return (
-    <ListItemText
-      primary={params.row.bio}
-      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-      secondaryTypographyProps={{
-        mt: 0.5,
-        component: 'span',
-        typography: 'caption',
-      }}
-    />
   );
 }

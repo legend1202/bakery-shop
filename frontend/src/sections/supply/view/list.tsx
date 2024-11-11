@@ -124,7 +124,7 @@ export default function MngSupplyListView() {
       renderCell: (params) => <RenderCellAmount params={params} supplyCount={supplyCount} />,
     },
     {
-      field: 'createAt',
+      field: 'createdAt',
       headerName: 'Fecha',
       minWidth: 140,
       disableColumnMenu: true,

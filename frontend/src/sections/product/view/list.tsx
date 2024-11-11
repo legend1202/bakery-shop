@@ -30,6 +30,9 @@ import {
   RenderCellAmount,
   RenderCellBranch,
   RenderCellProduct,
+  RenderCellProductCode,
+  RenderCellProductSize,
+  RenderCellProductPrice,
 } from '../mng-product-list-item';
 
 const HIDE_COLUMNS = {
@@ -66,7 +69,6 @@ export default function MngProductListView() {
 
   useEffect(() => {
     if (products) {
-      console.log(products);
       setProductCount(sumByProductId(products));
       const filteredProducts = products.filter(
         (product) => product.quantity < 0 && !product?.customOrderFlag
@@ -156,6 +158,33 @@ export default function MngProductListView() {
           hideable: false,
           disableColumnMenu: true,
           renderCell: (params) => <RenderCellBranch params={params} />,
+        },
+        {
+          field: 'price',
+          headerName: 'Precio',
+          flex: 1,
+          minWidth: 100,
+          hideable: false,
+          disableColumnMenu: true,
+          renderCell: (params) => <RenderCellProductPrice params={params} />,
+        },
+        {
+          field: 'code',
+          headerName: 'Código',
+          flex: 1,
+          minWidth: 100,
+          hideable: false,
+          disableColumnMenu: true,
+          renderCell: (params) => <RenderCellProductCode params={params} />,
+        },
+        {
+          field: 'size',
+          headerName: 'tamaño',
+          flex: 1,
+          minWidth: 100,
+          hideable: false,
+          disableColumnMenu: true,
+          renderCell: (params) => <RenderCellProductSize params={params} />,
         },
         {
           field: 'quantity',

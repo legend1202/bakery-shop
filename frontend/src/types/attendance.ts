@@ -18,6 +18,7 @@ export type ITAttendance = {
 };
 
 export type ResultItem = {
+  id: string;
   userId: string;
   count: number;
   userName: string;

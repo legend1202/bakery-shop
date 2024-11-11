@@ -9,6 +9,7 @@ import {
   handleDeleteBranch,
   handleBranchCreation,
   handleUpdateBranches,
+  handleGetDetail,
 } from '../services/branch.services';
 
 import { DecodedToken } from '../types/req.type';
@@ -43,6 +44,18 @@ export const getBranches = async (
     const branches = await handleGetBranches(req.userId, session);
     return sendResponse(res, 200, 'Get Branches', {
       branches,
+    });
+  } catch (error) {
+    throw new RequestError(`${error}`, 500);
+  }
+};
+
+export const getDetailbybranchId = async (req: Request, res: Response) => {
+  const { branchId } = req.params;
+  try {
+    const branchDetail = await handleGetDetail(branchId?.toString());
+    return sendResponse(res, 200, 'Get Branches', {
+      ...branchDetail,
     });
   } catch (error) {
     throw new RequestError(`${error}`, 500);

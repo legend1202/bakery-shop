@@ -1,8 +1,10 @@
 // import isEqual from "lodash/isEqual";
 import { useState, useEffect } from 'react';
 
+import { Stack } from '@mui/system';
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
+import { Button, Dialog, DialogTitle, DialogActions } from '@mui/material';
 import {
   DataGrid,
   GridColDef,
@@ -14,7 +16,7 @@ import { isSuperAdminFn } from 'src/utils/role-check';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { BranchDelete, useGetBranchLists } from 'src/api/branch';
+import { BranchDelete, useGetBranchLists, GetDetailByBranchId } from 'src/api/branch';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -22,10 +24,18 @@ import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 
 import { IBranch } from 'src/types/branch';
+import { IUserItem } from 'src/types/user';
+import { IMProduct } from 'src/types/product';
 
 import BranchEditForm from '../branch-update-form';
 import BranchNewEditForm from '../branch-new-edit-form';
-import { RenderCellBio, RenderCellName, RenderCellLocation } from '../branch-list-item';
+import {
+  RenderCellBio,
+  RenderCellName,
+  RenderCellLocation,
+  RenderCellProductName,
+  RenderCellEmployeeName,
+} from '../branch-list-item';
 
 const HIDE_COLUMNS = {
   category: false,
@@ -54,7 +64,13 @@ export default function BranchListView() {
 
   const [selectedBranch, setSelectedBranch] = useState<IBranch>();
 
+  const [openForm, setOpenForm] = useState<boolean>(false);
+
   const [reset, setReset] = useState(false);
+
+  const [users, setUsers] = useState<IUserItem[]>([]);
+
+  const [products, setProducts] = useState<IMProduct[]>([]);
 
   const [columnVisibilityModel, setColumnVisibilityModel] =
     useState<GridColumnVisibilityModel>(HIDE_COLUMNS);
@@ -113,6 +129,20 @@ export default function BranchListView() {
     }
     return [];
   };
+
+  const handleShowDetailDialog = async (branchId: string) => {
+    setOpenForm(true);
+
+    const branchDetail = await GetDetailByBranchId(branchId);
+    if (branchDetail.success) {
+      console.log(branchDetail.result);
+      setProducts(branchDetail.result.products);
+      setUsers(branchDetail.result.users);
+    } else {
+      setOpenForm(false);
+    }
+  };
+
   const columns: GridColDef[] = [
     {
       field: 'name',
@@ -120,7 +150,9 @@ export default function BranchListView() {
       flex: 1,
       minWidth: 280,
       disableColumnMenu: true,
-      renderCell: (params) => <RenderCellName params={params} />,
+      renderCell: (params) => (
+        <RenderCellName params={params} handleShowDetailDialog={handleShowDetailDialog} />
+      ),
     },
     {
       field: 'location',
@@ -150,30 +182,49 @@ export default function BranchListView() {
     },
   ];
 
+  const columnsOfUsers: GridColDef[] = [
+    {
+      field: 'name',
+      headerName: 'Personal',
+      flex: 1,
+      minWidth: 280,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellEmployeeName params={params} />,
+    },
+  ];
+  const columnsOfProducts: GridColDef[] = [
+    {
+      field: 'name',
+      headerName: 'Producto',
+      flex: 1,
+      minWidth: 280,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellProductName params={params} />,
+    },
+  ];
+
   const getTogglableColumns = () =>
     columns
       .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
       .map((column) => column.field);
 
-  return (
+  const onCloseForm = () => {
+    setOpenForm(false);
+  };
+
+  const renderProperties = (
     <Container
       maxWidth={settings.themeStretch ? false : 'lg'}
       sx={{
         flexGrow: 1,
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
       }}
     >
-      {isSuperAdmin && formStatus && <BranchNewEditForm afterSavebranch={afterSavebranch} />}
-
-      {isSuperAdmin && !formStatus && (
-        <BranchEditForm branch={selectedBranch} afterUpdateBranch={afterUpdateBranch} />
-      )}
-
       <Card
         sx={{
           mt: { xs: 2, md: 1 },
-          height: { xs: 800, md: 2 },
+          height: { xs: 200, md: 400 },
           flexGrow: { md: 1 },
           display: { md: 'flex' },
           flexDirection: { md: 'column' },
@@ -183,8 +234,52 @@ export default function BranchListView() {
           sx={{
             px: { xs: 1, md: 2 },
           }}
-          rows={tableData}
-          columns={columns}
+          rows={users}
+          columns={columnsOfUsers}
+          loading={brachesLoading}
+          getRowHeight={() => 'auto'}
+          pageSizeOptions={[5, 10, 25]}
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 10 },
+            },
+          }}
+          columnVisibilityModel={columnVisibilityModel}
+          onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+          localeText={{
+            MuiTablePagination: {
+              labelRowsPerPage: 'Filas por página',
+              labelDisplayedRows: ({ from, to, count }) =>
+                `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
+            },
+            toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
+          }}
+          slots={{
+            noRowsOverlay: () => <EmptyContent title="Sin datos" />,
+            noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
+          }}
+          slotProps={{
+            columnsPanel: {
+              getTogglableColumns,
+            },
+          }}
+        />
+      </Card>
+      <Card
+        sx={{
+          mt: { xs: 2, md: 1 },
+          height: { xs: 200, md: 400 },
+          flexGrow: { md: 1 },
+          display: { md: 'flex' },
+          flexDirection: { md: 'column' },
+        }}
+      >
+        <DataGrid
+          sx={{
+            px: { xs: 1, md: 2 },
+          }}
+          rows={products}
+          columns={columnsOfProducts}
           loading={brachesLoading}
           getRowHeight={() => 'auto'}
           pageSizeOptions={[5, 10, 25]}
@@ -215,5 +310,79 @@ export default function BranchListView() {
         />
       </Card>
     </Container>
+  );
+  return (
+    <>
+      <Container
+        maxWidth={settings.themeStretch ? false : 'lg'}
+        sx={{
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {isSuperAdmin && formStatus && <BranchNewEditForm afterSavebranch={afterSavebranch} />}
+
+        {isSuperAdmin && !formStatus && (
+          <BranchEditForm branch={selectedBranch} afterUpdateBranch={afterUpdateBranch} />
+        )}
+
+        <Card
+          sx={{
+            mt: { xs: 2, md: 1 },
+            height: { xs: 800, md: 2 },
+            flexGrow: { md: 1 },
+            display: { md: 'flex' },
+            flexDirection: { md: 'column' },
+          }}
+        >
+          <DataGrid
+            sx={{
+              px: { xs: 1, md: 2 },
+            }}
+            rows={tableData}
+            columns={columns}
+            loading={brachesLoading}
+            getRowHeight={() => 'auto'}
+            pageSizeOptions={[5, 10, 25]}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 10 },
+              },
+            }}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+            localeText={{
+              MuiTablePagination: {
+                labelRowsPerPage: 'Filas por página',
+                labelDisplayedRows: ({ from, to, count }) =>
+                  `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
+              },
+              toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
+            }}
+            slots={{
+              noRowsOverlay: () => <EmptyContent title="Sin datos" />,
+              noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
+            }}
+            slotProps={{
+              columnsPanel: {
+                getTogglableColumns,
+              },
+            }}
+          />
+        </Card>
+      </Container>
+      <Dialog fullWidth maxWidth="md" open={openForm} onClose={onCloseForm}>
+        <DialogTitle sx={{ minHeight: 76 }}>Detalles de la sucursal</DialogTitle>
+        <Stack spacing={3} sx={{ px: 3 }}>
+          {renderProperties}
+          <DialogActions>
+            <Button variant="outlined" color="inherit" onClick={onCloseForm}>
+              Cancel
+            </Button>
+          </DialogActions>
+        </Stack>
+      </Dialog>
+    </>
   );
 }

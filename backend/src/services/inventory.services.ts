@@ -187,6 +187,8 @@ export const handleGetInventoryOfProduct = async (
             totalQuantity: 1, // Include totalQuantity in the output
             'productDetails.name': 1, // Include product name
             'productDetails.price': 1, // Include product price
+            'productDetails.code': 1, // Include product price
+            'productDetails.size': 1, // Include product price
           },
         },
       ]);
@@ -318,6 +320,9 @@ export const handleGetInventoryOfSupply = async (
           supplyId: '$_id', // Rename _id to productId
           totalQuantity: 1, // Include totalQuantity in the output
           'supplyDetails.name': 1, // Include product name
+          'productDetails.price': 1, // Include product price
+          'productDetails.code': 1, // Include product price
+          'productDetails.size': 1, // Include product price
         },
       },
     ]);

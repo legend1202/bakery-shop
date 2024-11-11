@@ -11,7 +11,13 @@ import { useSettingsContext } from 'src/components/settings';
 
 import { ITProduct } from 'src/types/product';
 
-import { RenderCellAmount, RenderCellProduct } from '../inventory-product-list-item';
+import {
+  RenderCellAmount,
+  RenderCellProduct,
+  RenderCellProductCode,
+  RenderCellProductSize,
+  RenderCellProductPrice,
+} from '../inventory-product-list-item';
 
 const HIDE_COLUMNS = {
   category: false,
@@ -41,15 +47,36 @@ export default function MngProductListView() {
       field: 'productId',
       headerName: 'Producto',
       flex: 1,
-      minWidth: 320,
+      minWidth: 120,
       hideable: false,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
     {
+      field: 'price',
+      headerName: 'Precio',
+      minWidth: 100,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellProductPrice params={params} />,
+    },
+    {
+      field: 'code',
+      headerName: 'Código',
+      minWidth: 100,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellProductCode params={params} />,
+    },
+    {
+      field: 'size',
+      headerName: 'Tamaño',
+      minWidth: 100,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellProductSize params={params} />,
+    },
+    {
       field: 'quantity',
       headerName: 'Cantidad',
-      minWidth: 500,
+      minWidth: 100,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellAmount params={params} />,
     },

@@ -49,7 +49,6 @@ export function RenderCellAmount({ params, supplyCount }: ParamsCountProps) {
   const totolQuantity = getQuantityBySupplyId(supplyCount, params.row.supplyId);
 
   const getQuantityStatus = totolQuantity && params.row.quantity <= totolQuantity;
-
   return (
     <Stack direction="row" alignItems="center" sx={{ py: 1, width: 1 }}>
       <Label

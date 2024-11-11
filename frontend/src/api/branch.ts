@@ -22,6 +22,12 @@ export function useGetBranchLists() {
   return memoizedValue;
 }
 
+export const GetDetailByBranchId = async (branchId: string) => {
+  const res = await axiosInstance.get(`${endpoints.branch.getDetail}/${branchId}`);
+
+  return res.data;
+};
+
 export const createBranch = async (query: IBranch) => {
   const res = await axiosInstance.post(endpoints.branch.create, {
     branch: query,

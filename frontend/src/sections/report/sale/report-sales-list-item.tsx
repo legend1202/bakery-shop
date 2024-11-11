@@ -1,17 +1,22 @@
-import { Stack } from '@mui/material';
+import { Button } from '@mui/material';
 import { GridCellParams } from '@mui/x-data-grid';
 import ListItemText from '@mui/material/ListItemText';
 
-import Label from 'src/components/label/label';
+import { fDate, fTime } from 'src/utils/format-time';
 
 type ParamsProps = {
   params: GridCellParams;
 };
 
+type SaleParamsProps = {
+  params: GridCellParams;
+  handleOpenDialog: (saleId: string) => void;
+};
+
 export function RenderCellBranch({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.branchDetails.name}
+      primary={params.row?.branchDetails?.name || ''}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
@@ -21,7 +26,52 @@ export function RenderCellBranch({ params }: ParamsProps) {
     />
   );
 }
-export function RenderCellProduct({ params }: ParamsProps) {
+export function RenderCellSaleId({ params, handleOpenDialog }: SaleParamsProps) {
+  return (
+    <Button onClick={() => handleOpenDialog(params.row.id)} style={{ cursor: 'pointer' }}>
+      <ListItemText
+        primary={params.row.id}
+        primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+        secondaryTypographyProps={{
+          mt: 0.5,
+          component: 'span',
+          typography: 'caption',
+        }}
+      />
+    </Button>
+  );
+}
+
+export function RenderCellTotal({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={Math.abs(params.row.total)}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
+export function RenderCellCreated({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={fDate(params.row.createdAt)}
+      secondary={fTime(params.row.createdAt)}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
+export function RenderCellProductName({ params }: ParamsProps) {
   return (
     <ListItemText
       primary={params.row.productDetails.name}
@@ -35,49 +85,7 @@ export function RenderCellProduct({ params }: ParamsProps) {
   );
 }
 
-export function RenderCellPrice({ params }: ParamsProps) {
-  return (
-    <ListItemText
-      primary={params.row.productDetails.price}
-      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-      secondaryTypographyProps={{
-        mt: 0.5,
-        component: 'span',
-        typography: 'caption',
-      }}
-    />
-  );
-}
-
-export function RenderCellCode({ params }: ParamsProps) {
-  return (
-    <ListItemText
-      primary={params.row.productDetails.code}
-      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-      secondaryTypographyProps={{
-        mt: 0.5,
-        component: 'span',
-        typography: 'caption',
-      }}
-    />
-  );
-}
-
-export function RenderCellSize({ params }: ParamsProps) {
-  return (
-    <ListItemText
-      primary={params.row.productDetails.size}
-      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-      secondaryTypographyProps={{
-        mt: 0.5,
-        component: 'span',
-        typography: 'caption',
-      }}
-    />
-  );
-}
-
-export function RenderCellAmount({ params }: ParamsProps) {
+export function RenderCellProductQuantity({ params }: ParamsProps) {
   return (
     <ListItemText
       primary={params.row.quantity}
@@ -91,38 +99,24 @@ export function RenderCellAmount({ params }: ParamsProps) {
   );
 }
 
-export function RenderCellStatus({ params }: ParamsProps) {
-  const getStatusText = (status: number) => {
-    if (status === 0) {
-      return 'Pendiente';
-    }
-    if (status === 1) {
-      return 'Almacenada';
-    }
-    return 'Cancelada';
-  };
-
+export function RenderCellProductUnitPrice({ params }: ParamsProps) {
   return (
-    <Stack direction="row" alignItems="center" sx={{ py: 1, width: 1 }}>
-      <Label
-        variant="soft"
-        color={
-          (params.row.status === 1 && 'success') ||
-          (params.row.status === 2 && 'warning') ||
-          (params.row.status === 0 && 'default') ||
-          'default'
-        }
-      >
-        {getStatusText(params.row.status)}
-      </Label>
-    </Stack>
+    <ListItemText
+      primary={params.row.productDetails.price}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
   );
 }
 
-export function RenderCellBio({ params }: ParamsProps) {
+export function RenderCellProductTotal({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.bio}
+      primary={params.row.productDetails.price * params.row.quantity}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
