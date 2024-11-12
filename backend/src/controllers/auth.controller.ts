@@ -128,6 +128,17 @@ export const getUserById = async (req: Request, res: Response) => {
   }
 };
 
+
+export const getUserByParam = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const existingUser = await findOneUser({ id: userId });
+    return sendResponse(res, 201, 'User found', existingUser);
+  } catch (error) {
+    throw new RequestError(`${error}`, 500);
+  }
+};
+
 export const userDelete = async (req: Request, res: Response) => {
   const session: ClientSession = req.session!;
 

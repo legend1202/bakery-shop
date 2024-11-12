@@ -1,14 +1,19 @@
 import { GridCellParams } from '@mui/x-data-grid';
 import ListItemText from '@mui/material/ListItemText';
 
-
 type ParamsProps = {
   params: GridCellParams;
 };
 
-export function RenderCellName({ params }: ParamsProps) {
+type ParamsPropsName = {
+  params: GridCellParams;
+  handleShowDetailDialog: (userId: string) => void;
+};
+
+export function RenderCellName({ params, handleShowDetailDialog }: ParamsPropsName) {
   return (
     <ListItemText
+      onClick={() => handleShowDetailDialog(params.row.userId)}
       primary={params.row?.userName || ''}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{

@@ -11,6 +11,7 @@ import {
   assignRole,
   userDelete,
   getUserById,
+  getUserByParam,
 } from '../controllers/auth.controller';
 
 import { errorWrap } from '../utils/error.utils';
@@ -65,6 +66,13 @@ router.get(
   errorWrap(verifyToken, 'Could not verify JWT token'),
   /* errorWrap(verifyAdmin, `Admin can get users only. This user can't get users`), */
   withTransaction(errorWrap(getUserById, 'Could not get users'))
+);
+
+router.get(
+  '/get-user/:userId',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  /* errorWrap(verifyAdmin, `Admin can get users only. This user can't get users`), */
+  withTransaction(errorWrap(getUserByParam, 'Could not get users'))
 );
 
 export default router;

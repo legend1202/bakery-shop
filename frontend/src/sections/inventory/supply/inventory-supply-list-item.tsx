@@ -5,6 +5,11 @@ type ParamsProps = {
   params: GridCellParams;
 };
 
+type CreateAtParamsProps = {
+  params: GridCellParams;
+  lastRowId: string;
+};
+
 export function RenderCellBranch({ params }: ParamsProps) {
   return (
     <ListItemText
@@ -32,10 +37,12 @@ export function RenderCellProduct({ params }: ParamsProps) {
   );
 }
 
-export function RenderCellAmount({ params }: ParamsProps) {
+export function RenderCellAmount({ params, lastRowId }: CreateAtParamsProps) {
   return (
     <ListItemText
-      primary={params.row.quantity}
+      primary={
+        lastRowId === params.row.id ? `${-params.row.quantity  } (Latest)` : -params.row.quantity
+      }
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

@@ -43,6 +43,8 @@ export default function InventorySupplyListView() {
 
   const { supplies, suppliesLoading } = useGetMngSupplyListsByUsers();
 
+  const [lastRowId, setLastRowId] = useState<string>('');
+
   const [tableData, setTableData] = useState<IMSupply[]>([]);
 
   const [reset, setReset] = useState(false);
@@ -53,6 +55,10 @@ export default function InventorySupplyListView() {
   useEffect(() => {
     if (supplies) {
       const filteredProducts = supplies.filter((product) => product.quantity < 0);
+      const latestProduct = filteredProducts.reduce((latest, product) =>
+        new Date(product.createdAt) > new Date(latest.createdAt) ? product : latest
+      );
+      setLastRowId(latestProduct.id);
       setTableData(filteredProducts);
     }
   }, [supplies]);
@@ -92,14 +98,6 @@ export default function InventorySupplyListView() {
   };
 
   const columns: GridColDef[] = [
-    /* {
-      field: 'branchId',
-      headerName: 'Branch',
-      flex: 1,
-      minWidth: 180,
-      hideable: false,
-      renderCell: (params) => <RenderCellBranch params={params} />,
-    }, */
     {
       field: 'supplyId',
       headerName: 'Insumo',
@@ -114,14 +112,8 @@ export default function InventorySupplyListView() {
       headerName: 'Cantidad',
       minWidth: 100,
       disableColumnMenu: true,
-      renderCell: (params) => <RenderCellAmount params={params} />,
+      renderCell: (params) => <RenderCellAmount params={params} lastRowId={lastRowId} />,
     },
-    /* {
-      field: 'bio',
-      headerName: 'Biografía',
-      minWidth: 280,
-      renderCell: (params) => <RenderCellBio params={params} />,
-    }, */
     {
       field: 'status',
       headerName: 'Estatus',

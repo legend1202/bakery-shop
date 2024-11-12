@@ -4,8 +4,10 @@ import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
+import { Box, Stack } from '@mui/system';
 import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
+import { Button, Dialog, DialogTitle, DialogActions } from '@mui/material';
 import { DataGrid, GridColDef, GridColumnVisibilityModel } from '@mui/x-data-grid';
 
 import { paths } from 'src/routes/paths';
@@ -13,15 +15,18 @@ import { paths } from 'src/routes/paths';
 import { isSuperAdminFn } from 'src/utils/role-check';
 import { shouldCountAsHalf } from 'src/utils/attendanceTimeValidator';
 
+import { GetUserById } from 'src/api/admin';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetBranchLists } from 'src/api/branch';
 import { useGetAttendance } from 'src/api/attendance';
 
+import Label from 'src/components/label/label';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import EmptyContent from 'src/components/empty-content/empty-content';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
+import { IUserItem } from 'src/types/user';
 import { ResultItem } from 'src/types/attendance';
 
 import {
@@ -51,7 +56,11 @@ export default function ReportSaleView() {
 
   const { attendances, attendancesLoading } = useGetAttendance();
 
+  const [openDetail, setOpenDetail] = useState<boolean>(false);
+
   const [tableData, setTableData] = useState<ResultItem[]>([]);
+
+  const [selectedUser, setSelectedUser] = useState<IUserItem>();
 
   const [columnVisibilityModel, setColumnVisibilityModel] =
     useState<GridColumnVisibilityModel>(HIDE_COLUMNS);
@@ -176,7 +185,9 @@ export default function ReportSaleView() {
       minWidth: 180,
       hideable: false,
       disableColumnMenu: true,
-      renderCell: (params) => <RenderCellName params={params} />,
+      renderCell: (params) => (
+        <RenderCellName params={params} handleShowDetailDialog={handleShowDetailDialog} />
+      ),
     },
     {
       field: 'branchName',
@@ -203,109 +214,188 @@ export default function ReportSaleView() {
       .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
       .map((column) => column.field);
 
-  return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
-        heading="NÓMINA"
-        links={[
-          {
-            name: 'Panel',
-            href: paths.dashboard.root,
-          },
-          {
-            name: 'REPORTES',
-          },
-          {
-            name: 'NÓMINA',
-          },
-        ]}
-        action={
-          <FormProvider methods={methods}>
-            <Card
-              sx={{
-                padding: 1,
-                flexGrow: 1,
-                display: 'flex',
-                flexDirection: 'row',
-              }}
-            >
-              {isSuperAdmin && (
-                <RHFSelect
-                  name="branchId"
-                  label="Sucursal"
-                  fullWidth
-                  InputLabelProps={{ shrink: true }}
-                  PaperPropsSx={{ textTransform: 'capitalize' }}
-                  sx={{ minWidth: 140, mx: 1 }}
-                >
-                  <MenuItem key="" value="">
-                    Toda
-                  </MenuItem>
-                  {branches &&
-                    branches.map((branch) => (
-                      <MenuItem key={branch.id} value={branch.id}>
-                        {branch.name}
-                      </MenuItem>
-                    ))}
-                </RHFSelect>
-              )}
+  const handleShowDetailDialog = async (userId: string) => {
+    setOpenDetail(true);
 
-              <RHFTextField name="month" label="Mes" type="month" />
-            </Card>
-          </FormProvider>
-        }
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      />
+    const userDetail = await GetUserById(userId);
+    if (userDetail.success) {
+      setSelectedUser(userDetail.result);
+    } else {
+      setOpenDetail(false);
+    }
+  };
 
+  const onCloseForm = () => {
+    setOpenDetail(false);
+  };
+
+  const renderProperties = (
+    <Container
+      maxWidth={settings.themeStretch ? false : 'lg'}
+      sx={{
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'row',
+      }}
+    >
       <Card
         sx={{
-          height: { xs: 800, md: 400 },
           mt: { xs: 2, md: 1 },
-          flexGrow: { md: 1 },
-          display: { md: 'flex' },
-          flexDirection: { md: 'column' },
         }}
       >
-        {tableData && (
-          <DataGrid
-            rows={tableData}
-            columns={columns}
-            loading={attendancesLoading}
-            getRowHeight={() => 'auto'}
-            pageSizeOptions={[5, 10, 25]}
-            sx={{
-              px: { xs: 1, md: 2 },
-              height: '100%', // Use 100% to fill the parent height
-            }}
-            initialState={{
-              pagination: {
-                paginationModel: { pageSize: 10 },
-              },
-            }}
-            columnVisibilityModel={columnVisibilityModel}
-            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-            localeText={{
-              MuiTablePagination: {
-                labelRowsPerPage: 'Filas por página',
-                labelDisplayedRows: ({ from, to, count }) =>
-                  `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
-              },
-              toolbarQuickFilterPlaceholder: 'Buscar…',
-            }}
-            slots={{
-              noRowsOverlay: () => <EmptyContent title="Sin datos" />,
-              noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
-            }}
-            slotProps={{
-              columnsPanel: {
-                getTogglableColumns,
-              },
-            }}
-          />
-        )}
+        <Box
+          rowGap={3}
+          columnGap={3}
+          display="grid"
+          gridTemplateColumns={{
+            xs: 'repeat(1, 1fr)',
+            sm: 'repeat(7, 1fr)',
+          }}
+        >
+          <Label>LUN</Label>
+          <Label>MAR</Label>
+          <Label>MIE</Label>
+          <Label>JUE</Label>
+          <Label>VIE</Label>
+          <Label>SAB</Label>
+          <Label>DOM</Label>
+
+          <Label>{selectedUser?.mon_ini}</Label>
+          <Label>{selectedUser?.tue_ini}</Label>
+          <Label>{selectedUser?.wed_ini}</Label>
+          <Label>{selectedUser?.thu_ini}</Label>
+          <Label>{selectedUser?.fri_ini}</Label>
+          <Label>{selectedUser?.sat_ini}</Label>
+          <Label>{selectedUser?.sun_ini}</Label>
+
+          <Label>{selectedUser?.mon_end}</Label>
+          <Label>{selectedUser?.tue_end}</Label>
+          <Label>{selectedUser?.wed_end}</Label>
+          <Label>{selectedUser?.thu_end}</Label>
+          <Label>{selectedUser?.fri_end}</Label>
+          <Label>{selectedUser?.sat_end}</Label>
+          <Label>{selectedUser?.sun_end}</Label>
+        </Box>
       </Card>
     </Container>
+  );
+
+  return (
+    <>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+        <CustomBreadcrumbs
+          heading="NÓMINA"
+          links={[
+            {
+              name: 'Panel',
+              href: paths.dashboard.root,
+            },
+            {
+              name: 'REPORTES',
+            },
+            {
+              name: 'NÓMINA',
+            },
+          ]}
+          action={
+            <FormProvider methods={methods}>
+              <Card
+                sx={{
+                  padding: 1,
+                  flexGrow: 1,
+                  display: 'flex',
+                  flexDirection: 'row',
+                }}
+              >
+                {isSuperAdmin && (
+                  <RHFSelect
+                    name="branchId"
+                    label="Sucursal"
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                    PaperPropsSx={{ textTransform: 'capitalize' }}
+                    sx={{ minWidth: 140, mx: 1 }}
+                  >
+                    <MenuItem key="" value="">
+                      Toda
+                    </MenuItem>
+                    {branches &&
+                      branches.map((branch) => (
+                        <MenuItem key={branch.id} value={branch.id}>
+                          {branch.name}
+                        </MenuItem>
+                      ))}
+                  </RHFSelect>
+                )}
+
+                <RHFTextField name="month" label="Mes" type="month" />
+              </Card>
+            </FormProvider>
+          }
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
+        />
+
+        <Card
+          sx={{
+            height: { xs: 800, md: 400 },
+            mt: { xs: 2, md: 1 },
+            flexGrow: { md: 1 },
+            display: { md: 'flex' },
+            flexDirection: { md: 'column' },
+          }}
+        >
+          {tableData && (
+            <DataGrid
+              rows={tableData}
+              columns={columns}
+              loading={attendancesLoading}
+              getRowHeight={() => 'auto'}
+              pageSizeOptions={[5, 10, 25]}
+              sx={{
+                px: { xs: 1, md: 2 },
+                height: '100%', // Use 100% to fill the parent height
+              }}
+              initialState={{
+                pagination: {
+                  paginationModel: { pageSize: 10 },
+                },
+              }}
+              columnVisibilityModel={columnVisibilityModel}
+              onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+              localeText={{
+                MuiTablePagination: {
+                  labelRowsPerPage: 'Filas por página',
+                  labelDisplayedRows: ({ from, to, count }) =>
+                    `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
+                },
+                toolbarQuickFilterPlaceholder: 'Buscar…',
+              }}
+              slots={{
+                noRowsOverlay: () => <EmptyContent title="Sin datos" />,
+                noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
+              }}
+              slotProps={{
+                columnsPanel: {
+                  getTogglableColumns,
+                },
+              }}
+            />
+          )}
+        </Card>
+      </Container>
+      <Dialog maxWidth="md" open={openDetail} onClose={onCloseForm}>
+        <DialogTitle sx={{ minHeight: 76 }}>Turno</DialogTitle>
+        <Stack spacing={3} sx={{ px: 3 }}>
+          {renderProperties}
+          <DialogActions>
+            <Button variant="outlined" color="inherit" onClick={onCloseForm}>
+              Cancel
+            </Button>
+          </DialogActions>
+        </Stack>
+      </Dialog>
+    </>
   );
 }

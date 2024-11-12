@@ -18,6 +18,11 @@ type ParamsCountProps = {
   supplyCount: ISupplyCount[];
 };
 
+type CreateAtParamsProps = {
+  params: GridCellParams;
+  lastRowId: string;
+};
+
 export function RenderCellBranch({ params }: ParamsProps) {
   return (
     <ListItemText
@@ -35,6 +40,20 @@ export function RenderCellProduct({ params }: ParamsProps) {
   return (
     <ListItemText
       primary={params.row.supplyDetails.name}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
+export function RenderCellPrice({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.supplyDetails.price}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
@@ -66,6 +85,20 @@ export function RenderCellAmount({ params, supplyCount }: ParamsCountProps) {
   );
 }
 
+export function RenderCellTotal({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.supplyDetails.price * params.row.quantity}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
 export function RenderCellStatus({ params }: ParamsProps) {
   return (
     <ListItemText
@@ -94,10 +127,14 @@ export function RenderCellBio({ params }: ParamsProps) {
   );
 }
 
-export function RenderCellDate({ params }: ParamsProps) {
+export function RenderCellDate({ params, lastRowId }: CreateAtParamsProps) {
   return (
     <ListItemText
-      primary={fDate(params.row.createdAt)}
+      primary={
+        lastRowId === params.row.id
+          ? `${fDate(params.row.createdAt)} (Latest)`
+          : fDate(params.row.createdAt)
+      }
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

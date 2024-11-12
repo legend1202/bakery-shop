@@ -63,6 +63,12 @@ export function useGetUserById(userId: string) {
   return memoizedValue;
 }
 
+export const GetUserById = async (userId: string) => {
+  const res = await axiosInstance.get(`${endpoints.admin.userById}/${userId}`);
+
+  return res.data;
+};
+
 export const UserRoleUpdate = async (query: IUserRoleUpdate) => {
   const res = await axiosInstance.put(endpoints.admin.userRoleUpdate, {
     user: query,

@@ -25,6 +25,8 @@ import { ISupplyCount } from 'src/types/product';
 import MngSupplyNewEditForm from '../mng-supply-new-edit-form';
 import {
   RenderCellDate,
+  RenderCellPrice,
+  RenderCellTotal,
   RenderCellAmount,
   RenderCellStatus,
   RenderCellProduct,
@@ -49,6 +51,8 @@ export default function MngSupplyListView() {
 
   const [tableData, setTableData] = useState<IMSupply[]>([]);
 
+  const [lastRowId, setLastRowId] = useState<string>('');
+
   const [supplyCount, setSupplyCount] = useState<ISupplyCount[]>([]);
 
   const [reset, setReset] = useState(false);
@@ -60,6 +64,10 @@ export default function MngSupplyListView() {
     if (supplies) {
       setSupplyCount(sumBySupplyId(supplies));
       const filteredProducts = supplies.filter((product) => product.quantity > 0);
+      const latestProduct = filteredProducts.reduce((latest, product) =>
+        new Date(product.createdAt) > new Date(latest.createdAt) ? product : latest
+      );
+      setLastRowId(latestProduct.id);
       setTableData(filteredProducts);
     }
   }, [supplies]);
@@ -99,14 +107,6 @@ export default function MngSupplyListView() {
   };
 
   const columns: GridColDef[] = [
-    /* {
-      field: 'branchId',
-      headerName: 'Branch',
-      flex: 1,
-      minWidth: 180,
-      hideable: false,
-      renderCell: (params) => <RenderCellBranch params={params} />,
-    }, */
     {
       field: 'supplyId',
       headerName: 'Insumo',
@@ -117,6 +117,13 @@ export default function MngSupplyListView() {
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
     {
+      field: 'price',
+      headerName: 'Costo unitario',
+      minWidth: 140,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellPrice params={params} />,
+    },
+    {
       field: 'quantity',
       headerName: 'Cantidad',
       minWidth: 100,
@@ -124,18 +131,20 @@ export default function MngSupplyListView() {
       renderCell: (params) => <RenderCellAmount params={params} supplyCount={supplyCount} />,
     },
     {
-      field: 'createdAt',
-      headerName: 'Fecha',
+      field: 'total',
+      headerName: 'Total',
       minWidth: 140,
       disableColumnMenu: true,
-      renderCell: (params) => <RenderCellDate params={params} />,
+      sortable: false,
+      renderCell: (params) => <RenderCellTotal params={params} />,
     },
-    /* {
-      field: 'bio',
-      headerName: 'Biografía',
-      minWidth: 280,
-      renderCell: (params) => <RenderCellBio params={params} />,
-    }, */
+    {
+      field: 'createdAt',
+      headerName: 'Fecha',
+      minWidth: 180,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellDate params={params} lastRowId={lastRowId} />,
+    },
     {
       field: 'status',
       headerName: 'Estatus',
