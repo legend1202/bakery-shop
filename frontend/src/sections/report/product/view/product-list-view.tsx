@@ -12,8 +12,6 @@ import Container from '@mui/material/Container';
 import { useTheme } from '@mui/material/styles';
 import { DataGrid, GridColDef, GridColumnVisibilityModel } from '@mui/x-data-grid';
 
-import { paths } from 'src/routes/paths';
-
 import { isSuperAdminFn } from 'src/utils/role-check';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -34,6 +32,7 @@ import {
   RenderCellBranch,
   RenderCellStatus,
   RenderCellProduct,
+  RenderCellCreated,
   RenderCellQuantity,
 } from '../reposrt-product-list-item';
 
@@ -61,7 +60,7 @@ export default function ProductListView() {
   const { products } = useGetMngProductListsByUser();
 
   const [tableData, setTableData] = useState<IMProduct[]>([]);
-  
+
   const [temptableData, setTempTableData] = useState<IMProduct[]>([]);
 
   const [columnVisibilityModel, setColumnVisibilityModel] =
@@ -225,8 +224,17 @@ export default function ProductListView() {
       renderCell: (params) => <RenderCellPrice params={params} />,
     },
     {
+      field: 'createdAt',
+      headerName: 'Fecha',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellCreated params={params} />,
+    },
+    {
       field: 'status',
-      headerName: 'Estatus',
+      headerName: 'Estado',
       flex: 1,
       minWidth: 180,
       hideable: false,
@@ -243,17 +251,10 @@ export default function ProductListView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="ÓRDENES DE PRODUCTO"
+        heading="REPORTE DE ÓRDENES DE PRODUCTOS"
         links={[
           {
-            name: 'Panel',
-            href: paths.dashboard.root,
-          },
-          {
-            name: 'REPORTES ',
-          },
-          {
-            name: 'PRODUCTO',
+            name: '',
           },
         ]}
         action={

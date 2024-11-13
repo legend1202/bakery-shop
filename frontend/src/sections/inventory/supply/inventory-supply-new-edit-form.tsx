@@ -111,7 +111,7 @@ export default function InventorySupplyNewEditForm({ afterSavebranch }: Props) {
             {supplies && (
               <RHFSelect
                 name="supplyId"
-                label="Suministrar"
+                label="Insumo"
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}

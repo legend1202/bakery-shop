@@ -180,8 +180,8 @@ export default function UserListView() {
       }}
     >
       <CustomBreadcrumbs
-        heading="LISTAR EMPLEADOS"
-        links={[{ name: 'EMPLEADOS', href: paths.dashboard.root }, { name: 'LISTAR' }]}
+        heading="LISTA DE PERSONAL"
+        links={[{ name: '' }]}
         sx={{
           mb: {
             xs: 3,

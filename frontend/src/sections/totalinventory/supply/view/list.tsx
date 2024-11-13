@@ -8,6 +8,7 @@ import { useGetInventoryOfSupply } from 'src/api/inventory';
 
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import { ITSupply } from 'src/types/supply';
 
@@ -69,6 +70,16 @@ export default function MngProductListView() {
         flexDirection: 'column',
       }}
     >
+      <CustomBreadcrumbs
+        heading="INSUMOS EN INVENTARIO"
+        links={[{ name: '' }]}
+        sx={{
+          mb: {
+            xs: 3,
+            md: 5,
+          },
+        }}
+      />
       <Card
         sx={{
           mt: { xs: 2, md: 1 },

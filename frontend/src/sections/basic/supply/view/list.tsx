@@ -16,6 +16,7 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import { ISupply } from 'src/types/supply';
 
@@ -86,7 +87,7 @@ export default function SupplyListView() {
     }, */
     {
       field: 'price',
-      headerName: 'Price',
+      headerName: 'Precio unitario',
       minWidth: 500,
       renderCell: (params) => <RenderCellPrice params={params} />,
     },
@@ -131,6 +132,16 @@ export default function SupplyListView() {
         flexDirection: 'column',
       }}
     >
+      <CustomBreadcrumbs
+        heading="NUEVO INSUMO"
+        links={[{ name: '' }]}
+        sx={{
+          mb: {
+            xs: 3,
+            md: 5,
+          },
+        }}
+      />
       <SupplyNewEditForm afterSavebranch={afterSavebranch} />
 
       <Card

@@ -18,6 +18,7 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import { IMSupply } from 'src/types/supply';
 import { ISupplyCount } from 'src/types/product';
@@ -25,7 +26,6 @@ import { ISupplyCount } from 'src/types/product';
 import MngSupplyNewEditForm from '../mng-supply-new-edit-form';
 import {
   RenderCellDate,
-  RenderCellPrice,
   RenderCellTotal,
   RenderCellAmount,
   RenderCellStatus,
@@ -116,13 +116,13 @@ export default function MngSupplyListView() {
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellProduct params={params} />,
     },
-    {
+    /* {
       field: 'price',
       headerName: 'Costo unitario',
       minWidth: 140,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellPrice params={params} />,
-    },
+    }, */
     {
       field: 'quantity',
       headerName: 'Cantidad',
@@ -141,13 +141,13 @@ export default function MngSupplyListView() {
     {
       field: 'createdAt',
       headerName: 'Fecha',
-      minWidth: 180,
+      minWidth: 220,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellDate params={params} lastRowId={lastRowId} />,
     },
     {
       field: 'status',
-      headerName: 'Estatus',
+      headerName: 'Estado',
       minWidth: 100,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellStatus params={params} />,
@@ -193,6 +193,16 @@ export default function MngSupplyListView() {
         flexDirection: 'column',
       }}
     >
+      <CustomBreadcrumbs
+        heading="ÓRDENES DE INSUMOS"
+        links={[{ name: '' }]}
+        sx={{
+          mb: {
+            xs: 3,
+            md: 5,
+          },
+        }}
+      />
       <MngSupplyNewEditForm afterSavebranch={afterSavebranch} />
 
       <Card

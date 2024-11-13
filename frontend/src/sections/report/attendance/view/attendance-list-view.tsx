@@ -10,8 +10,6 @@ import Container from '@mui/material/Container';
 import { Button, Dialog, DialogTitle, DialogActions } from '@mui/material';
 import { DataGrid, GridColDef, GridColumnVisibilityModel } from '@mui/x-data-grid';
 
-import { paths } from 'src/routes/paths';
-
 import { isSuperAdminFn } from 'src/utils/role-check';
 import { shouldCountAsHalf } from 'src/utils/attendanceTimeValidator';
 
@@ -287,15 +285,8 @@ export default function ReportSaleView() {
           heading="NÓMINA"
           links={[
             {
-              name: 'Panel',
-              href: paths.dashboard.root,
-            },
-            {
-              name: 'REPORTES',
-            },
-            {
-              name: 'NÓMINA',
-            },
+              name: '',
+            }
           ]}
           action={
             <FormProvider methods={methods}>

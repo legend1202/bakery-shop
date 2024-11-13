@@ -220,43 +220,57 @@ export default function UserNewEditForm() {
             }}
           >
             <Label
-              style={{ backgroundColor: isMonDisabled ? 'dark' : 'lightyellow' }}
+              style={{
+                backgroundColor: isMonDisabled ? 'rgba(145, 158, 171, 0.16)' : 'lightyellow',
+              }}
               onClick={() => setIsMonDisabled(!isMonDisabled)}
             >
               LUN
             </Label>
             <Label
-              style={{ backgroundColor: isTueDisabled ? 'dark' : 'lightyellow' }}
+              style={{
+                backgroundColor: isTueDisabled ? 'rgba(145, 158, 171, 0.16)' : 'lightyellow',
+              }}
               onClick={() => setIsTueDisabled(!isTueDisabled)}
             >
               MAR
             </Label>
             <Label
-              style={{ backgroundColor: isWedDisabled ? 'dark' : 'lightyellow' }}
+              style={{
+                backgroundColor: isWedDisabled ? 'rgba(145, 158, 171, 0.16)' : 'lightyellow',
+              }}
               onClick={() => setIsWedDisabled(!isWedDisabled)}
             >
               MIE
             </Label>
             <Label
-              style={{ backgroundColor: isThuDisabled ? 'dark' : 'lightyellow' }}
+              style={{
+                backgroundColor: isThuDisabled ? 'rgba(145, 158, 171, 0.16)' : 'lightyellow',
+              }}
               onClick={() => setIsThuDisabled(!isThuDisabled)}
             >
               JUE
             </Label>
             <Label
-              style={{ backgroundColor: isFriDisabled ? 'dark' : 'lightyellow' }}
+              style={{
+                backgroundColor: isFriDisabled ? 'rgba(145, 158, 171, 0.16)' : 'lightyellow',
+              }}
               onClick={() => setIsFriDisabled(!isFriDisabled)}
             >
               VIE
             </Label>
             <Label
-              style={{ backgroundColor: isSatDisabled ? 'dark' : 'lightyellow' }}
+              style={{
+                backgroundColor: isSatDisabled ? 'rgba(145, 158, 171, 0.16)' : 'lightyellow',
+              }}
               onClick={() => setIsSatDisabled(!isSatDisabled)}
             >
               SAB
             </Label>
             <Label
-              style={{ backgroundColor: isSunDisabled ? 'dark' : 'lightyellow' }}
+              style={{
+                backgroundColor: isSunDisabled ? 'rgba(145, 158, 171, 0.16)' : 'lightyellow',
+              }}
               onClick={() => setIsSunDisabled(!isSunDisabled)}
             >
               DOM

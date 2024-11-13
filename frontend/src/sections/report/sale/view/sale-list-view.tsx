@@ -13,8 +13,6 @@ import { useTheme } from '@mui/material/styles';
 import { Button, Dialog, DialogTitle, DialogActions } from '@mui/material';
 import { DataGrid, GridColDef, GridColumnVisibilityModel } from '@mui/x-data-grid';
 
-import { paths } from 'src/routes/paths';
-
 import { isSuperAdminFn } from 'src/utils/role-check';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -282,11 +280,7 @@ export default function ReportSaleView() {
           heading="VENTAS "
           links={[
             {
-              name: 'REPORTES',
-              href: paths.dashboard.root,
-            },
-            {
-              name: 'VENTAS',
+              name: '',
             },
           ]}
           action={

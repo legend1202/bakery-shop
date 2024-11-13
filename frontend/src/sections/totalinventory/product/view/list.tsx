@@ -8,6 +8,7 @@ import { useGetInventoryOfProduct } from 'src/api/inventory';
 
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import { ITProduct } from 'src/types/product';
 
@@ -96,6 +97,13 @@ export default function MngProductListView() {
         flexDirection: 'column',
       }}
     >
+      <CustomBreadcrumbs
+        heading="INVENTARIO"
+        links={[{ name: '' }]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
       <Card
         sx={{
           mt: { xs: 2, md: 1 },

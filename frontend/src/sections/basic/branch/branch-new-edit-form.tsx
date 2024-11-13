@@ -84,7 +84,7 @@ export default function BranchNewEditForm({ afterSavebranch }: Props) {
           >
             <RHFTextField name="name" label="Sucursal" />
 
-            <RHFTextField name="location" label="ubicación" />
+            <RHFTextField name="location" label="Ubicación" />
 
             <RHFTextField name="bio" label="Color" />
 

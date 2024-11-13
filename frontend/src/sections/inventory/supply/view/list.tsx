@@ -16,6 +16,7 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import { IMSupply } from 'src/types/supply';
 
@@ -110,13 +111,13 @@ export default function InventorySupplyListView() {
     {
       field: 'quantity',
       headerName: 'Cantidad',
-      minWidth: 100,
+      minWidth: 180,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellAmount params={params} lastRowId={lastRowId} />,
     },
     {
       field: 'status',
-      headerName: 'Estatus',
+      headerName: 'Estado',
       minWidth: 100,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellStatus params={params} />,
@@ -162,6 +163,13 @@ export default function InventorySupplyListView() {
         flexDirection: 'column',
       }}
     >
+      <CustomBreadcrumbs
+        heading={t('DEDUCIR INSUMOS')}
+        links={[{ name: '' }]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
       <InventorySupplyNewEditForm afterSavebranch={afterSavebranch} />
 
       <Card

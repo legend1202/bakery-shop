@@ -77,7 +77,7 @@ export function useNavData() {
           },
           // List
           {
-            title: t('Listar empleados'),
+            title: t('Lista de personal'),
             /* title: t('List employees'), */
             path: paths.admin.users.list,
             icon: ICONS.user,
@@ -86,7 +86,7 @@ export function useNavData() {
           },
           // Product
           {
-            title: t('Nuevo Producto'),
+            title: t('Agregar producto nuevo'),
             /* title: t('Add new product'), */
             path: paths.product.list,
             icon: ICONS.user,

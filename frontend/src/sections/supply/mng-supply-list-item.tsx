@@ -132,7 +132,7 @@ export function RenderCellDate({ params, lastRowId }: CreateAtParamsProps) {
     <ListItemText
       primary={
         lastRowId === params.row.id
-          ? `${fDate(params.row.createdAt)} (Latest)`
+          ? `${fDate(params.row.createdAt)} (Última orden)`
           : fDate(params.row.createdAt)
       }
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}

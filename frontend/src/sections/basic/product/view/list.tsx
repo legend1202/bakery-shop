@@ -10,8 +10,6 @@ import {
   GridColumnVisibilityModel,
 } from '@mui/x-data-grid';
 
-import { paths } from 'src/routes/paths';
-
 import { useTranslate } from 'src/locales';
 import { ProductDelete, useGetProductListsByUser } from 'src/api/product';
 
@@ -196,15 +194,8 @@ export default function ProductListView() {
         }}
       >
         <CustomBreadcrumbs
-          heading="LISTAR"
-          links={[
-            { name: 'Dashboard', href: paths.dashboard.root },
-            {
-              name: 'PRODUCTO',
-              href: paths.product.list,
-            },
-            { name: 'LISTAR' },
-          ]}
+          heading="LISTA DE PRODUCTOS"
+          links={[{ name: '' }]}
           action={
             <Button onClick={handleNewOwnerPopOver} variant="contained">
               Nuevo producto

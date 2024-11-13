@@ -1,7 +1,5 @@
 import Container from '@mui/material/Container';
 
-import { paths } from 'src/routes/paths';
-
 import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
@@ -17,14 +15,8 @@ export default function UserCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t('EMPLEADOS')}
-        links={[
-          { name: t('EMPLEADOS'), href: paths.admin.users.create },
-          {
-            name: t('Crear'),
-            href: paths.admin.users.create,
-          },
-        ]}
+        heading={t('PERSONAL')}
+        links={[{ name: t('') }]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}

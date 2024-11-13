@@ -74,10 +74,38 @@ export function RenderCellEmployeeName({ params }: ParamsProps) {
   );
 }
 
+export function RenderCellEmployeeRole({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.role}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
 export function RenderCellProductName({ params }: ParamsProps) {
   return (
     <ListItemText
       primary={params.row.productDetails.name}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
+export function RenderCellProductQuantity({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.totalQuantity}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

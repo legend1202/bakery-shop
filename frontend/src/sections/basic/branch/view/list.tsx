@@ -22,6 +22,7 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import { IBranch } from 'src/types/branch';
 import { IUserItem } from 'src/types/user';
@@ -35,6 +36,8 @@ import {
   RenderCellLocation,
   RenderCellProductName,
   RenderCellEmployeeName,
+  RenderCellEmployeeRole,
+  RenderCellProductQuantity,
 } from '../branch-list-item';
 
 const HIDE_COLUMNS = {
@@ -187,9 +190,17 @@ export default function BranchListView() {
       field: 'name',
       headerName: 'Personal',
       flex: 1,
-      minWidth: 280,
+      minWidth: 140,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellEmployeeName params={params} />,
+    },
+    {
+      field: 'role',
+      headerName: 'Rol',
+      flex: 1,
+      minWidth: 140,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellEmployeeRole params={params} />,
     },
   ];
   const columnsOfProducts: GridColDef[] = [
@@ -197,9 +208,17 @@ export default function BranchListView() {
       field: 'name',
       headerName: 'Producto',
       flex: 1,
-      minWidth: 280,
+      minWidth: 140,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellProductName params={params} />,
+    },
+    {
+      field: 'totalQuantity',
+      headerName: 'Total',
+      flex: 1,
+      minWidth: 140,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellProductQuantity params={params} />,
     },
   ];
 
@@ -321,6 +340,13 @@ export default function BranchListView() {
           flexDirection: 'column',
         }}
       >
+        <CustomBreadcrumbs
+          heading={t('SUCURSALES')}
+          links={[{ name: '' }]}
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
+        />
         {isSuperAdmin && formStatus && <BranchNewEditForm afterSavebranch={afterSavebranch} />}
 
         {isSuperAdmin && !formStatus && (

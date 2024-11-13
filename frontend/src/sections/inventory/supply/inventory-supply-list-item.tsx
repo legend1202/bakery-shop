@@ -41,7 +41,7 @@ export function RenderCellAmount({ params, lastRowId }: CreateAtParamsProps) {
   return (
     <ListItemText
       primary={
-        lastRowId === params.row.id ? `${-params.row.quantity  } (Latest)` : -params.row.quantity
+        lastRowId === params.row.id ? `${-params.row.quantity} (Último uso)` : -params.row.quantity
       }
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{

@@ -12,8 +12,6 @@ import Container from '@mui/material/Container';
 import { useTheme } from '@mui/material/styles';
 import { DataGrid, GridColDef, GridColumnVisibilityModel } from '@mui/x-data-grid';
 
-import { paths } from 'src/routes/paths';
-
 import { useGetSupplyListsByUsers, useGetMngSupplyListsByUsers } from 'src/api/supply';
 
 import Scrollbar from 'src/components/scrollbar';
@@ -168,17 +166,10 @@ export default function ReportSupplyView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="ÓRDENES DE INSUMOS"
+        heading="REPORTE DE ÓRDENES DE INSUMOS"
         links={[
           {
-            name: 'Panel',
-            href: paths.dashboard.root,
-          },
-          {
-            name: 'ÓRDENES',
-          },
-          {
-            name: 'INSUMOS',
+            name: '',
           },
         ]}
         action={

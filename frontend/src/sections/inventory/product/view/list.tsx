@@ -16,6 +16,7 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import { IMProduct } from 'src/types/product';
 
@@ -190,6 +191,13 @@ export default function MngProductListView() {
         flexDirection: 'column',
       }}
     >
+      <CustomBreadcrumbs
+        heading={t('ACTUALIZAR INVENTARIO')}
+        links={[{ name: '' }]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
       <InventoryProductNewEditForm afterSavebranch={afterSavebranch} />
 
       <Card
