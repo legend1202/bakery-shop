@@ -41,6 +41,7 @@ export const mngcreateProduct = async (
       productDetails: productData,
       branchDetails: branchData,
       quantity: newProduct.quantity,
+      price: newProduct.price,
       status: newProduct.status,
       bio: newProduct.bio,
     });

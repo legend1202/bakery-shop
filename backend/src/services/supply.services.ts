@@ -12,16 +12,15 @@ import { RequestError } from '../utils/globalErrorHandler';
 import { UsersModel } from '../models/user.model';
 import { BranchesModel } from '../models/branch.model';
 import { Supplies, SuppliesModel } from '../models/supply.model';
+import { updateSupply } from '../controllers/supply.controller';
 
 export const handleSupplyCreation = async (
   supply: Partial<Supplies> & Document,
   userId?: string,
   session?: ClientSession
 ): Promise<Supplies> => {
-  const { name, price, bio } = supply;
+  const { id, name, price, bio } = supply;
 
-  /*  if (!branchId) throw new RequestError('Branch name must not be empty', 400);
-   */
   if (!name) throw new RequestError('Proudct name must not be empty', 400);
 
   if (!userId) {
@@ -37,16 +36,28 @@ export const handleSupplyCreation = async (
         500
       );
     } else {
-      const newBranch = await createNewSupply(
-        userId,
-        /* branchId, */
-        name,
-        price,
-        bio,
-        session
-      );
+      if (id) {
+        const updatedSupply = await findByIdAndUpdateSupplyDocument(id, {
+          name: name,
+          price: price,
+        });
 
-      return newBranch;
+        if (updatedSupply) {
+          return updatedSupply;
+        } else {
+          throw new RequestError(`There is not ${id} user.`, 500);
+        }
+      } else {
+        const newBranch = await createNewSupply(
+          userId,
+          name,
+          price,
+          bio,
+          session
+        );
+
+        return newBranch;
+      }
     }
   }
 };
@@ -55,51 +66,18 @@ export const handleGetSupplies = async (
   userId?: string,
   session?: ClientSession
 ): Promise<Supplies[]> => {
-  /* if (userId) { */
   const products = await SuppliesModel.find();
 
   return products;
-  /*  } else {
-    const products = await SuppliesModel.aggregate([
-      {
-        $lookup: {
-          from: BranchesModel.collection.name,
-          localField: 'branchId',
-          foreignField: 'id',
-          as: 'branchDetails',
-        },
-      },
-      { $unwind: '$branchDetails' },
-    ]);
-
-    return products;
-  } */
 };
 
 export const handleGetSupplyByUser = async (
   userId?: string,
   session?: ClientSession
 ): Promise<Supplies[]> => {
-  /* const existingUser = await UsersModel.findOne({ id: userId });
-
-  if (existingUser?.role === 'ADMIN') {
-    const products = await handleGetSupplies(userId, session);
-
-    return products;
-  } else {
-    const branchId = existingUser?.branchId;
-
-    if (!branchId) {
-      throw new RequestError(
-        `Can't register this branch. this branch is not existed.`,
-        500
-      );
-    } else { */
   const products = await SuppliesModel.find();
 
   return products;
-  /*   }
-  } */
 };
 
 export const handleUpdateSupply = async (

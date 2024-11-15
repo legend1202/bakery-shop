@@ -40,6 +40,7 @@ export default function MngProductListView() {
   useEffect(() => {
     if (products) {
       setTableData(products);
+      console.log(products);
     }
   }, [products]);
 

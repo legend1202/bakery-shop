@@ -42,6 +42,8 @@ export default function SupplyListView() {
 
   const [tableData, setTableData] = useState<ISupply[]>([]);
 
+  const [currentSupply, setCurrentSupply] = useState<ISupply>();
+
   const [reset, setReset] = useState(false);
 
   const [columnVisibilityModel, setColumnVisibilityModel] =
@@ -55,7 +57,9 @@ export default function SupplyListView() {
 
   const afterSavebranch = async (newProduct: ISupply) => {
     enqueueSnackbar('Creado exitosamente');
-    setTableData([...tableData, newProduct]);
+    const filteredData = tableData.filter((row) => row.id !== newProduct.id);
+    setTableData([...filteredData, newProduct]);
+    setCurrentSupply(undefined);
   };
 
   const handleDeleteRow = async (id: string) => {
@@ -71,6 +75,10 @@ export default function SupplyListView() {
     }
   };
 
+  const handleEditRow = async (supply: ISupply) => {
+    setCurrentSupply(supply);
+  };
+
   const columns: GridColDef[] = [
     {
       field: 'supply',
@@ -79,24 +87,12 @@ export default function SupplyListView() {
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellName params={params} />,
     },
-    /*  {
-      field: 'branch',
-      headerName: 'Branch',
-      minWidth: 320,
-      renderCell: (params) => <RenderCellBranch params={params} />,
-    }, */
     {
       field: 'price',
       headerName: 'Precio unitario',
       minWidth: 500,
       renderCell: (params) => <RenderCellPrice params={params} />,
     },
-    /* {
-      field: 'bio',
-      headerName: 'Biografía',
-      minWidth: 520,
-      renderCell: (params) => <RenderCellBio params={params} />,
-    }, */
     {
       type: 'actions',
       field: 'actions',
@@ -108,6 +104,12 @@ export default function SupplyListView() {
       filterable: false,
       disableColumnMenu: true,
       getActions: (params) => [
+        <GridActionsCellItem
+          showInMenu
+          icon={<Iconify icon="solar:eye-bold" />}
+          label="Editar"
+          onClick={() => handleEditRow(params.row)}
+        />,
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}
@@ -142,7 +144,7 @@ export default function SupplyListView() {
           },
         }}
       />
-      <SupplyNewEditForm afterSavebranch={afterSavebranch} />
+      <SupplyNewEditForm currentSupply={currentSupply} afterSavebranch={afterSavebranch} />
 
       <Card
         sx={{

@@ -25,12 +25,14 @@ export const handleMngProductCreation = async (
   if (!productId) throw new RequestError('Proudct name must not be empty', 400);
   if (!quantity) throw new RequestError('Price must not be empty', 400);
 
+  const originProduct = await ProductsModel.findOne({ id: productId });
+
   const newproduct = await createNewMngProduct(
     productId,
-    /* branchId, */
     userId,
     quantity,
     bio,
+    originProduct?.price,
     session
   );
 
@@ -43,6 +45,7 @@ export const createNewMngProduct = async (
   userId?: string,
   quantity?: number,
   bio?: string,
+  price?: number,
   session?: ClientSession
 ): Promise<MngProducts> => {
   /*   if (branchId) { */
@@ -53,6 +56,7 @@ export const createNewMngProduct = async (
       /*  branchId, */
       userId,
       quantity,
+      price,
       customOrderFlag: false,
       status: 0,
       bio,
@@ -66,6 +70,7 @@ export const createNewMngProduct = async (
       branchId: userData?.branchId,
       userId,
       quantity,
+      price,
       customOrderFlag: false,
       status: 0,
       bio,
@@ -74,21 +79,6 @@ export const createNewMngProduct = async (
     await newProduct.save({ session });
     return newProduct;
   }
-  /* } else {
-    const userData = await UsersModel.findOne({ id: userId });
-    const newProduct = new MngProductsModel({
-      productId,
-      branchId: userData?.branchId,
-      userId,
-      quantity,
-      customOrderFlag: false,
-      status: 0,
-      bio,
-    });
-
-    await newProduct.save({ session });
-    return newProduct;
-  } */
 };
 
 export const handleGetMngProductsByUser = async (

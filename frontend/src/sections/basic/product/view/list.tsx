@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
@@ -67,10 +67,10 @@ export default function ProductListView() {
     }
   }, [products]);
 
-  /* const handleEditRow = useCallback((data: IProduct) => {
+  const handleEditRow = useCallback((data: IProduct) => {
     setCurrentProduct(data);
     setOpenForm(true);
-  }, []); */
+  }, []);
 
   const handleDeleteRow = async (id: string) => {
     settableLoading(true);
@@ -91,28 +91,28 @@ export default function ProductListView() {
     {
       field: 'product',
       headerName: 'PRODUCTO',
-      minWidth: 280,
+      minWidth: 250,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellName params={params} />,
     },
     {
       field: 'price',
       headerName: 'Precio',
-      minWidth: 240,
+      minWidth: 250,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellPrice params={params} />,
     },
     {
       field: 'code',
       headerName: 'Código',
-      minWidth: 280,
+      minWidth: 250,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellCode params={params} />,
     },
     {
       field: 'size',
       headerName: 'Tamaño',
-      minWidth: 240,
+      minWidth: 250,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellSize params={params} />,
     },
@@ -128,12 +128,12 @@ export default function ProductListView() {
       filterable: false,
       disableColumnMenu: true,
       getActions: (params) => [
-        /*  <GridActionsCellItem
+        <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:pen-bold" />}
           label="Editar"
           onClick={() => handleEditRow(params.row)}
-        />, */
+        />,
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}

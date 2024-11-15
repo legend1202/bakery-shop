@@ -12,8 +12,6 @@ import {
   handleGetSupplyByUser,
 } from '../services/supply.services';
 
-import { BranchesModel } from '../models/branch.model';
-
 import { DecodedToken } from '../types/req.type';
 
 export const create = async (
@@ -29,6 +27,7 @@ export const create = async (
       id: newSupply.id,
       /* branchDetails: branchData, */
       name: newSupply.name,
+      price: newSupply.price,
       bio: newSupply.bio,
     });
   } catch (error) {

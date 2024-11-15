@@ -25,19 +25,13 @@ export default function InventoryProductNewEditForm({ afterSavebranch }: Props) 
 
   const { products } = useGetProductListsByUser();
 
-  /* const { branches } = useGetBranchLists(); */
-
-  /* const [productsForBranch, setProductsForBranch] = useState<IProduct[]>([]); */
-
   const NewProductSchema = Yup.object().shape({
-    /*  branchId: Yup.string().required('Branch is required'), */
     productId: Yup.string().required('El producto es obligatorio'),
     quantity: Yup.number().required('Se requiere cantidad'),
   });
 
   const defaultValues = useMemo(
     () => ({
-      /* branchId: '', */
       productId: '',
       quantity: 0,
       bio: '',
@@ -58,13 +52,6 @@ export default function InventoryProductNewEditForm({ afterSavebranch }: Props) 
   } = methods;
 
   const values = watch();
-
-  /* useEffect(() => {
-    if (values.branchId) {
-      const updatedProducts = products.filter((product) => product.branchId === values.branchId);
-      setProductsForBranch(updatedProducts);
-    }
-  }, [values.branchId, products]); */
 
   const onSubmit = handleSubmit(async (data) => {
     try {

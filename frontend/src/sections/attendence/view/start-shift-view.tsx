@@ -30,7 +30,9 @@ export default function ShiftStartView() {
   const password = useBoolean();
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().required('Se requiere correo electrónico').email('El correo electrónico debe ser una dirección de correo electrónico válida'),
+    email: Yup.string()
+      .required('Se requiere correo electrónico')
+      .email('El correo electrónico debe ser una dirección de correo electrónico válida'),
     password: Yup.string().required('Se requiere contraseña'),
   });
 
@@ -63,9 +65,9 @@ export default function ShiftStartView() {
       const { success } = res.data;
 
       if (success) {
-        router.push(paths.dashboard.root);
+        router.push(paths.home);
       } else {
-        router.push(paths.dashboard.root);
+        router.push(paths.home);
       }
     } catch (error) {
       console.error(error);

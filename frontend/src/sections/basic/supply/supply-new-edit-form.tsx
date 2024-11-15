@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -17,25 +17,23 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import { ISupply } from 'src/types/supply';
 
 type Props = {
+  currentSupply: ISupply | undefined;
   afterSavebranch: (newProduct: ISupply) => void;
 };
-export default function SupplyNewEditForm({ afterSavebranch }: Props) {
+export default function SupplyNewEditForm({ currentSupply, afterSavebranch }: Props) {
   const [errorMsg, setErrorMsg] = useState('');
 
   const NewProductSchema = Yup.object().shape({
-    /*  branchId: Yup.string().required('Branch is required'), */
     name: Yup.string().required(),
     price: Yup.number().required('Price is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
-      /* branchId: '', */
-      name: '',
-      price: 0,
-      bio: '',
+      name: currentSupply?.name || '',
+      price: currentSupply?.price || 0,
     }),
-    []
+    [currentSupply?.name, currentSupply?.price]
   );
 
   const methods = useForm({
@@ -53,9 +51,18 @@ export default function SupplyNewEditForm({ afterSavebranch }: Props) {
 
   const values = watch();
 
+  useEffect(() => {
+    if (currentSupply?.name && currentSupply?.price) {
+      setValue('name', currentSupply.name);
+      setValue('price', currentSupply.price);
+    } else {
+      reset();
+    }
+  }, [currentSupply?.name, currentSupply?.price, reset, setValue]);
+
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const saveData = { ...values };
+      const saveData = { ...values, id: currentSupply?.id };
       const saveResults: any = await createSupply(saveData);
 
       if (saveResults.data?.success) {
@@ -84,26 +91,9 @@ export default function SupplyNewEditForm({ afterSavebranch }: Props) {
               sm: 'repeat(3, 1fr)',
             }}
           >
-            {/* {branches && (
-              <RHFSelect
-                name="branchId"
-                label="Branch"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {branches.map((option) => (
-                  <MenuItem key={option.id} value={option?.id}>
-                    {option?.name}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-            )} */}
             <RHFTextField name="name" label="Insumo" />
 
             <RHFTextField name="price" label="Precio unitario" />
-
-            {/* <RHFTextField name="bio" label="Biografía" /> */}
 
             <LoadingButton
               type="submit"

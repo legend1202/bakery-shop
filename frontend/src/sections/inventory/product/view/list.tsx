@@ -124,7 +124,7 @@ export default function MngProductListView() {
     },
     {
       field: 'price',
-      headerName: 'Precio',
+      headerName: 'Costo unitario',
       minWidth: 100,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellPrice params={params} />,
@@ -150,12 +150,6 @@ export default function MngProductListView() {
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellAmount params={params} />,
     },
-    /* {
-      field: 'bio',
-      headerName: 'Biografía',
-      minWidth: 180,
-      renderCell: (params) => <RenderCellBio params={params} />,
-    }, */
     {
       field: 'status',
       headerName: 'Estatus',
