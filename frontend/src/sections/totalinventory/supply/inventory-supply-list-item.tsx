@@ -49,6 +49,34 @@ export function RenderCellAmount({ params }: ParamsProps) {
   );
 }
 
+export function RenderCellLatestOrder({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.latestOrder?.quantity || ''}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
+export function RenderCellLatestUsed({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.latestUsed ? -params.row.latestUsed.quantity : ''}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
 export function RenderCellStatus({ params }: ParamsProps) {
   const getStatusText = (status: number) => {
     if (status === 0) {

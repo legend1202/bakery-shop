@@ -16,6 +16,7 @@ const SaleReportPage = lazy(() => import('src/pages/Report/sale/list'));
 const AttendanceReportPage = lazy(() => import('src/pages/Report/attendance/list'));
 const ProductInventoryPage = lazy(() => import('src/pages/totalinventory/product'));
 const SupplyInventoryPage = lazy(() => import('src/pages/totalinventory/supply'));
+const ReportCashCutPage = lazy(() => import('src/pages/Report/cashcut'));
 
 export const reportRoutes = [
   {
@@ -36,6 +37,7 @@ export const reportRoutes = [
       { path: paths.report.attendance, element: <AttendanceReportPage /> },
       { path: paths.inventory.product.root, element: <ProductInventoryPage /> },
       { path: paths.inventory.supply.root, element: <SupplyInventoryPage /> },
+      { path: paths.report.cashcut, element: <ReportCashCutPage /> },
     ],
   },
 ];

@@ -12,7 +12,12 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 
 import { ITSupply } from 'src/types/supply';
 
-import { RenderCellAmount, RenderCellProduct } from '../inventory-supply-list-item';
+import {
+  RenderCellAmount,
+  RenderCellProduct,
+  RenderCellLatestUsed,
+  RenderCellLatestOrder,
+} from '../inventory-supply-list-item';
 
 const HIDE_COLUMNS = {
   category: false,
@@ -42,7 +47,7 @@ export default function MngProductListView() {
       field: 'supplyId',
       headerName: 'Insumos',
       flex: 1,
-      minWidth: 320,
+      minWidth: 140,
       hideable: false,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellProduct params={params} />,
@@ -50,9 +55,23 @@ export default function MngProductListView() {
     {
       field: 'quantity',
       headerName: 'Cantidad',
-      minWidth: 500,
+      minWidth: 140,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellAmount params={params} />,
+    },
+    {
+      field: 'latestOrder.quantity',
+      headerName: 'Última órden',
+      minWidth: 140,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellLatestOrder params={params} />,
+    },
+    {
+      field: 'latestused.quantity',
+      headerName: 'Último uso',
+      minWidth: 140,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellLatestUsed params={params} />,
     },
   ];
 

@@ -35,4 +35,6 @@ export type ITSupply = {
   totalQuantity: number;
   supplyDetails: ISupply;
   supplyId: string;
+  latestOrder: any;
+  latestUsed: any;
 };

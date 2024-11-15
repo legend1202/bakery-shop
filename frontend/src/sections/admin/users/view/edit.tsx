@@ -1,7 +1,5 @@
 import Container from '@mui/material/Container';
 
-import { paths } from 'src/routes/paths';
-
 import { useTranslate } from 'src/locales';
 import { useGetUserById } from 'src/api/admin';
 
@@ -24,14 +22,8 @@ export default function UserEditView({ id }: Props) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t('EMPLEADOS')}
-        links={[
-          { name: t('EMPLEADOS'), href: paths.admin.users.create },
-          {
-            name: t('Editar'),
-            href: paths.admin.users.create,
-          },
-        ]}
+        heading={t('PERSONAL')}
+        links={[{ name: '' }]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}

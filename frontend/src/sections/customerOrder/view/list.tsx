@@ -24,6 +24,7 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import { IMProduct, IProductCount } from 'src/types/product';
 
@@ -240,6 +241,16 @@ export default function CustomerOrderListView() {
         flexDirection: 'column',
       }}
     >
+      <CustomBreadcrumbs
+        heading="ÓRDENES DE PEDIDOS"
+        links={[{ name: '' }]}
+        sx={{
+          mb: {
+            xs: 3,
+            md: 5,
+          },
+        }}
+      />
       {renderEditForm}
 
       <Card

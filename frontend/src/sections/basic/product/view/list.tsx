@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
@@ -67,10 +67,10 @@ export default function ProductListView() {
     }
   }, [products]);
 
-  const handleEditRow = useCallback((data: IProduct) => {
+  /* const handleEditRow = useCallback((data: IProduct) => {
     setCurrentProduct(data);
     setOpenForm(true);
-  }, []);
+  }, []); */
 
   const handleDeleteRow = async (id: string) => {
     settableLoading(true);
@@ -95,12 +95,6 @@ export default function ProductListView() {
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellName params={params} />,
     },
-    /*  {
-      field: 'branch',
-      headerName: 'Branch',
-      minWidth: 240,
-      renderCell: (params) => <RenderCellBranch params={params} />,
-    }, */
     {
       field: 'price',
       headerName: 'Precio',
@@ -123,12 +117,6 @@ export default function ProductListView() {
       renderCell: (params) => <RenderCellSize params={params} />,
     },
 
-    /* {
-      field: 'bio',
-      headerName: 'Biografía',
-      minWidth: 280,
-      renderCell: (params) => <RenderCellBio params={params} />,
-    }, */
     {
       type: 'actions',
       field: 'actions',
@@ -140,12 +128,12 @@ export default function ProductListView() {
       filterable: false,
       disableColumnMenu: true,
       getActions: (params) => [
-        <GridActionsCellItem
+        /*  <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:pen-bold" />}
           label="Editar"
           onClick={() => handleEditRow(params.row)}
-        />,
+        />, */
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:eye-bold" />}

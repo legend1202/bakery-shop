@@ -2,7 +2,7 @@ import { Stack } from '@mui/system';
 import { GridCellParams } from '@mui/x-data-grid';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fDate } from 'src/utils/format-time';
+import { fmDate } from 'src/utils/format-time';
 import { getQuantityBySupplyId } from 'src/utils/product';
 
 import Label from 'src/components/label/label';
@@ -102,7 +102,7 @@ export function RenderCellTotal({ params }: ParamsProps) {
 export function RenderCellStatus({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.status ? 'Accept' : 'Pending'}
+      primary={params.row.status ? 'Aceptar' : 'Pendiente'}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
@@ -132,8 +132,8 @@ export function RenderCellDate({ params, lastRowId }: CreateAtParamsProps) {
     <ListItemText
       primary={
         lastRowId === params.row.id
-          ? `${fDate(params.row.createdAt)} (Última orden)`
-          : fDate(params.row.createdAt)
+          ? `${fmDate(params.row.createdAt)} (Última orden)`
+          : fmDate(params.row.createdAt)
       }
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{

@@ -9,6 +9,7 @@ import supplyRoutes from './supply.routes';
 import productRoutes from './product.routes';
 import attendanceRoutes from './attendance.routes';
 import inventoryRoutes from './inventory.routes';
+import checkcutRoutes from './cashcut.routes';
 
 import { sendResponse } from '../utils/response.utils';
 
@@ -24,5 +25,7 @@ router.use('/api/supply', supplyRoutes);
 router.use('/api/product', productRoutes);
 router.use('/api/attendance', attendanceRoutes);
 router.use('/api/inventory', inventoryRoutes);
+router.use('/api/checkcut', checkcutRoutes);
+
 
 export default router;

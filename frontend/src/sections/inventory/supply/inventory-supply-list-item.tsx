@@ -56,7 +56,7 @@ export function RenderCellAmount({ params, lastRowId }: CreateAtParamsProps) {
 export function RenderCellStatus({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.status ? 'Used' : 'Pending'}
+      primary={params.row.status ? 'Usada' : 'Pendiente'}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

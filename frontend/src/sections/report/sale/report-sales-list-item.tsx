@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import { GridCellParams } from '@mui/x-data-grid';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fDate, fTime } from 'src/utils/format-time';
+import { fTime, fmDate } from 'src/utils/format-time';
 
 type ParamsProps = {
   params: GridCellParams;
@@ -59,7 +59,7 @@ export function RenderCellTotal({ params }: ParamsProps) {
 export function RenderCellCreated({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={fDate(params.row.createdAt)}
+      primary={fmDate(params.row.createdAt)}
       secondary={fTime(params.row.createdAt)}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{

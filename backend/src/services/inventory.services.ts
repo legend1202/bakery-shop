@@ -292,37 +292,57 @@ export const handleGetInventoryOfSupply = async (
   } else {
     const result = await MngSuppiesModel.aggregate([
       {
-        // Match only documents with status = 1 (confirmed)
+        // Match only documents with status = true
         $match: { status: true },
       },
       {
         $group: {
-          _id: '$supplyId', // Group by productId
-          totalQuantity: { $sum: '$quantity' }, // Sum quantity for each productId
+          _id: '$supplyId', // Group by supplyId
+          totalQuantity: { $sum: '$quantity' }, // Sum quantity for each supplyId
+          latestOrder: {
+            $max: {
+              $cond: [
+                { $gt: ['$quantity', 0] }, // Check if quantity > 0
+                '$$ROOT', // Return the whole document
+                null,
+              ],
+            },
+          },
+          latestUsed: {
+            $max: {
+              $cond: [
+                { $lt: ['$quantity', 0] }, // Check if quantity < 0
+                '$$ROOT', // Return the whole document
+                null,
+              ],
+            },
+          },
         },
       },
       {
-        // Lookup product details from ProductsModel
+        // Lookup product details from SuppliesModel
         $lookup: {
-          from: 'supplies', // The collection name for ProductsModel
-          localField: '_id', // _id contains the productId
-          foreignField: 'id', // 'id' field in ProductsModel
+          from: 'supplies', // The collection name for SuppliesModel
+          localField: '_id', // _id contains the supplyId
+          foreignField: 'id', // 'id' field in SuppliesModel
           as: 'supplyDetails',
         },
       },
       {
-        // Unwind productDetails array to get individual product objects
+        // Unwind supplyDetails array to get individual product objects
         $unwind: '$supplyDetails',
       },
       {
         $project: {
           id: '$_id', // Exclude _id field from the output
-          supplyId: '$_id', // Rename _id to productId
+          supplyId: '$_id', // Rename _id to supplyId
           totalQuantity: 1, // Include totalQuantity in the output
-          'supplyDetails.name': 1, // Include product name
-          'productDetails.price': 1, // Include product price
-          'productDetails.code': 1, // Include product price
-          'productDetails.size': 1, // Include product price
+          'supplyDetails.name': 1, // Include supply name
+          'supplyDetails.price': 1, // Include supply price
+          'supplyDetails.code': 1, // Include supply code
+          'supplyDetails.size': 1, // Include supply size
+          latestOrder: 1, // Include latest order record
+          latestUsed: 1, // Include latest used record
         },
       },
     ]);

@@ -103,4 +103,8 @@ export const endpoints = {
     product: '/api/inventory/product',
     supply: '/api/inventory/supply',
   },
+  checkcut: {
+    getCheckcut: '/api/checkcut/get',
+    create: '/api/checkcut/register',
+  },
 };
