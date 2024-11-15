@@ -186,7 +186,7 @@ export default function ProductListView() {
           links={[{ name: '' }]}
           action={
             <Button onClick={handleNewOwnerPopOver} variant="contained">
-              Nuevo producto
+              nuevo producto
             </Button>
           }
           sx={{

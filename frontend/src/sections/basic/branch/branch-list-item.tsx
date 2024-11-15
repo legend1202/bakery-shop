@@ -87,6 +87,19 @@ export function RenderCellEmployeeRole({ params }: ParamsProps) {
     />
   );
 }
+export function RenderCellEmployeeEmail({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.email}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
 
 export function RenderCellProductName({ params }: ParamsProps) {
   return (
@@ -106,6 +119,34 @@ export function RenderCellProductQuantity({ params }: ParamsProps) {
   return (
     <ListItemText
       primary={params.row.totalQuantity}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
+export function RenderCellProductCode({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.productDetails.code}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
+export function RenderCellProductSize({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.productDetails.size}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

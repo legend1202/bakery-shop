@@ -1,10 +1,10 @@
 // import isEqual from "lodash/isEqual";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { Stack } from '@mui/system';
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
-import { Button, Dialog, DialogTitle, DialogActions } from '@mui/material';
+import { Tab, Tabs, Button, Dialog, DialogTitle, DialogActions } from '@mui/material';
 import {
   DataGrid,
   GridColDef,
@@ -35,8 +35,11 @@ import {
   RenderCellName,
   RenderCellLocation,
   RenderCellProductName,
+  RenderCellProductCode,
+  RenderCellProductSize,
   RenderCellEmployeeName,
   RenderCellEmployeeRole,
+  RenderCellEmployeeEmail,
   RenderCellProductQuantity,
 } from '../branch-list-item';
 
@@ -45,6 +48,19 @@ const HIDE_COLUMNS = {
 };
 
 const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
+
+const TABS = [
+  {
+    value: 'employee',
+    label: 'LISTA DE PERSONAL',
+    icon: <Iconify icon="solar:user-id-bold" width={24} />,
+  },
+  {
+    value: 'product',
+    label: 'LISTA DE PRODUCTOS',
+    icon: <Iconify icon="solar:heart-bold" width={24} />,
+  },
+];
 
 // ----------------------------------------------------------------------
 
@@ -77,6 +93,12 @@ export default function BranchListView() {
 
   const [columnVisibilityModel, setColumnVisibilityModel] =
     useState<GridColumnVisibilityModel>(HIDE_COLUMNS);
+
+  const [currentTab, setCurrentTab] = useState('employee');
+
+  const handleChangeTab = useCallback((event: React.SyntheticEvent, newValue: string) => {
+    setCurrentTab(newValue);
+  }, []);
 
   useEffect(() => {
     if (branches) {
@@ -138,7 +160,6 @@ export default function BranchListView() {
 
     const branchDetail = await GetDetailByBranchId(branchId);
     if (branchDetail.success) {
-      console.log(branchDetail.result);
       setProducts(branchDetail.result.products);
       setUsers(branchDetail.result.users);
     } else {
@@ -202,6 +223,14 @@ export default function BranchListView() {
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellEmployeeRole params={params} />,
     },
+    {
+      field: 'email',
+      headerName: 'E-mail',
+      flex: 1,
+      minWidth: 140,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellEmployeeEmail params={params} />,
+    },
   ];
   const columnsOfProducts: GridColDef[] = [
     {
@@ -220,6 +249,22 @@ export default function BranchListView() {
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellProductQuantity params={params} />,
     },
+    {
+      field: 'productDetails.code',
+      headerName: 'Código',
+      flex: 1,
+      minWidth: 140,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellProductCode params={params} />,
+    },
+    {
+      field: 'productdetails.size',
+      headerName: 'Tamaño',
+      flex: 1,
+      minWidth: 140,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellProductSize params={params} />,
+    },
   ];
 
   const getTogglableColumns = () =>
@@ -237,97 +282,114 @@ export default function BranchListView() {
       sx={{
         flexGrow: 1,
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
       }}
     >
-      <Card
-        sx={{
-          mt: { xs: 2, md: 1 },
-          height: { xs: 200, md: 400 },
-          flexGrow: { md: 1 },
-          display: { md: 'flex' },
-          flexDirection: { md: 'column' },
-        }}
-      >
-        <DataGrid
+      <Card>
+        <Tabs
+          value={currentTab}
+          onChange={handleChangeTab}
           sx={{
-            px: { xs: 1, md: 2 },
+            bgcolor: 'background.paper',
           }}
-          rows={users}
-          columns={columnsOfUsers}
-          loading={brachesLoading}
-          getRowHeight={() => 'auto'}
-          pageSizeOptions={[5, 10, 25]}
-          initialState={{
-            pagination: {
-              paginationModel: { pageSize: 10 },
-            },
-          }}
-          columnVisibilityModel={columnVisibilityModel}
-          onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-          localeText={{
-            MuiTablePagination: {
-              labelRowsPerPage: 'Filas por página',
-              labelDisplayedRows: ({ from, to, count }) =>
-                `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
-            },
-            toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
-          }}
-          slots={{
-            noRowsOverlay: () => <EmptyContent title="Sin datos" />,
-            noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
-          }}
-          slotProps={{
-            columnsPanel: {
-              getTogglableColumns,
-            },
-          }}
-        />
+        >
+          {TABS.map((tab) => (
+            <Tab key={tab.value} value={tab.value} icon={tab.icon} label={tab.label} />
+          ))}
+        </Tabs>
       </Card>
-      <Card
-        sx={{
-          mt: { xs: 2, md: 1 },
-          height: { xs: 200, md: 400 },
-          flexGrow: { md: 1 },
-          display: { md: 'flex' },
-          flexDirection: { md: 'column' },
-        }}
-      >
-        <DataGrid
+      {currentTab === 'employee' && (
+        <Card
           sx={{
-            px: { xs: 1, md: 2 },
+            mt: { xs: 2, md: 1 },
+            height: { xs: 200, md: 400 },
+            flexGrow: { md: 1 },
+            display: { md: 'flex' },
+            flexDirection: { md: 'column' },
           }}
-          rows={products}
-          columns={columnsOfProducts}
-          loading={brachesLoading}
-          getRowHeight={() => 'auto'}
-          pageSizeOptions={[5, 10, 25]}
-          initialState={{
-            pagination: {
-              paginationModel: { pageSize: 10 },
-            },
+        >
+          <DataGrid
+            sx={{
+              px: { xs: 1, md: 2 },
+            }}
+            rows={users}
+            columns={columnsOfUsers}
+            loading={brachesLoading}
+            getRowHeight={() => 'auto'}
+            pageSizeOptions={[5, 10, 25]}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 10 },
+              },
+            }}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+            localeText={{
+              MuiTablePagination: {
+                labelRowsPerPage: 'Filas por página',
+                labelDisplayedRows: ({ from, to, count }) =>
+                  `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
+              },
+              toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
+            }}
+            slots={{
+              noRowsOverlay: () => <EmptyContent title="Sin datos" />,
+              noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
+            }}
+            slotProps={{
+              columnsPanel: {
+                getTogglableColumns,
+              },
+            }}
+          />
+        </Card>
+      )}
+      {currentTab === 'product' && (
+        <Card
+          sx={{
+            mt: { xs: 2, md: 1 },
+            height: { xs: 200, md: 400 },
+            flexGrow: { md: 1 },
+            display: { md: 'flex' },
+            flexDirection: { md: 'column' },
           }}
-          columnVisibilityModel={columnVisibilityModel}
-          onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-          localeText={{
-            MuiTablePagination: {
-              labelRowsPerPage: 'Filas por página',
-              labelDisplayedRows: ({ from, to, count }) =>
-                `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
-            },
-            toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
-          }}
-          slots={{
-            noRowsOverlay: () => <EmptyContent title="Sin datos" />,
-            noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
-          }}
-          slotProps={{
-            columnsPanel: {
-              getTogglableColumns,
-            },
-          }}
-        />
-      </Card>
+        >
+          <DataGrid
+            sx={{
+              px: { xs: 1, md: 2 },
+            }}
+            rows={products}
+            columns={columnsOfProducts}
+            loading={brachesLoading}
+            getRowHeight={() => 'auto'}
+            pageSizeOptions={[5, 10, 25]}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 10 },
+              },
+            }}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+            localeText={{
+              MuiTablePagination: {
+                labelRowsPerPage: 'Filas por página',
+                labelDisplayedRows: ({ from, to, count }) =>
+                  `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
+              },
+              toolbarQuickFilterPlaceholder: 'Buscar…', // Customizing "Search…" text
+            }}
+            slots={{
+              noRowsOverlay: () => <EmptyContent title="Sin datos" />,
+              noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
+            }}
+            slotProps={{
+              columnsPanel: {
+                getTogglableColumns,
+              },
+            }}
+          />
+        </Card>
+      )}
     </Container>
   );
   return (

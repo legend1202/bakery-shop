@@ -142,6 +142,8 @@ export const handleGetDetail = async (branchId?: string) => {
         totalQuantity: 1, // Include the calculated total quantity
         'productDetails.name': 1, // Include product name
         'productDetails.price': 1, // Include product price
+        'productDetails.code': 1, // Include product price
+        'productDetails.size': 1, // Include product price
       },
     },
   ]);

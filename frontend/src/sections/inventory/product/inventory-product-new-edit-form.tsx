@@ -128,7 +128,7 @@ export default function InventoryProductNewEditForm({ afterSavebranch }: Props) 
                 justifyContent: 'flex-end',
               }}
             >
-              Agregar
+              agregar
             </LoadingButton>
           </Box>
         </Stack>

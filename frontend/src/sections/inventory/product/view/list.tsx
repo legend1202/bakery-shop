@@ -152,7 +152,7 @@ export default function MngProductListView() {
     },
     {
       field: 'status',
-      headerName: 'Estatus',
+      headerName: 'Estado',
       minWidth: 100,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellStatus params={params} />,
