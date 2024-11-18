@@ -110,6 +110,8 @@ export const paths = {
     sale: `${ROOTS.REPORT}/sale`,
     attendance: `${ROOTS.REPORT}/attendance`,
     cashcut: `${ROOTS.REPORT}/cashcut`,
+    cashcutlist: `${ROOTS.REPORT}/cashcutlist`,
+    cashcutlist_details: (saleDate: string) => `${ROOTS.REPORT}/cashcutlist/${saleDate}`,
   },
   shift: {
     root: `${ROOTS.SHIFT}`,

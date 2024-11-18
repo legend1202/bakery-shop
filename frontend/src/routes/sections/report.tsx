@@ -17,6 +17,8 @@ const AttendanceReportPage = lazy(() => import('src/pages/Report/attendance/list
 const ProductInventoryPage = lazy(() => import('src/pages/totalinventory/product'));
 const SupplyInventoryPage = lazy(() => import('src/pages/totalinventory/supply'));
 const ReportCashCutPage = lazy(() => import('src/pages/Report/cashcut'));
+const ReportCashCutListPage = lazy(() => import('src/pages/Report/cashcutlist'));
+const ReportCashCutDetailPage = lazy(() => import('src/pages/Report/cashcutlist/detail'));
 
 export const reportRoutes = [
   {
@@ -38,6 +40,8 @@ export const reportRoutes = [
       { path: paths.inventory.product.root, element: <ProductInventoryPage /> },
       { path: paths.inventory.supply.root, element: <SupplyInventoryPage /> },
       { path: paths.report.cashcut, element: <ReportCashCutPage /> },
+      { path: paths.report.cashcutlist, element: <ReportCashCutListPage /> },
+      { path: `${paths.report.cashcutlist}/:saleDate`, element: <ReportCashCutDetailPage /> },
     ],
   },
 ];

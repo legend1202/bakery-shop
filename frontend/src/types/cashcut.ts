@@ -17,3 +17,10 @@ export type ICashcutData = {
   totalSales: number;
   cashcutData: ICashcut[];
 };
+
+export type ICashcutList = {
+  id: string;
+  saleDate: string;
+  cashcutTotal: number;
+  salesTotal: number;
+};

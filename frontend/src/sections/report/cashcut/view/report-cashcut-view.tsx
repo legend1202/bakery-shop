@@ -8,7 +8,15 @@ import Card from '@mui/material/Card';
 import { Box, Stack } from '@mui/system';
 import Container from '@mui/material/Container';
 import { DataGrid, GridColDef, GridColumnVisibilityModel } from '@mui/x-data-grid';
-import { Button, Dialog, TextField, DialogTitle, DialogActions } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  Divider,
+  TextField,
+  Typography,
+  DialogTitle,
+  DialogActions,
+} from '@mui/material';
 
 import { GetCashcut, createCashcut } from 'src/api/checkcut';
 
@@ -45,6 +53,8 @@ export default function ReportCashCutView() {
   const [currentCashcutData, setCurrentCashcutData] = useState<ICashcutData>();
 
   const [cashcutValue, setCashcutValue] = useState<number | string>('');
+
+  const [total, setTotal] = useState(0);
 
   const [columnVisibilityModel, setColumnVisibilityModel] =
     useState<GridColumnVisibilityModel>(HIDE_COLUMNS);
@@ -148,7 +158,6 @@ export default function ReportCashCutView() {
 
     const result = await createCashcut(saveData);
     if (result.data.success) {
-      console.log(result.data);
       const updatedData = result.data.result;
       const filteredCashcut = tableData.filter(
         (cashcut) => cashcut.cashcutData[0].id !== updatedData.id
@@ -192,6 +201,15 @@ export default function ReportCashCutView() {
       </Box>
     </Card>
   );
+
+  useEffect(() => {
+    setTotal(0);
+    if (tableData) {
+      tableData.forEach((item) => {
+        setTotal(total + item.totalSales);
+      });
+    }
+  }, [tableData, setTotal, total]);
 
   return (
     <>
@@ -269,6 +287,21 @@ export default function ReportCashCutView() {
               }}
             />
           )}
+        </Card>
+        <Divider />
+        <Card
+          sx={{
+            p: 4,
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Typography>Fecha: {saleDate}</Typography>
+          <Stack>
+            <Typography>Total: {total}</Typography>
+          </Stack>
         </Card>
       </Container>
       <Dialog maxWidth="md" open={openDetail} onClose={onCloseForm}>

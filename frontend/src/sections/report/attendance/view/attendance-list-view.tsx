@@ -3,34 +3,37 @@ import { useForm } from 'react-hook-form';
 import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { Stack } from '@mui/system';
 import Card from '@mui/material/Card';
-import { Box, Stack } from '@mui/system';
 import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
-import { Button, Dialog, DialogTitle, DialogActions } from '@mui/material';
 import { DataGrid, GridColDef, GridColumnVisibilityModel } from '@mui/x-data-grid';
+import { Button, Dialog, Divider, Typography, DialogTitle, DialogActions } from '@mui/material';
 
 import { isSuperAdminFn } from 'src/utils/role-check';
-import { shouldCountAsHalf } from 'src/utils/attendanceTimeValidator';
+import { calWorkHours, calTotalWorkHours } from 'src/utils/attendanceTimeValidator';
 
 import { GetUserById } from 'src/api/admin';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetBranchLists } from 'src/api/branch';
 import { useGetAttendance } from 'src/api/attendance';
 
-import Label from 'src/components/label/label';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import EmptyContent from 'src/components/empty-content/empty-content';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 import { IUserItem } from 'src/types/user';
-import { ResultItem } from 'src/types/attendance';
+import { ResultItem, ITAttendance } from 'src/types/attendance';
 
 import {
   RenderCellName,
   RenderCellBranch,
   RenderCellPayroll,
+  RenderCellShiftEnd,
+  RenderCellShiftStart,
+  RenderCellShiftPeriod,
+  RenderCellAttendaceDate,
 } from '../report-attendance-list-item';
 
 // ----------------------------------------------------------------------
@@ -57,6 +60,8 @@ export default function ReportSaleView() {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
 
   const [tableData, setTableData] = useState<ResultItem[]>([]);
+
+  const [attendaceDetails, setAttendanceDetails] = useState<ITAttendance[]>([]);
 
   const [selectedUser, setSelectedUser] = useState<IUserItem>();
 
@@ -103,12 +108,13 @@ export default function ReportSaleView() {
             const createdAt = new Date(item.createdAt);
             const updatedAt = new Date(item.updatedAt);
 
-            const { startTime } = item.userDetails;
-            const endTime = item.userDetails.endTIme;
+            /* const { startTime } = item.userDetails;
+            const endTime = item.userDetails.endTIme; */
             const payrate = Number(item?.userDetails?.payment);
 
             // Determine the increment value based on the time of day
-            const increment = shouldCountAsHalf(createdAt, updatedAt, startTime, endTime) ? 1 : 0.5;
+            /* const increment = shouldCountAsHalf(createdAt, updatedAt, startTime, endTime) ? 1 : 0.5; */
+            const increment = calWorkHours(createdAt, updatedAt);
 
             // Initialize the count for this userId if not already done
             if (!acc[userId]) {
@@ -121,7 +127,7 @@ export default function ReportSaleView() {
               };
             }
             // Increment the count for this userId
-            acc[userId].count += increment * payrate || 200;
+            acc[userId].count += increment * Number(payrate);
             return acc;
           },
           {} as Record<string, ResultItem>
@@ -144,13 +150,15 @@ export default function ReportSaleView() {
             const createdAt = new Date(item.createdAt);
             const updatedAt = new Date(item.updatedAt);
 
-            const { startTime } = item.userDetails;
-            const endTime = item.userDetails.endTIme;
+            /* const { startTime } = item.userDetails;
+            const endTime = item.userDetails.endTIme; */
             const payrate = Number(item?.userDetails?.payment) || 200;
 
             // Determine the increment value based on the time of day
-            const increment = shouldCountAsHalf(createdAt, updatedAt, startTime, endTime) ? 1 : 0.5;
+            /* const increment = shouldCountAsHalf(createdAt, updatedAt, startTime, endTime) ? 1 : 0.5; */
+            const increment = calWorkHours(createdAt, updatedAt);
 
+            console.log(increment);
             // Initialize the count for this userId if not already done
             if (!acc[userId]) {
               acc[userId] = {
@@ -162,7 +170,7 @@ export default function ReportSaleView() {
               };
             }
             // Increment the count for this userId
-            acc[userId].count += increment * payrate;
+            acc[userId].count += (increment / 40) * Number(payrate);
             return acc;
           },
           {} as Record<string, ResultItem>
@@ -207,6 +215,48 @@ export default function ReportSaleView() {
     },
   ];
 
+  const columnsDetail: GridColDef[] = [
+    {
+      field: 'userId',
+      headerName: 'Fecha',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellAttendaceDate params={params} />,
+    },
+    {
+      field: 'createdAt',
+      headerName: 'Inicio de turno',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      sortable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellShiftStart params={params} />,
+    },
+    {
+      field: 'updatedAt',
+      headerName: 'Fin de turno',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      sortable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellShiftEnd params={params} />,
+    },
+    {
+      field: 'status',
+      headerName: 'Horas',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      sortable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => <RenderCellShiftPeriod params={params} />,
+    },
+  ];
+
   const getTogglableColumns = () =>
     columns
       .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
@@ -214,6 +264,12 @@ export default function ReportSaleView() {
 
   const handleShowDetailDialog = async (userId: string) => {
     setOpenDetail(true);
+
+    const filteredAttendace = attendances.filter(
+      (attend) => attend.userId === userId && attend.createdAt.startsWith(values.month)
+    );
+
+    setAttendanceDetails(filteredAttendace);
 
     const userDetail = await GetUserById(userId);
     if (userDetail.success) {
@@ -228,54 +284,126 @@ export default function ReportSaleView() {
   };
 
   const renderProperties = (
-    <Container
-      maxWidth={settings.themeStretch ? false : 'lg'}
+    <Card
       sx={{
-        flexGrow: 1,
-        display: 'flex',
-        flexDirection: 'row',
+        mt: { xs: 2, md: 1 },
       }}
     >
       <Card
         sx={{
-          mt: { xs: 2, md: 1 },
+          mb: { xs: 4, md: 2 },
         }}
       >
-        <Box
-          rowGap={3}
-          columnGap={3}
-          display="grid"
-          gridTemplateColumns={{
-            xs: 'repeat(1, 1fr)',
-            sm: 'repeat(7, 1fr)',
+        <Typography>{`${selectedUser?.firstName} ${selectedUser?.lastName}`}</Typography>
+      </Card>
+      <Divider />
+      <Card
+        sx={{
+          mt: { xs: 2, md: 1 },
+          flexGrow: { md: 1 },
+        }}
+      >
+        {attendaceDetails && (
+          <DataGrid
+            rows={attendaceDetails}
+            columns={columnsDetail}
+            loading={!attendaceDetails}
+            getRowHeight={() => 'auto'}
+            pageSizeOptions={[5, 10, 25]}
+            sx={{
+              px: { xs: 1, md: 2 },
+            }}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 10 },
+              },
+            }}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+            localeText={{
+              MuiTablePagination: {
+                labelRowsPerPage: 'Filas por página',
+                labelDisplayedRows: ({ from, to, count }) =>
+                  `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`,
+              },
+              toolbarQuickFilterPlaceholder: 'Buscar…',
+            }}
+            slots={{
+              noRowsOverlay: () => <EmptyContent title="Sin datos" />,
+              noResultsOverlay: () => <EmptyContent title="No se encontraron resultados" />,
+            }}
+            slotProps={{
+              columnsPanel: {
+                getTogglableColumns,
+              },
+            }}
+          />
+        )}
+      </Card>
+      <Divider />
+
+      <Card
+        sx={{
+          mt: { xs: 4, md: 2 },
+          p: 4,
+        }}
+      >
+        <Stack
+          sx={{
+            flexGrow: { md: 1 },
+            display: { md: 'flex' },
+            flexDirection: { md: 'row' },
+            justifyContent: 'space-between',
           }}
         >
-          <Label>LUN</Label>
-          <Label>MAR</Label>
-          <Label>MIE</Label>
-          <Label>JUE</Label>
-          <Label>VIE</Label>
-          <Label>SAB</Label>
-          <Label>DOM</Label>
-
-          <Label>{selectedUser?.mon_ini}</Label>
-          <Label>{selectedUser?.tue_ini}</Label>
-          <Label>{selectedUser?.wed_ini}</Label>
-          <Label>{selectedUser?.thu_ini}</Label>
-          <Label>{selectedUser?.fri_ini}</Label>
-          <Label>{selectedUser?.sat_ini}</Label>
-          <Label>{selectedUser?.sun_ini}</Label>
-
-          <Label>{selectedUser?.mon_end}</Label>
-          <Label>{selectedUser?.tue_end}</Label>
-          <Label>{selectedUser?.wed_end}</Label>
-          <Label>{selectedUser?.thu_end}</Label>
-          <Label>{selectedUser?.fri_end}</Label>
-          <Label>{selectedUser?.sat_end}</Label>
-          <Label>{selectedUser?.sun_end}</Label>
-        </Box>
+          <Typography>Total horas</Typography>
+          <Typography>{calTotalWorkHours(attendaceDetails)}</Typography>
+        </Stack>
+        <Stack
+          sx={{
+            flexGrow: { md: 1 },
+            display: { md: 'flex' },
+            flexDirection: { md: 'row' },
+            justifyContent: 'space-between',
+          }}
+        >
+          <Typography>Horas a laborar: </Typography>
+          <Typography>40 / semana</Typography>
+        </Stack>
+        <Stack
+          sx={{
+            flexGrow: { md: 1 },
+            display: { md: 'flex' },
+            flexDirection: { md: 'row' },
+            justifyContent: 'space-between',
+          }}
+        >
+          <Typography>Tasa de pago : </Typography>
+          <Typography>{selectedUser?.payment} / semana</Typography>
+        </Stack>
       </Card>
-    </Container>
+      <Card
+        sx={{
+          mt: { xs: 4, md: 2 },
+          p: 4,
+        }}
+      >
+        <Stack
+          sx={{
+            flexGrow: { md: 1 },
+            display: { md: 'flex' },
+            flexDirection: { md: 'row' },
+            justifyContent: 'space-between',
+          }}
+        >
+          <Typography>Total a pagar :</Typography>
+          <Typography>
+            {' '}
+            {(calTotalWorkHours(attendaceDetails) / 40) * Number(selectedUser?.payment)}
+          </Typography>
+        </Stack>
+      </Card>
+    </Card>
   );
 
   return (
@@ -286,7 +414,7 @@ export default function ReportSaleView() {
           links={[
             {
               name: '',
-            }
+            },
           ]}
           action={
             <FormProvider methods={methods}>
@@ -377,7 +505,7 @@ export default function ReportSaleView() {
         </Card>
       </Container>
       <Dialog maxWidth="md" open={openDetail} onClose={onCloseForm}>
-        <DialogTitle sx={{ minHeight: 76 }}>Turno</DialogTitle>
+        <DialogTitle sx={{ minHeight: 76 }}>LISTA DE ASISTENCIA</DialogTitle>
         <Stack spacing={3} sx={{ px: 3 }}>
           {renderProperties}
           <DialogActions>

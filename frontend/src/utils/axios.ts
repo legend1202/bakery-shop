@@ -105,6 +105,7 @@ export const endpoints = {
   },
   checkcut: {
     getCheckcut: '/api/checkcut/get',
+    getTotalCheckcut: '/api/checkcut/getTotal',
     create: '/api/checkcut/register',
   },
 };

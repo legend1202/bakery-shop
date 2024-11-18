@@ -261,6 +261,14 @@ export function useNavData() {
             roles: ['SUPERADMIN'],
             color: '#ff8000',
           },
+          {
+            title: t('LISTA DE CORTES DE CAJA'),
+            /* title: t('Appointment'), */
+            path: paths.report.cashcutlist,
+            icon: ICONS.user,
+            roles: ['SUPERADMIN'],
+            color: '#ff8000',
+          },
         ],
       },
     ],

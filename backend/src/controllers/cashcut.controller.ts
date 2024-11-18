@@ -7,6 +7,7 @@ import { RequestError } from '../utils/globalErrorHandler';
 import {
   handleCashcutCreation,
   handleGetCashcut,
+  handleGetTotalCashcut,
 } from '../services/cashcut.services';
 
 import { DecodedToken } from '../types/req.type';
@@ -33,6 +34,17 @@ export const getCashcut = async (req: Request, res: Response) => {
   const { saleDate } = req.params;
   try {
     const cashcut = await handleGetCashcut(saleDate);
+    return sendResponse(res, 200, 'Get handleGetCashcut', {
+      cashcut,
+    });
+  } catch (error) {
+    throw new RequestError(`${error}`, 500);
+  }
+};
+
+export const getTotalCashcut = async (req: Request, res: Response) => {
+  try {
+    const cashcut = await handleGetTotalCashcut();
     return sendResponse(res, 200, 'Get handleGetCashcut', {
       cashcut,
     });

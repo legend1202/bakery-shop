@@ -83,11 +83,64 @@ export const handleGetCashcut = async (saleDate: string): Promise<any> => {
     },
   ]);
 
-  console.log(results);
-
   return results;
 };
 
+export const handleGetTotalCashcut = async (): Promise<any> => {
+  const result = await CashcutModel.aggregate([
+    // Group cashcuts by date
+    {
+      $group: {
+        _id: '$saleDate',
+        totalCashcut: { $sum: '$total' },
+      },
+    },
+    // Perform a lookup on Sales
+    {
+      $lookup: {
+        from: 'sales', // Sales collection name
+        let: { date: '$_id' },
+        pipeline: [
+          {
+            $addFields: {
+              formattedDate: {
+                $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
+              },
+            },
+          },
+          {
+            $match: {
+              $expr: { $eq: ['$formattedDate', '$$date'] },
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              totalSales: { $sum: '$total' },
+            },
+          },
+        ],
+        as: 'salesData',
+      },
+    },
+    // Unwind salesData to merge it properly
+    {
+      $unwind: {
+        path: '$salesData',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    // Add totalSales to the result
+    {
+      $project: {
+        saleDate: '$_id',
+        totalCashcut: 1,
+        totalSales: { $ifNull: ['$salesData.totalSales', 0] },
+      },
+    },
+  ]);
+  return result;
+};
 export const handleCashcutCreation = async (
   cashcut: Partial<CashcutDocument> & Document
 ): Promise<CashcutDocument> => {
