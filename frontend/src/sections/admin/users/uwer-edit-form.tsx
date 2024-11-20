@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -43,6 +43,20 @@ export default function UserEditForm({ currentUser }: Props) {
   const { branches } = useGetBranchLists();
 
   const password = useBoolean();
+
+  const [isMonDisabled, setIsMonDisabled] = useState(true);
+
+  const [isTueDisabled, setIsTueDisabled] = useState(true);
+
+  const [isWedDisabled, setIsWedDisabled] = useState(true);
+
+  const [isThuDisabled, setIsThuDisabled] = useState(true);
+
+  const [isFriDisabled, setIsFriDisabled] = useState(true);
+
+  const [isSatDisabled, setIsSatDisabled] = useState(true);
+
+  const [isSunDisabled, setIsSunDisabled] = useState(true);
 
   const NewProductSchema = Yup.object().shape({
     firstName: Yup.string().required('Este campo es obligatorio'),
@@ -94,10 +108,10 @@ export default function UserEditForm({ currentUser }: Props) {
       thu_end: '15',
       fri_ini: '9',
       fri_end: '15',
-      sat_ini: '9',
-      sat_end: '15',
-      sun_ini: '9',
-      sun_end: '15',
+      sat_ini: '',
+      sat_end: '',
+      sun_ini: '',
+      sun_end: '',
     }),
     []
   );
@@ -241,29 +255,78 @@ export default function UserEditForm({ currentUser }: Props) {
               sm: 'repeat(7, 1fr)',
             }}
           >
-            <Label>LUN</Label>
-            <Label>MAR</Label>
-            <Label>MIE</Label>
-            <Label>JUE</Label>
-            <Label>VIE</Label>
-            <Label>SAB</Label>
-            <Label>DOM</Label>
+            <Label
+              style={{
+                backgroundColor: isMonDisabled ? 'rgba(145, 158, 171, 0.16)' : 'lightyellow',
+              }}
+              onClick={() => setIsMonDisabled(!isMonDisabled)}
+            >
+              LUN
+            </Label>
+            <Label
+              style={{
+                backgroundColor: isTueDisabled ? 'rgba(145, 158, 171, 0.16)' : 'lightyellow',
+              }}
+              onClick={() => setIsTueDisabled(!isTueDisabled)}
+            >
+              MAR
+            </Label>
+            <Label
+              style={{
+                backgroundColor: isWedDisabled ? 'rgba(145, 158, 171, 0.16)' : 'lightyellow',
+              }}
+              onClick={() => setIsWedDisabled(!isWedDisabled)}
+            >
+              MIE
+            </Label>
+            <Label
+              style={{
+                backgroundColor: isThuDisabled ? 'rgba(145, 158, 171, 0.16)' : 'lightyellow',
+              }}
+              onClick={() => setIsThuDisabled(!isThuDisabled)}
+            >
+              JUE
+            </Label>
+            <Label
+              style={{
+                backgroundColor: isFriDisabled ? 'rgba(145, 158, 171, 0.16)' : 'lightyellow',
+              }}
+              onClick={() => setIsFriDisabled(!isFriDisabled)}
+            >
+              VIE
+            </Label>
+            <Label
+              style={{
+                backgroundColor: isSatDisabled ? 'rgba(145, 158, 171, 0.16)' : 'lightyellow',
+              }}
+              onClick={() => setIsSatDisabled(!isSatDisabled)}
+            >
+              SAB
+            </Label>
+            <Label
+              style={{
+                backgroundColor: isSunDisabled ? 'rgba(145, 158, 171, 0.16)' : 'lightyellow',
+              }}
+              onClick={() => setIsSunDisabled(!isSunDisabled)}
+            >
+              DOM
+            </Label>
 
-            <RHFTextField name="mon_ini" label="INI" />
-            <RHFTextField name="tue_ini" label="INI" />
-            <RHFTextField name="wed_ini" label="INI" />
-            <RHFTextField name="thu_ini" label="INI" />
-            <RHFTextField name="fri_ini" label="INI" />
-            <RHFTextField name="sat_ini" label="TINI" />
-            <RHFTextField name="sun_ini" label="INI" />
+            <RHFTextField name="mon_ini" label="INI" disabled={isMonDisabled} />
+            <RHFTextField name="tue_ini" label="INI" disabled={isTueDisabled} />
+            <RHFTextField name="wed_ini" label="INI" disabled={isWedDisabled} />
+            <RHFTextField name="thu_ini" label="INI" disabled={isThuDisabled} />
+            <RHFTextField name="fri_ini" label="INI" disabled={isFriDisabled} />
+            <RHFTextField name="sat_ini" label="TINI" disabled={isSatDisabled} />
+            <RHFTextField name="sun_ini" label="INI" disabled={isSunDisabled} />
 
-            <RHFTextField name="mon_end" label="END" />
-            <RHFTextField name="tue_end" label="END" />
-            <RHFTextField name="wed_end" label="END" />
-            <RHFTextField name="thu_end" label="END" />
-            <RHFTextField name="fri_end" label="END" />
-            <RHFTextField name="sat_end" label="END" />
-            <RHFTextField name="sun_end" label="END" />
+            <RHFTextField name="mon_end" label="END" disabled={isMonDisabled} />
+            <RHFTextField name="tue_end" label="END" disabled={isTueDisabled} />
+            <RHFTextField name="wed_end" label="END" disabled={isWedDisabled} />
+            <RHFTextField name="thu_end" label="END" disabled={isThuDisabled} />
+            <RHFTextField name="fri_end" label="END" disabled={isFriDisabled} />
+            <RHFTextField name="sat_end" label="END" disabled={isSatDisabled} />
+            <RHFTextField name="sun_end" label="END" disabled={isSunDisabled} />
             {/* <RHFTextField name="color" label="Color" /> */}
           </Box>
 

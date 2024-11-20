@@ -36,7 +36,6 @@ export default function MngSupplyNewEditForm({ afterSavebranch }: Props) {
       /* branchId: '', */
       supplyId: '',
       quantity: 0,
-      bio: '',
     }),
     []
   );
@@ -89,7 +88,7 @@ export default function MngSupplyNewEditForm({ afterSavebranch }: Props) {
             display="grid"
             gridTemplateColumns={{
               xs: 'repeat(1, 1fr)',
-              sm: 'repeat(4, 1fr)',
+              sm: 'repeat(3, 1fr)',
             }}
           >
             {/* {branches && (
@@ -125,16 +124,14 @@ export default function MngSupplyNewEditForm({ afterSavebranch }: Props) {
 
             <RHFTextField name="quantity" label="Cantidad" />
 
-            <RHFTextField name="bio" label="Costo unitario" />
+            {/* <RHFTextField name="bio" label="Costo unitario" /> */}
 
             <LoadingButton
               type="submit"
               size="large"
               loading={isSubmitting}
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-end',
+                textAlign: 'center',
               }}
             >
               guardar

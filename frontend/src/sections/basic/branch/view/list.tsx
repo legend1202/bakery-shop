@@ -211,7 +211,7 @@ export default function BranchListView() {
       field: 'name',
       headerName: 'Personal',
       flex: 1,
-      minWidth: 140,
+      minWidth: 180,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellEmployeeName params={params} />,
     },
@@ -237,7 +237,7 @@ export default function BranchListView() {
       field: 'name',
       headerName: 'Producto',
       flex: 1,
-      minWidth: 140,
+      minWidth: 180,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellProductName params={params} />,
     },
@@ -460,7 +460,7 @@ export default function BranchListView() {
           />
         </Card>
       </Container>
-      <Dialog fullWidth maxWidth="md" open={openForm} onClose={onCloseForm}>
+      <Dialog fullWidth maxWidth="lg" open={openForm} onClose={onCloseForm}>
         <DialogTitle sx={{ minHeight: 76 }}>Detalles de la sucursal</DialogTitle>
         <Stack spacing={3} sx={{ px: 3 }}>
           {renderProperties}

@@ -102,10 +102,10 @@ export default function UserNewEditForm() {
       thu_end: '15',
       fri_ini: '9',
       fri_end: '15',
-      sat_ini: '9',
-      sat_end: '15',
-      sun_ini: '9',
-      sun_end: '15',
+      sat_ini: '',
+      sat_end: '',
+      sun_ini: '',
+      sun_end: '',
     }),
     []
   );
