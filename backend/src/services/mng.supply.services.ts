@@ -125,12 +125,8 @@ export const handleDeleteMngSupply = async (
   id: string,
   options?: QueryOptions<MngSupplies>
 ) => {
-  const product = await findOneMngSupply({ id });
-  if (product?.status) {
-    throw new RequestError('This Order could not be deleted', 400);
-  } else {
-    return await MngSuppiesModel.deleteOne({ id: id });
-  }
+  /* const product = await findOneMngSupply({ id }); */
+  return await MngSuppiesModel.deleteOne({ id: id });
 };
 
 export async function findOneMngSupply(

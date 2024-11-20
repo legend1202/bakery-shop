@@ -56,11 +56,13 @@ export default function InventorySupplyListView() {
   useEffect(() => {
     if (supplies) {
       const filteredProducts = supplies.filter((product) => product.quantity < 0);
-      const latestProduct = filteredProducts.reduce((latest, product) =>
-        new Date(product.createdAt) > new Date(latest.createdAt) ? product : latest
-      );
-      setLastRowId(latestProduct.id);
-      setTableData(filteredProducts);
+      if (filteredProducts.length > 0) {
+        const latestProduct = filteredProducts?.reduce((latest, product) =>
+          new Date(product.createdAt) > new Date(latest.createdAt) ? product : latest
+        );
+        setLastRowId(latestProduct?.id);
+        setTableData(filteredProducts);
+      }
     }
   }, [supplies]);
 
@@ -71,6 +73,7 @@ export default function InventorySupplyListView() {
 
   const handleDeleteRow = async (id: string) => {
     const updateData = { id };
+    console.log(id);
     const result = await MngSupplyDelete(updateData);
     if (result.data.success) {
       enqueueSnackbar(t('Eliminada'));

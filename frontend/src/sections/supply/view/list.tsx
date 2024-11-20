@@ -64,11 +64,13 @@ export default function MngSupplyListView() {
     if (supplies) {
       setSupplyCount(sumBySupplyId(supplies));
       const filteredProducts = supplies.filter((product) => product.quantity > 0);
-      const latestProduct = filteredProducts.reduce((latest, product) =>
-        new Date(product.createdAt) > new Date(latest.createdAt) ? product : latest
-      );
-      setLastRowId(latestProduct.id);
-      setTableData(filteredProducts);
+      if (filteredProducts.length > 0) {
+        const latestProduct = filteredProducts.reduce((latest, product) =>
+          new Date(product.createdAt) > new Date(latest.createdAt) ? product : latest
+        );
+        setLastRowId(latestProduct.id);
+        setTableData(filteredProducts);
+      }
     }
   }, [supplies]);
 
