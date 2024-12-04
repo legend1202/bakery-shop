@@ -208,8 +208,9 @@ export default function ReportCashCutView() {
     let tempTotal = 0;
     if (tableData.length > 0) {
       tableData.forEach((item) => {
-        const cashcut = item.cashcutData[0].total || 0;
-        tempTotal += item.totalSales - Number(cashcut);
+        const cashcut = item?.cashcutData[0]?.total || 0;
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        tempTotal += item?.totalSales - Number(cashcut);
       });
     }
     setTotal(tempTotal);
