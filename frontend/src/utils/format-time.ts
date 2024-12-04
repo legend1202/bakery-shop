@@ -5,7 +5,7 @@ import { format, getTime, formatDistanceToNow } from 'date-fns';
 type InputValue = Date | string | number | null | undefined | any;
 
 export function fmDate(date: any, newFormat?: string) {
-  const fm = newFormat || 'MM/dd/yyyy';
+  const fm = newFormat || 'dd/MM/yyyy';
 
   return date ? format(new Date(date), fm) : '';
 }

@@ -213,7 +213,7 @@ export default function ReportCashCutView() {
       });
     }
     setTotal(tempTotal);
-  }, [tableData, total]);
+  }, [tableData]);
 
   return (
     <>
