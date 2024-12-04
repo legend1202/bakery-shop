@@ -18,6 +18,8 @@ import {
   DialogActions,
 } from '@mui/material';
 
+import { fmDate } from 'src/utils/format-time';
+
 import { GetCashcut, createCashcut } from 'src/api/checkcut';
 
 import { useSettingsContext } from 'src/components/settings';
@@ -203,13 +205,15 @@ export default function ReportCashCutView() {
   );
 
   useEffect(() => {
-    setTotal(0);
-    if (tableData) {
+    let tempTotal = 0;
+    if (tableData.length > 0) {
       tableData.forEach((item) => {
-        setTotal(total + item.totalSales);
+        const cashcut = item.cashcutData[0].total || 0;
+        tempTotal += item.totalSales - Number(cashcut);
       });
     }
-  }, [tableData, setTotal, total]);
+    setTotal(tempTotal);
+  }, [tableData, total]);
 
   return (
     <>
@@ -298,7 +302,7 @@ export default function ReportCashCutView() {
             justifyContent: 'space-between',
           }}
         >
-          <Typography>Fecha: {saleDate}</Typography>
+          <Typography>Fecha: {fmDate(saleDate)}</Typography>
           <Stack>
             <Typography>Total: {total}</Typography>
           </Stack>

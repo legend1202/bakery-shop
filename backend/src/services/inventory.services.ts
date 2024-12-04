@@ -266,6 +266,13 @@ export const handleGetInventoryOfProduct = async (
           $unwind: '$productDetails',
         },
         {
+          $group: {
+            _id: '$_id', // Group by productId to avoid duplicates
+            totalQuantity: { $first: '$totalQuantity' }, // Take the first totalQuantity
+            productDetails: { $first: '$productDetails' }, // Take the first productDetails
+          },
+        },
+        {
           $project: {
             id: '$_id', // Rename _id to productId
             productId: '$_id',
@@ -275,6 +282,9 @@ export const handleGetInventoryOfProduct = async (
           },
         },
       ]);
+
+      console.log(result);
+
       return result;
     }
   }

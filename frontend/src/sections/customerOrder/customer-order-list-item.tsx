@@ -2,6 +2,7 @@ import { Stack } from '@mui/material';
 import { GridCellParams } from '@mui/x-data-grid';
 import ListItemText from '@mui/material/ListItemText';
 
+import { fmDate } from 'src/utils/format-time';
 import { getQuantityByProductId } from 'src/utils/product';
 
 import Label from 'src/components/label/label';
@@ -97,7 +98,7 @@ export function RenderCellAddress({ params }: ParamsProps) {
 export function RenderCellDeliverDate({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.deliverDate}
+      primary={fmDate(params.row.deliverDate)}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
