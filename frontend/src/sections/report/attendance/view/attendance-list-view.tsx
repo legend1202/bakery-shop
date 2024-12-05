@@ -127,7 +127,13 @@ export default function ReportSaleView() {
               };
             }
             // Increment the count for this userId
-            acc[userId].count += increment * Number(payrate);
+            if (item.userDetails.work_hour) {
+              acc[userId].count +=
+                (increment / Number(item.userDetails.work_hour)) * Number(payrate);
+            } else {
+              acc[userId].count += 0;
+            }
+
             return acc;
           },
           {} as Record<string, ResultItem>
@@ -158,7 +164,6 @@ export default function ReportSaleView() {
             /* const increment = shouldCountAsHalf(createdAt, updatedAt, startTime, endTime) ? 1 : 0.5; */
             const increment = calWorkHours(createdAt, updatedAt);
 
-            console.log(increment);
             // Initialize the count for this userId if not already done
             if (!acc[userId]) {
               acc[userId] = {
@@ -170,7 +175,12 @@ export default function ReportSaleView() {
               };
             }
             // Increment the count for this userId
-            acc[userId].count += (increment / 40) * Number(payrate);
+            if (item.userDetails.work_hour) {
+              acc[userId].count +=
+                (increment / Number(item.userDetails.work_hour)) * Number(payrate);
+            } else {
+              acc[userId].count += 0;
+            }
             return acc;
           },
           {} as Record<string, ResultItem>
@@ -357,7 +367,7 @@ export default function ReportSaleView() {
           }}
         >
           <Typography>Total horas</Typography>
-          <Typography>{calTotalWorkHours(attendaceDetails)}</Typography>
+          <Typography>{calTotalWorkHours(attendaceDetails).toFixed(2)}</Typography>
         </Stack>
         <Stack
           sx={{
@@ -368,7 +378,7 @@ export default function ReportSaleView() {
           }}
         >
           <Typography>Horas a laborar: </Typography>
-          <Typography>40 / semana</Typography>
+          <Typography>{selectedUser?.work_hour} / semana</Typography>
         </Stack>
         <Stack
           sx={{
@@ -398,8 +408,12 @@ export default function ReportSaleView() {
         >
           <Typography>Total a pagar :</Typography>
           <Typography>
-            {' '}
-            {(calTotalWorkHours(attendaceDetails) / 40) * Number(selectedUser?.payment)}
+            {selectedUser?.work_hour
+              ? (
+                  (calTotalWorkHours(attendaceDetails) / Number(selectedUser?.work_hour)) *
+                  Number(selectedUser?.payment)
+                ).toFixed(2)
+              : 0}
           </Typography>
         </Stack>
       </Card>

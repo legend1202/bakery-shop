@@ -37,5 +37,5 @@ export function calTotalWorkHours(attendances: ITAttendance[]): number {
     totalHours += dayHours;
   });
 
-  return Number(totalHours.toFixed(2));
+  return Number(totalHours);
 }

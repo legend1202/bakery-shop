@@ -120,6 +120,7 @@ export type IUserItem = {
   sat_end?: string;
   sun_ini?: string;
   sun_end?: string;
+  work_hour?: number;
 };
 
 export type ITUserItem = {

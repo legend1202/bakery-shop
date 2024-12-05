@@ -133,6 +133,22 @@ export const handleUserUpdate = async (
     sun_end,
   } = user;
 
+  const work_hour =
+    Number(mon_end) +
+    Number(tue_end) +
+    Number(wed_end) +
+    Number(thu_end) +
+    Number(fri_end) +
+    Number(sat_end) +
+    Number(sun_end) -
+    Number(mon_ini) -
+    Number(tue_ini) -
+    Number(wed_ini) -
+    Number(thu_ini) -
+    Number(fri_ini) -
+    Number(sat_ini) -
+    Number(sun_ini);
+
   if (!firstName) throw new RequestError('First Name must not be empty', 400);
   if (!lastName) throw new RequestError('Last Name must not be empty', 400);
   if (!email) throw new RequestError('Invalid fields', 400);
@@ -144,6 +160,7 @@ export const handleUserUpdate = async (
   const newUser = {
     ...user,
     userId,
+    work_hour,
     password: hashedPassword,
     passwordStr: password,
   };
@@ -317,27 +334,43 @@ export const createNewUser = async (
   userId?: string,
   role?: string,
   bio?: string,
-  startTime?: string,
-  endTime?: string,
+  startTime?: number,
+  endTime?: number,
   payment?: string,
   color?: string,
-  mon_ini?: string,
-  mon_end?: string,
-  tue_ini?: string,
-  tue_end?: string,
-  wed_ini?: string,
-  wed_end?: string,
-  thu_ini?: string,
-  thu_end?: string,
-  fri_ini?: string,
-  fri_end?: string,
-  sat_ini?: string,
-  sat_end?: string,
-  sun_ini?: string,
-  sun_end?: string,
+  mon_ini?: number,
+  mon_end?: number,
+  tue_ini?: number,
+  tue_end?: number,
+  wed_ini?: number,
+  wed_end?: number,
+  thu_ini?: number,
+  thu_end?: number,
+  fri_ini?: number,
+  fri_end?: number,
+  sat_ini?: number,
+  sat_end?: number,
+  sun_ini?: number,
+  sun_end?: number,
   session?: ClientSession
 ): Promise<Users> => {
   const userData = await UsersModel.findOne({ id: userId });
+
+  const work_hour =
+    Number(mon_end) +
+    Number(tue_end) +
+    Number(wed_end) +
+    Number(thu_end) +
+    Number(fri_end) +
+    Number(sat_end) +
+    Number(sun_end) -
+    Number(mon_ini) -
+    Number(tue_ini) -
+    Number(wed_ini) -
+    Number(thu_ini) -
+    Number(fri_ini) -
+    Number(sat_ini) -
+    Number(sun_ini);
 
   if (userData?.role === 'SUPERADMIN') {
     const newUser = new UsersModel({
@@ -368,6 +401,7 @@ export const createNewUser = async (
       sat_end,
       sun_ini,
       sun_end,
+      work_hour,
     });
 
     await newUser.save({ session });
@@ -400,6 +434,7 @@ export const createNewUser = async (
       sat_end,
       sun_ini,
       sun_end,
+      work_hour,
     });
 
     await newUser.save({ session });
