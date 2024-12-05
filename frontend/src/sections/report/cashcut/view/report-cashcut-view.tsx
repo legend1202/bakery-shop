@@ -25,7 +25,6 @@ import { GetCashcut, createCashcut } from 'src/api/checkcut';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import EmptyContent from 'src/components/empty-content/empty-content';
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 import { ICashcutData } from 'src/types/cashcut';
 
@@ -226,20 +225,20 @@ export default function ReportCashCutView() {
               name: '',
             },
           ]}
-          action={
-            <FormProvider methods={methods}>
-              <Card
-                sx={{
-                  padding: 1,
-                  flexGrow: 1,
-                  display: 'flex',
-                  flexDirection: 'row',
-                }}
-              >
-                <RHFTextField name="saleDate" label="Date" type="date" />
-              </Card>
-            </FormProvider>
-          }
+          // action={
+          //   <FormProvider methods={methods}>
+          //     <Card
+          //       sx={{
+          //         padding: 1,
+          //         flexGrow: 1,
+          //         display: 'flex',
+          //         flexDirection: 'row',
+          //       }}
+          //     >
+          //       <RHFTextField name="saleDate" label="Date" type="date" />
+          //     </Card>
+          //   </FormProvider>
+          // }
           sx={{
             mb: { xs: 3, md: 5 },
           }}
