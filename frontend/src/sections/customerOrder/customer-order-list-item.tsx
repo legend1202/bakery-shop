@@ -70,7 +70,7 @@ export function RenderCellAmount({ params, productCount }: ParamsCountProps) {
 export function RenderCellPrice({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.price}
+      primary={params.row.total}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
@@ -141,6 +141,21 @@ export function RenderCellBio({ params }: ParamsProps) {
   return (
     <ListItemText
       primary={params.row.bio}
+      primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+      secondaryTypographyProps={{
+        mt: 0.5,
+        component: 'span',
+        typography: 'caption',
+      }}
+    />
+  );
+}
+
+
+export function RenderCellId({ params }: ParamsProps) {
+  return (
+    <ListItemText
+      primary={params.row.id}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

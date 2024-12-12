@@ -14,12 +14,14 @@ import { Branches, BranchesModel } from '../models/branch.model';
 import { Sales, SalesModel } from '../models/sale.model';
 import { Products, ProductsModel } from '../models/product.model';
 import { CashcutDocument, CashcutModel } from '../models/cashcut.model';
+import { MngProductsModel } from '../models/mng.product.model';
+import { OrdersModel } from '../models/order.model';
 
 export const handleGetCashcut = async (saleDate: string): Promise<any> => {
-  const results = await SalesModel.aggregate([
+  const resultOrder = await OrdersModel.aggregate([
     {
-      // Match sales records by saleDate only
       $match: {
+        status: 1,
         $expr: {
           $eq: [
             { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
@@ -28,7 +30,13 @@ export const handleGetCashcut = async (saleDate: string): Promise<any> => {
         },
       },
     },
-
+    {
+      $project: {
+        // Convert the 'createdAt' field to a date string with format 'YYYY-MM-DD'
+        branchId: 1,
+        total: 1, // Keep the price field
+      },
+    },
     {
       $lookup: {
         from: BranchesModel.collection.name,
@@ -48,98 +56,307 @@ export const handleGetCashcut = async (saleDate: string): Promise<any> => {
       $unwind: { path: '$branchDetails', preserveNullAndEmptyArrays: true },
     },
     {
-      // Lookup to join with cashcut data based on branchId and saleDate
-      $lookup: {
-        from: CashcutModel.collection.name,
-        localField: 'branchId',
-        foreignField: 'branchId',
-        pipeline: [
-          {
-            $match: {
-              saleDate: saleDate,
-            },
-          },
-        ],
-        as: 'cashcutData',
-      },
-    },
-    {
-      // Unwind the cashcutData array to handle cases with or without cashcut data
-      $unwind: {
-        path: '$cashcutData',
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      // Group sales by branchId to calculate total items and total price for each branch
       $group: {
+        // Group by the formatted date
         _id: '$branchId',
-        totalSales: { $sum: '$total' },
-        totalItemsSold: { $sum: '$totalItems' },
-        products: { $push: '$products' },
+        totalOrder: { $sum: '$total' }, // Calculate the total price for each group
         branchDetails: { $push: '$branchDetails' },
-        cashcutData: { $push: '$cashcutData' },
+      },
+    },
+    {
+      $sort: {
+        _id: 1, // Sort by date in ascending order
       },
     },
   ]);
 
-  return results;
+  const resultSales = await SalesModel.aggregate([
+    {
+      $match: {
+        status: true,
+        $expr: {
+          $eq: [
+            { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+            saleDate,
+          ],
+        },
+      },
+    },
+    {
+      $project: {
+        // Convert the 'createdAt' field to a date string with format 'YYYY-MM-DD'
+        branchId: 1,
+        total: 1, // Keep the price field
+      },
+    },
+    {
+      $lookup: {
+        from: BranchesModel.collection.name,
+        localField: 'branchId',
+        foreignField: 'id',
+        as: 'branchDetails',
+      },
+    },
+    {
+      $addFields: {
+        branchDetails: {
+          $ifNull: ['$branchDetails', []], // If branchDetails is null, set it to an empty array
+        },
+      },
+    },
+    {
+      $unwind: { path: '$branchDetails', preserveNullAndEmptyArrays: true },
+    },
+    {
+      $group: {
+        // Group by the formatted date
+        _id: '$branchId',
+        totalSale: { $sum: '$total' }, // Calculate the total price for each group
+        branchDetails: { $push: '$branchDetails' },
+      },
+    },
+    {
+      $sort: {
+        _id: 1, // Sort by date in ascending order
+      },
+    },
+  ]);
+
+  const mergedArray = resultOrder.map((item1) => {
+    // Find matching item in array2
+    const matchingItem = resultSales.find((item2) => item2._id === item1._id);
+
+    if (matchingItem) {
+      // Merge properties
+      return {
+        ...item1,
+        totalSale: matchingItem.totalSale,
+        branchDetails: matchingItem.branchDetails,
+      };
+    }
+
+    return item1;
+  });
+
+  // Add remaining items from array2 that don't match in array1
+  const finalArray = [
+    ...mergedArray,
+    ...resultSales.filter(
+      (item2) => !resultOrder.some((item1) => item1._id === item2._id)
+    ),
+  ];
+  return finalArray;
+};
+
+export const handleGetCashcutOfToday = async (
+  saleDate: string
+): Promise<any> => {
+  const resultOrder = await OrdersModel.aggregate([
+    {
+      $match: {
+        status: 1,
+        $expr: {
+          $eq: [
+            { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+            saleDate,
+          ],
+        },
+      },
+    },
+    {
+      $project: {
+        // Convert the 'createdAt' field to a date string with format 'YYYY-MM-DD'
+        branchId: 1,
+        total: 1, // Keep the price field
+      },
+    },
+    {
+      $lookup: {
+        from: BranchesModel.collection.name,
+        localField: 'branchId',
+        foreignField: 'id',
+        as: 'branchDetails',
+      },
+    },
+    {
+      $addFields: {
+        branchDetails: {
+          $ifNull: ['$branchDetails', []], // If branchDetails is null, set it to an empty array
+        },
+      },
+    },
+    {
+      $unwind: { path: '$branchDetails', preserveNullAndEmptyArrays: true },
+    },
+    {
+      $group: {
+        // Group by the formatted date
+        _id: '$branchId',
+        totalOrder: { $sum: '$total' }, // Calculate the total price for each group
+        branchDetails: { $push: '$branchDetails' },
+      },
+    },
+    {
+      $sort: {
+        _id: 1, // Sort by date in ascending order
+      },
+    },
+  ]);
+
+  const resultSales = await SalesModel.aggregate([
+    {
+      $match: {
+        status: false,
+        $expr: {
+          $eq: [
+            { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+            saleDate,
+          ],
+        },
+      },
+    },
+    {
+      $project: {
+        // Convert the 'createdAt' field to a date string with format 'YYYY-MM-DD'
+        branchId: 1,
+        total: 1, // Keep the price field
+      },
+    },
+    {
+      $lookup: {
+        from: BranchesModel.collection.name,
+        localField: 'branchId',
+        foreignField: 'id',
+        as: 'branchDetails',
+      },
+    },
+    {
+      $addFields: {
+        branchDetails: {
+          $ifNull: ['$branchDetails', []], // If branchDetails is null, set it to an empty array
+        },
+      },
+    },
+    {
+      $unwind: { path: '$branchDetails', preserveNullAndEmptyArrays: true },
+    },
+    {
+      $group: {
+        // Group by the formatted date
+        _id: '$branchId',
+        totalSale: { $sum: '$total' }, // Calculate the total price for each group
+        branchDetails: { $push: '$branchDetails' },
+      },
+    },
+    {
+      $sort: {
+        _id: 1, // Sort by date in ascending order
+      },
+    },
+  ]);
+
+  const mergedArray = resultOrder.map((item1) => {
+    // Find matching item in array2
+    const matchingItem = resultSales.find((item2) => item2._id === item1._id);
+
+    if (matchingItem) {
+      // Merge properties
+      return {
+        ...item1,
+        totalSale: matchingItem.totalSale,
+        branchDetails: matchingItem.branchDetails,
+      };
+    }
+
+    return item1;
+  });
+
+  // Add remaining items from array2 that don't match in array1
+  const finalArray = [
+    ...mergedArray,
+    ...resultSales.filter(
+      (item2) => !resultOrder.some((item1) => item1._id === item2._id)
+    ),
+  ];
+  return finalArray;
 };
 
 export const handleGetTotalCashcut = async (): Promise<any> => {
-  const result = await CashcutModel.aggregate([
-    // Group cashcuts by date
-    {
-      $group: {
-        _id: '$saleDate',
-        totalCashcut: { $sum: '$total' },
+  try {
+    const resultOrder = await OrdersModel.aggregate([
+      { $match: { status: 1 } },
+      {
+        $project: {
+          // Convert the 'createdAt' field to a date string with format 'YYYY-MM-DD'
+          date: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+          total: 1, // Keep the price field
+        },
       },
-    },
-    // Perform a lookup on Sales
-    {
-      $lookup: {
-        from: 'sales', // Sales collection name
-        let: { date: '$_id' },
-        pipeline: [
-          {
-            $addFields: {
-              formattedDate: {
-                $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
-              },
-            },
-          },
-          {
-            $match: {
-              $expr: { $eq: ['$formattedDate', '$$date'] },
-            },
-          },
-          {
-            $group: {
-              _id: null,
-              totalSales: { $sum: '$total' },
-            },
-          },
-        ],
-        as: 'salesData',
+      {
+        $group: {
+          // Group by the formatted date
+          _id: '$date',
+          totalOrder: { $sum: '$total' }, // Calculate the total price for each group
+        },
       },
-    },
-    // Unwind salesData to merge it properly
-    {
-      $unwind: {
-        path: '$salesData',
-        preserveNullAndEmptyArrays: true,
+      {
+        $sort: {
+          _id: 1, // Sort by date in ascending order
+        },
       },
-    },
-    // Add totalSales to the result
-    {
-      $project: {
-        saleDate: '$_id',
-        totalCashcut: 1,
-        totalSales: { $ifNull: ['$salesData.totalSales', 0] },
+    ]);
+
+    const resultSales = await SalesModel.aggregate([
+      { $match: { status: true } },
+      {
+        $project: {
+          // Convert the 'createdAt' field to a date string with format 'YYYY-MM-DD'
+          date: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+          total: 1, // Keep the price field
+        },
       },
-    },
-  ]);
-  return result;
+      {
+        $group: {
+          // Group by the formatted date
+          _id: '$date',
+          totalSale: { $sum: '$total' }, // Calculate the total price for each group
+        },
+      },
+      {
+        $sort: {
+          _id: 1, // Sort by date in ascending order
+        },
+      },
+    ]);
+
+    const mergedArray = resultOrder.map((item1) => {
+      // Find matching item in array2
+      const matchingItem = resultSales.find((item2) => item2._id === item1._id);
+
+      if (matchingItem) {
+        // Merge properties
+        return {
+          ...item1,
+          totalSale: matchingItem.totalSale,
+        };
+      }
+
+      return item1;
+    });
+
+    // Add remaining items from array2 that don't match in array1
+    const finalArray = [
+      ...mergedArray,
+      ...resultSales.filter(
+        (item2) => !resultOrder.some((item1) => item1._id === item2._id)
+      ),
+    ];
+
+    return finalArray;
+  } catch (error) {
+    console.error('Error fetching sales and product totals:', error);
+    throw error;
+  }
 };
 export const handleCashcutCreation = async (
   cashcut: Partial<CashcutDocument> & Document
@@ -185,4 +402,38 @@ export const findByIdAndUpdateCashcutDocument = async (
     ...options,
     returnDocument: 'after',
   });
+};
+
+export const handleGenerateCashcut = async (saleDate: string): Promise<any> => {
+  try {
+    // Update status to true where createdAt matches the target date
+
+    const result = await SalesModel.updateMany(
+      {
+        $match: {
+          status: false,
+          $expr: {
+            $eq: [
+              { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+              saleDate,
+            ],
+          },
+        },
+      },
+      {
+        $set: {
+          status: true,
+        },
+      }
+    );
+
+    if (result?.acknowledged) {
+      return result;
+    } else {
+      throw new RequestError(`There is no data.`, 500);
+    }
+  } catch (err) {
+    console.error(err);
+    throw new RequestError(`There is no data.`, 500);
+  }
 };

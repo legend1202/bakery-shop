@@ -176,24 +176,32 @@ export function useNavData() {
             /* title: t('Order'), */
             path: paths.mng.customOrder.list,
             icon: ICONS.user,
-            roles: ['ADMIN', 'SUPERADMIN'],
+            roles: ['SUPERADMIN'],
             color: '#008f39',
           },
         ],
       },
       {
-        subheader: t('Gestión'),
+        subheader: t('VENTAS'),
         /* subheader: t('Management'), */
         roles: ['SALESPERSON'],
         color: '#ff8000',
         items: [
           // sale
           {
-            title: t('Venta'),
+            title: t('Productos'),
             /* title: t('Sale'), */
             path: paths.sale.purchase,
             icon: ICONS.user,
             roles: ['SALESPERSON'],
+          },
+          // Custome Product Order
+          {
+            title: t('Pedidos'),
+            /* title: t('Order'), */
+            path: paths.mng.customOrder.list,
+            icon: ICONS.user,
+            roles: ['SALESPERSON', 'SUPERADMIN'],
           },
           {
             title: t('Lista'),
@@ -219,14 +227,14 @@ export function useNavData() {
             roles: ['SUPERADMIN', 'ADMIN'],
             color: '#ff8000',
           },
-          {
-            title: t('Órdenes de pedido'),
-            /* title: t('Purchase orders'), */
-            path: paths.report.customproduct,
-            icon: ICONS.user,
-            roles: ['SUPERADMIN', 'ADMIN'],
-            color: '#ff8000',
-          },
+          // {
+          //   title: t('Órdenes de pedido'),
+          //   /* title: t('Purchase orders'), */
+          //   path: paths.report.customproduct,
+          //   icon: ICONS.user,
+          //   roles: ['SUPERADMIN', 'ADMIN'],
+          //   color: '#ff8000',
+          // },
           // sale
           {
             title: t('Órdenes de insumos'),
@@ -253,16 +261,17 @@ export function useNavData() {
             roles: ['ADMIN', 'SUPERADMIN'],
             color: '#ff8000',
           },
+          // {
+          //   title: t('Corte de caja'),
+          //   /* title: t('Appointment'), */
+          //   path: paths.report.cashcut,
+          //   icon: ICONS.user,
+          //   roles: ['SUPERADMIN'],
+          //   color: '#ff8000',
+          // },
           {
+            // title: t('LISTA DE CORTES DE CAJA'),
             title: t('Corte de caja'),
-            /* title: t('Appointment'), */
-            path: paths.report.cashcut,
-            icon: ICONS.user,
-            roles: ['SUPERADMIN'],
-            color: '#ff8000',
-          },
-          {
-            title: t('LISTA DE CORTES DE CAJA'),
             /* title: t('Appointment'), */
             path: paths.report.cashcutlist,
             icon: ICONS.user,

@@ -1,13 +1,23 @@
-import { format, getTime, formatDistanceToNow } from 'date-fns';
+import { format, getTime, parseISO, formatDistanceToNow } from 'date-fns';
 
 // ----------------------------------------------------------------------
 
 type InputValue = Date | string | number | null | undefined | any;
 
+// export function fmDate(date: any, newFormat?: string) {
+//   const fm = newFormat || 'dd/MM/yyyy';
+
+//   return date ? format(new Date(date), fm) : '';
+// }
+
 export function fmDate(date: any, newFormat?: string) {
   const fm = newFormat || 'dd/MM/yyyy';
 
-  return date ? format(new Date(date), fm) : '';
+  // Parse the date using parseISO if it's a string in ISO format
+  // eslint-disable-next-line no-nested-ternary
+  const parsedDate = date ? (typeof date === 'string' ? parseISO(date) : new Date(date)) : null;
+
+  return parsedDate ? format(parsedDate, fm) : '';
 }
 
 export function fDate(date: InputValue, newFormat?: string) {

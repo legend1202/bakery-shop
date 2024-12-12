@@ -5,6 +5,8 @@ import {
   getCashcut,
   createCashcut,
   getTotalCashcut,
+  getCashcutOfToday,
+  generateCashcut
 } from '../controllers/cashcut.controller';
 
 import { errorWrap } from '../utils/error.utils';
@@ -13,9 +15,21 @@ import { withTransaction } from '../utils/transactionHelper';
 const router = express.Router();
 
 router.get(
+  '/generate/:saleDate',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  withTransaction(errorWrap(generateCashcut, 'Could not get Products'))
+);
+
+router.get(
   '/get/:saleDate',
   errorWrap(verifyToken, 'Could not verify JWT token'),
   withTransaction(errorWrap(getCashcut, 'Could not get Products'))
+);
+
+router.get(
+  '/getToday/:saleDate',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  withTransaction(errorWrap(getCashcutOfToday, 'Could not get Products'))
 );
 
 router.get(

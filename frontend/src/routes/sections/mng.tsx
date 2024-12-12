@@ -16,6 +16,7 @@ const PurchasePage = lazy(() => import('src/pages/Sale/purchase'));
 const CheckoutPage = lazy(() => import('src/pages/Sale/checkout'));
 const AttendanceMngPage = lazy(() => import('src/pages/attendance/list'));
 const CustomerOrderListPage = lazy(() => import('src/pages/customerOrder/list'));
+const CustomerOrderCreatePage = lazy(() => import('src/pages/customerOrder/create'));
 
 export const mngRoutes = [
   {
@@ -31,6 +32,7 @@ export const mngRoutes = [
     children: [
       { path: paths.mng.product.list, element: <MngProductListPage /> },
       { path: paths.mng.customOrder.list, element: <CustomerOrderListPage /> },
+      { path: paths.mng.customOrder.create, element: <CustomerOrderCreatePage /> },
       { path: paths.mng.supply.list, element: <MngSuppliesListPage /> },
       { path: paths.sale.list, element: <SaleMngPage /> },
       { path: paths.sale.purchase, element: <PurchasePage /> },

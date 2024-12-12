@@ -14,6 +14,7 @@ export interface Sales extends Document {
   products: Product[];
   totalItems: number;
   total: number;
+  status: boolean;
   bio: string;
   createdAt: Date;
   updateAt: Date;
@@ -57,6 +58,7 @@ const SalesSchema = new Schema<Sales>(
     },
     totalItems: { type: Number },
     total: { type: Number },
+    status: { type: Boolean, default: false },
     bio: { type: String },
   },
   {

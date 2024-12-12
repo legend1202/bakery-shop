@@ -282,9 +282,7 @@ export const handleGetInventoryOfProduct = async (
           },
         },
       ]);
-
-      console.log(result);
-
+      
       return result;
     }
   }

@@ -11,8 +11,8 @@ import { useRouter } from 'src/routes/hooks';
 
 import { fmDate } from 'src/utils/format-time';
 
-import { GetCashcut } from 'src/api/checkcut';
 import { useGetSaleListsByUser } from 'src/api/sale';
+import { GenerateCashcut, GetCashcutOfToday } from 'src/api/checkcut';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -42,7 +42,7 @@ type Props = {
   saleDate: string;
 };
 
-export default function ReportCashCutDetailView({ saleDate }: Props) {
+export default function ReportCashcutGenerateView({ saleDate }: Props) {
   const settings = useSettingsContext();
 
   const router = useRouter();
@@ -64,7 +64,7 @@ export default function ReportCashCutDetailView({ saleDate }: Props) {
   useMemo(() => {
     if (saleDate) {
       const handleGetData = async () => {
-        const result = await GetCashcut(saleDate);
+        const result = await GetCashcutOfToday(saleDate);
         if (result.success && result.result.cashcut.length > 0) {
           const temptCashcutData: ICashcutList[] = result.result.cashcut;
           setTableData(temptCashcutData);
@@ -146,8 +146,14 @@ export default function ReportCashCutDetailView({ saleDate }: Props) {
     setOpenForm(false);
   };
 
-  const handleBackCashcutList = () => {
-    router.push(paths.report.cashcutlist);
+  const handleGenerateCashcut = async () => {
+    const currentMonth = new Date().toISOString().slice(0, 10);
+    const result = await GenerateCashcut(currentMonth);
+    if (result.success) {
+      router.push(paths.report.cashcutlist);
+    } else {
+      console.log(result);
+    }
   };
 
   return (
@@ -161,8 +167,8 @@ export default function ReportCashCutDetailView({ saleDate }: Props) {
             },
           ]}
           action={
-            <Button variant="contained" onClick={handleBackCashcutList}>
-              atrés
+            <Button variant="contained" onClick={handleGenerateCashcut}>
+              generar corte
             </Button>
           }
           sx={{

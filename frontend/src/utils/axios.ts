@@ -105,7 +105,15 @@ export const endpoints = {
   },
   checkcut: {
     getCheckcut: '/api/checkcut/get',
+    getCheckcutOfToday: '/api/checkcut/getToday',
     getTotalCheckcut: '/api/checkcut/getTotal',
     create: '/api/checkcut/register',
+    generateCashcut: '/api/checkcut/generate',
+  },
+  order: {
+    create: '/api/order/create',
+    getOrder: '/api/order/get-order',
+    delete: '/api/order/delete',
+    confirm: '/api/order/confirm',
   },
 };

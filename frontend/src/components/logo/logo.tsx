@@ -1,10 +1,9 @@
-import { forwardRef } from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 
-import Link from '@mui/material/Link';
 import { Button } from '@mui/material';
 import { BoxProps } from '@mui/material/Box';
 
-import { RouterLink } from 'src/routes/components';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -14,6 +13,36 @@ export interface LogoProps extends BoxProps {
 
 const Logo = forwardRef<HTMLDivElement, LogoProps>(
   ({ disabledLink = false, sx, ...other }, ref) => {
+    const { user } = useAuthContext();
+
+    const [isSuperAdmin, setIsSuperAdmin] = useState<boolean>(false);
+
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
+    const [isSalesPerson, setIsSalesPerson] = useState<boolean>(false);
+
+    useEffect(() => {
+      if (user?.role) {
+        if (user.role === 'SUPERADMIN') {
+          setIsSuperAdmin(true);
+          setIsAdmin(false);
+          setIsSalesPerson(false);
+        }
+
+        if (user.role === 'ADMIN') {
+          setIsSuperAdmin(false);
+          setIsAdmin(true);
+          setIsSalesPerson(false);
+        }
+
+        if (user.role === 'SALESPERSON') {
+          setIsSuperAdmin(false);
+          setIsAdmin(false);
+          setIsSalesPerson(true);
+        }
+      }
+    }, [user]);
+
     const logo = (
       /*  <Avatar
         src="/assets/background/logo.jpg"
@@ -28,15 +57,23 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
       <Button color="error">Página Principal</Button>
     );
 
-    if (disabledLink) {
-      return logo;
+    if (isSuperAdmin) {
+      return <Button color="error">ADMINISTRACIÓN GENERAL</Button>;
+    }
+    if (isAdmin) {
+      return <Button color="error">ADMINISTRACIÓN DE SUCURSAL</Button>;
     }
 
-    return (
-      <Link component={RouterLink} href="/" sx={{ display: 'contents' }}>
-        {logo}
-      </Link>
-    );
+    if (isSalesPerson) {
+      return <Button color="error">MOSTRADOR</Button>;
+    }
+    return logo;
+
+    // return (
+    //   <Link component={RouterLink} href="/" sx={{ display: 'contents' }}>
+    //     {logo}
+    //   </Link>
+    // );
   }
 );
 

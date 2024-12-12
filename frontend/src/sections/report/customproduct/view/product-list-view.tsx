@@ -15,8 +15,8 @@ import { DataGrid, GridColDef, GridColumnVisibilityModel } from '@mui/x-data-gri
 import { isSuperAdminFn } from 'src/utils/role-check';
 
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetOrderLists } from 'src/api/order';
 import { useGetBranchLists } from 'src/api/branch';
-import { useGetProductListsByUser, useGetMngCustomerProductListsByUser } from 'src/api/product';
 
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
@@ -24,13 +24,11 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
 import EmptyContent from 'src/components/empty-content/empty-content';
 
-import { IMProduct } from 'src/types/product';
+import { IOrder } from 'src/types/order';
 
 import ProductAnalytic from '../product-analytic';
 import {
-  RenderCellPrice,
   RenderCellBranch,
-  RenderCellStatus,
   RenderCellProduct,
   RenderCellCreated,
   RenderCellQuantity,
@@ -52,19 +50,17 @@ export default function CustomProductListView() {
 
   const { user } = useAuthContext();
 
+  const { orders, ordersLoading } = useGetOrderLists();
+
   const isSuperAdmin = isSuperAdminFn(user?.role);
 
   const { branches } = useGetBranchLists();
 
-  const { products: basicProducts } = useGetProductListsByUser();
-
-  const { products, productsLoading } = useGetMngCustomerProductListsByUser();
-
   const [columnVisibilityModel, setColumnVisibilityModel] =
     useState<GridColumnVisibilityModel>(HIDE_COLUMNS);
 
-  const [tableData, setTableData] = useState<IMProduct[]>([]);
-  const [temptableData, setTempTableData] = useState<IMProduct[]>([]);
+  const [tableData, setTableData] = useState<IOrder[]>([]);
+  const [temptableData, setTempTableData] = useState<IOrder[]>([]);
 
   const NewProductSchema = Yup.object().shape({
     branchId: Yup.string().required('Name is required'),
@@ -89,97 +85,27 @@ export default function CustomProductListView() {
   const values = watch();
 
   useEffect(() => {
-    if (products) {
-      const updatedTableData = products.filter((product) => product.customOrderFlag === true);
+    if (orders) {
+      const updatedTableData = orders.filter((order) => order.status === 1);
       setTempTableData(updatedTableData);
     }
-  }, [products]);
+  }, [orders]);
 
   useEffect(() => {
-    if (values.branchId && values.productId) {
+    if (values.branchId) {
       const updatedTableData = temptableData.filter(
-        (product) => product.branchId === values.branchId && product.productId === values.productId
+        (product) => product.branchId === values.branchId
       );
       setTableData(updatedTableData);
     } else {
-      if (values.branchId) {
-        const updatedTableData = temptableData.filter(
-          (product) => product.branchId === values.branchId
-        );
-        setTableData(updatedTableData);
-      }
-      if (values.productId) {
-        const updatedTableData = temptableData.filter(
-          (product) => product.productId === values.productId
-        );
-        setTableData(updatedTableData);
-      }
-    }
-    if (!values.branchId && !values.productId) {
       setTableData(temptableData);
     }
   }, [values, temptableData]);
 
   const deliveryAmountProducts = () =>
     sumBy(tableData, (product) => {
-      if (product.quantity < 0 && product.status === 1) {
-        return Math.abs(product.quantity);
-      }
-      return 0;
-    });
-
-  const deliveryPriceProducts = () =>
-    sumBy(tableData, (product) => {
-      if (product.quantity < 0 && product.price && product.status === 1) {
-        return Math.abs(product.price);
-      }
-      if (
-        product.quantity < 0 &&
-        !product.price &&
-        product.status === 1 &&
-        product?.productDetails?.price
-      ) {
-        return Math.abs(product.quantity) * product.productDetails.price;
-      }
-      return 0;
-    });
-
-  const pendingTotalAmountProduct = () =>
-    sumBy(tableData, (product) => {
-      if (product.quantity < 0 && product.status === 0) {
-        return Math.abs(product.quantity);
-      }
-      return 0;
-    });
-
-  const pendingPriceProducts = () =>
-    sumBy(tableData, (product) => {
-      if (product.quantity < 0 && product.price && product.status === 0) {
-        return Math.abs(product.price);
-      }
-      if (
-        product.quantity < 0 &&
-        !product.price &&
-        product.status === 0 &&
-        product?.productDetails?.price
-      ) {
-        return Math.abs(product.quantity) * product.productDetails.price;
-      }
-      return 0;
-    });
-
-  const cancellTotalAmountProduct = () =>
-    sumBy(tableData, (product) => {
-      if (product.quantity < 0 && product.status === 2) {
-        return Math.abs(product.quantity);
-      }
-      return 0;
-    });
-
-  const cancellPriceProducts = () =>
-    sumBy(tableData, (product) => {
-      if (product.price && product.quantity < 0 && product.status === 2) {
-        return Math.abs(product.price);
+      if (product?.total) {
+        return Number(product.total);
       }
       return 0;
     });
@@ -187,7 +113,7 @@ export default function CustomProductListView() {
   const columns: GridColDef[] = [
     {
       field: 'productId',
-      headerName: 'Producto',
+      headerName: 'ID',
       flex: 1,
       minWidth: 180,
       hideable: false,
@@ -205,22 +131,22 @@ export default function CustomProductListView() {
     },
     {
       field: 'quantity',
-      headerName: 'Cantidad',
+      headerName: 'Total',
       flex: 1,
       minWidth: 180,
       hideable: false,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellQuantity params={params} />,
     },
-    {
-      field: 'price',
-      headerName: 'Precio',
-      flex: 1,
-      minWidth: 180,
-      hideable: false,
-      disableColumnMenu: true,
-      renderCell: (params) => <RenderCellPrice params={params} />,
-    },
+    // {
+    //   field: 'price',
+    //   headerName: 'Precio',
+    //   flex: 1,
+    //   minWidth: 180,
+    //   hideable: false,
+    //   disableColumnMenu: true,
+    //   renderCell: (params) => <RenderCellPrice params={params} />,
+    // },
     {
       field: 'createdAt',
       headerName: 'Fecha',
@@ -229,15 +155,6 @@ export default function CustomProductListView() {
       hideable: false,
       disableColumnMenu: true,
       renderCell: (params) => <RenderCellCreated params={params} />,
-    },
-    {
-      field: 'status',
-      headerName: 'Estado',
-      flex: 1,
-      minWidth: 180,
-      hideable: false,
-      disableColumnMenu: true,
-      renderCell: (params) => <RenderCellStatus params={params} />,
     },
   ];
 
@@ -286,7 +203,7 @@ export default function CustomProductListView() {
                 </RHFSelect>
               )}
 
-              <RHFSelect
+              {/* <RHFSelect
                 name="productId"
                 label="Producto"
                 fullWidth
@@ -303,7 +220,7 @@ export default function CustomProductListView() {
                       {product.name}
                     </MenuItem>
                   ))}
-              </RHFSelect>
+              </RHFSelect> */}
             </Card>
           </FormProvider>
         }
@@ -336,26 +253,9 @@ export default function CustomProductListView() {
               title="Entregada"
               total={deliveryAmountProducts()}
               percent={100}
-              price={deliveryPriceProducts()}
+              price={deliveryAmountProducts()}
               icon="solar:sort-by-time-bold-duotone"
               color={theme.palette.success.main}
-            />
-
-            <ProductAnalytic
-              title="Pendiente"
-              total={pendingTotalAmountProduct()}
-              percent={100}
-              price={pendingPriceProducts()}
-              icon="solar:sort-by-time-bold-duotone"
-              color={theme.palette.warning.main}
-            />
-            <ProductAnalytic
-              title="Cancelada"
-              total={cancellTotalAmountProduct()}
-              percent={100}
-              price={cancellPriceProducts()}
-              icon="solar:file-check-bold-duotone"
-              color={theme.palette.warning.main}
             />
           </Stack>
         </Scrollbar>
@@ -374,7 +274,7 @@ export default function CustomProductListView() {
           <DataGrid
             rows={tableData}
             columns={columns}
-            loading={productsLoading}
+            loading={ordersLoading}
             getRowHeight={() => 'auto'}
             pageSizeOptions={[5, 10, 25]}
             sx={{

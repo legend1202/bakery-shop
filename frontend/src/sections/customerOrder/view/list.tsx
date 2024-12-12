@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
+import { Button } from '@mui/material';
 import Container from '@mui/material/Container';
 import {
   DataGrid,
@@ -9,16 +10,14 @@ import {
   GridColumnVisibilityModel,
 } from '@mui/x-data-grid';
 
-import { sumByProductId } from 'src/utils/product';
-import { isAdminFn, isSuperAdminFn } from 'src/utils/role-check';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
+import { isSuperAdminFn } from 'src/utils/role-check';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import {
-  MngProductDelete,
-  MngProductConfirm,
-  useGetMngCustomerProductListsByUser,
-} from 'src/api/product';
+import { OrderDelete, OrderConfirm, useGetOrderLists } from 'src/api/order';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -26,16 +25,13 @@ import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-import { IMProduct, IProductCount } from 'src/types/product';
+import { IOrder } from 'src/types/order';
 
-import CustomerOrderNewEditForm from '../customer-order-new-edit-form';
-import CustomerOrderEditFormSale from '../customer-order-new-edit-form-sale';
 import {
+  RenderCellId,
   RenderCellPrice,
   RenderCellStatus,
-  RenderCellAmount,
   RenderCellBranch,
-  RenderCellProduct,
   RenderCellAddress,
   RenderCellDeliverDate,
 } from '../customer-order-list-item';
@@ -53,21 +49,17 @@ export default function CustomerOrderListView() {
 
   const settings = useSettingsContext();
 
+  const router = useRouter();
+
   const { user } = useAuthContext();
 
-  const isAdmin = isAdminFn(user?.role);
+  const { orders, ordersLoading } = useGetOrderLists();
 
   const isSuperAdmin = isSuperAdminFn(user?.role);
 
   const { enqueueSnackbar } = useSnackbar();
 
-  /* const { products, productsLoading } = useGetCustomOrderListsByUser(); */
-
-  const { products, productsLoading } = useGetMngCustomerProductListsByUser();
-
-  const [productCount, setProductCount] = useState<IProductCount[]>([]);
-
-  const [tableData, setTableData] = useState<IMProduct[]>([]);
+  const [tableData, setTableData] = useState<IOrder[]>([]);
 
   const [reset, setReset] = useState(false);
 
@@ -75,23 +67,13 @@ export default function CustomerOrderListView() {
     useState<GridColumnVisibilityModel>(HIDE_COLUMNS);
 
   useEffect(() => {
-    if (products) {
-      setProductCount(sumByProductId(products));
-      const filteredProducts = products.filter(
-        (product) => product.quantity < 0 && product?.customOrderFlag
-      );
-      setTableData(filteredProducts);
+    if (orders) {
+      setTableData(orders);
     }
-  }, [products]);
-
-  const afterSavebranch = async (newProduct: IMProduct) => {
-    enqueueSnackbar('Creado exitosamente');
-    setTableData([...tableData, newProduct]);
-  };
+  }, [orders]);
 
   const handleDeleteRow = async (id: string) => {
-    const updateData = { id };
-    const result = await MngProductDelete(updateData);
+    const result = await OrderDelete(id);
     if (result.data) {
       enqueueSnackbar(t('Actualizada'));
       const fixedProducts = tableData.filter((product) => product.id !== result.data.id);
@@ -104,8 +86,7 @@ export default function CustomerOrderListView() {
     }
   };
   const handleConfirmRow = async (id: string) => {
-    const updateData = { id };
-    const result = await MngProductConfirm(updateData);
+    const result = await OrderConfirm(id);
 
     if (result.data) {
       enqueueSnackbar(t('Actualizada'));
@@ -146,91 +127,123 @@ export default function CustomerOrderListView() {
     ];
   };
 
-  const columns: GridColDef[] = [
-    {
-      field: 'productId',
-      headerName: 'Producto',
-      flex: 1,
-      minWidth: 180,
-      hideable: false,
-      disableColumnMenu: true,
-      renderCell: (params) => <RenderCellProduct params={params} />,
-    },
-    {
-      field: 'branchId',
-      headerName: 'Sucursal',
-      flex: 1,
-      minWidth: 180,
-      hideable: false,
-      disableColumnMenu: true,
-      renderCell: (params) => <RenderCellBranch params={params} />,
-    },
-    {
-      field: 'quantity',
-      headerName: 'Cantidad',
-      minWidth: 100,
-      disableColumnMenu: true,
-      renderCell: (params) => <RenderCellAmount params={params} productCount={productCount} />,
-    },
-    {
-      field: 'price',
-      headerName: 'Precio',
-      minWidth: 100,
-      disableColumnMenu: true,
-      renderCell: (params) => <RenderCellPrice params={params} />,
-    },
-    {
-      field: 'address',
-      headerName: 'DIRECCIÓN',
-      minWidth: 100,
-      disableColumnMenu: true,
-      renderCell: (params) => <RenderCellAddress params={params} />,
-    },
-    {
-      field: 'deliverDate',
-      headerName: 'Fecha de entrega',
-      minWidth: 140,
-      disableColumnMenu: true,
-      renderCell: (params) => <RenderCellDeliverDate params={params} />,
-    },
-    /* {
-      field: 'bio',
-      headerName: 'Biografía',
-      minWidth: 100,
-      renderCell: (params) => <RenderCellBio params={params} />,
-    }, */
-    {
-      field: 'status',
-      headerName: 'Estatus',
-      minWidth: 100,
-      disableColumnMenu: true,
-      renderCell: (params) => <RenderCellStatus params={params} />,
-    },
-    {
-      type: 'actions',
-      field: 'actions',
-      headerName: ' ',
-      align: 'right',
-      headerAlign: 'right',
-      width: 80,
-      sortable: false,
-      filterable: false,
-      disableColumnMenu: true,
-      getActions: (params) => actions(params),
-    },
-  ];
+  const columns: GridColDef[] = isSuperAdmin
+    ? [
+        {
+          field: 'id',
+          headerName: 'ID',
+          minWidth: 360,
+          disableColumnMenu: true,
+          renderCell: (params) => <RenderCellId params={params} />,
+        },
+        {
+          field: 'branchId',
+          headerName: 'Sucursal',
+          flex: 1,
+          minWidth: 140,
+          hideable: false,
+          disableColumnMenu: true,
+          renderCell: (params) => <RenderCellBranch params={params} />,
+        },
+        {
+          field: 'price',
+          headerName: 'Precio',
+          minWidth: 140,
+          disableColumnMenu: true,
+          renderCell: (params) => <RenderCellPrice params={params} />,
+        },
+        {
+          field: 'address',
+          headerName: 'DIRECCIÓN',
+          minWidth: 140,
+          disableColumnMenu: true,
+          renderCell: (params) => <RenderCellAddress params={params} />,
+        },
+        {
+          field: 'deliverDate',
+          headerName: 'Fecha de entrega',
+          minWidth: 140,
+          disableColumnMenu: true,
+          renderCell: (params) => <RenderCellDeliverDate params={params} />,
+        },
+        {
+          field: 'status',
+          headerName: 'Estatus',
+          minWidth: 100,
+          disableColumnMenu: true,
+          renderCell: (params) => <RenderCellStatus params={params} />,
+        },
+        {
+          type: 'actions',
+          field: 'actions',
+          headerName: ' ',
+          align: 'right',
+          headerAlign: 'right',
+          width: 80,
+          sortable: false,
+          filterable: false,
+          disableColumnMenu: true,
+          getActions: (params) => actions(params),
+        },
+      ]
+    : [
+        {
+          field: 'id',
+          headerName: 'ID',
+          minWidth: 360,
+          disableColumnMenu: true,
+          renderCell: (params) => <RenderCellId params={params} />,
+        },
+        {
+          field: 'price',
+          headerName: 'Precio',
+          minWidth: 200,
+          disableColumnMenu: true,
+          renderCell: (params) => <RenderCellPrice params={params} />,
+        },
+        {
+          field: 'address',
+          headerName: 'DIRECCIÓN',
+          minWidth: 200,
+          disableColumnMenu: true,
+          renderCell: (params) => <RenderCellAddress params={params} />,
+        },
+        {
+          field: 'deliverDate',
+          headerName: 'Fecha de entrega',
+          minWidth: 140,
+          disableColumnMenu: true,
+          renderCell: (params) => <RenderCellDeliverDate params={params} />,
+        },
+        {
+          field: 'status',
+          headerName: 'Estatus',
+          minWidth: 140,
+          disableColumnMenu: true,
+          renderCell: (params) => <RenderCellStatus params={params} />,
+        },
+        {
+          type: 'actions',
+          field: 'actions',
+          headerName: ' ',
+          align: 'right',
+          headerAlign: 'right',
+          width: 80,
+          sortable: false,
+          filterable: false,
+          disableColumnMenu: true,
+          getActions: (params) => actions(params),
+        },
+      ];
 
   const getTogglableColumns = () =>
     columns
       .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
       .map((column) => column.field);
 
-  const renderEditForm = (
-    <>
-      {!isSuperAdmin && isAdmin && <CustomerOrderNewEditForm afterSavebranch={afterSavebranch} />}
-      {!isSuperAdmin && !isAdmin && <CustomerOrderEditFormSale afterSavebranch={afterSavebranch} />}
-    </>
-  );
+  const handleGenerateCashcut = async () => {
+    router.push(paths.mng.customOrder.create);
+  };
 
   return (
     <Container
@@ -244,6 +257,11 @@ export default function CustomerOrderListView() {
       <CustomBreadcrumbs
         heading="ÓRDENES DE PEDIDOS"
         links={[{ name: '' }]}
+        action={
+          <Button variant="contained" onClick={handleGenerateCashcut}>
+            Create Order
+          </Button>
+        }
         sx={{
           mb: {
             xs: 3,
@@ -251,7 +269,7 @@ export default function CustomerOrderListView() {
           },
         }}
       />
-      {renderEditForm}
+      {/* {renderEditForm} */}
 
       <Card
         sx={{
@@ -268,7 +286,7 @@ export default function CustomerOrderListView() {
           }}
           rows={tableData}
           columns={columns}
-          loading={productsLoading}
+          loading={ordersLoading}
           getRowHeight={() => 'auto'}
           pageSizeOptions={[5, 10, 25]}
           initialState={{

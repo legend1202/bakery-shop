@@ -1,20 +1,65 @@
 import { Document, model, Schema } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
-export interface Orders extends Document {
+// Define the Orders interface
+export interface OrderDocument extends Document {
   id: string;
-  name: string;
-  description: string;
-  type: number; // 0 - Order(supply), 1 - Order(product)  
-  productId: string;
-  salesperson: string;
-  quantity: number;
-  status: string; // cancel, pending, success
+  userId: string;
+  salesDate: string;
+
+  packageFirm: boolean;
+
+  deliverMethod: boolean; // Pickup / Deliver
+
+  pickupStatus: boolean;
+  pickupDate: string;
+
+  deliverId: string;
+  deliverDate: string;
+
+  branchId: string;
+
+  customerName: string;
+  cellPhone: string;
+  homePhone: string;
+  address: string;
+
+  floor: string;
+  base: string;
+  people: string;
+  place: string;
+  wafer: string;
+  figure: string;
+
+  // color
+  bottom: string;
+  border: string;
+  details: string;
+  ribbon: string;
+  sabor1: string;
+  sabor2: string;
+
+  artificial: string;
+  natural: string;
+  color: string;
+  doll: string;
+  candle: string;
+
+  cake: string;
+  cakebundle: string;
+  basebundle: string;
+  dollOrCandle: string;
+
+  total: number;
+
+  status: 0; //0: pending 1: confirmed,  2: cancelled.
+
   createdAt: Date;
-  updateAt: Date;
+  updatedAt: Date;
 }
 
-const OrdersSchema = new Schema<Orders>(
+// Define the schema
+const OrdersSchema = new Schema<OrderDocument>(
   {
     id: {
       type: String,
@@ -22,37 +67,115 @@ const OrdersSchema = new Schema<Orders>(
       required: true,
       unique: true,
     },
-    name: {
+    userId: {
       type: String,
     },
-    description: {
+    salesDate: {
       type: String,
     },
-    type: {
+    packageFirm: {
+      type: Boolean,
+    },
+    deliverMethod: {
+      type: Boolean,
+    },
+    pickupDate: {
+      type: String,
+    },
+    deliverDate: {
+      type: String,
+    },
+
+    branchId: {
+      type: String,
+    },
+    customerName: {
+      type: String,
+    },
+    cellPhone: {
+      type: String,
+    },
+    homePhone: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
+
+    floor: {
+      type: String,
+    },
+    base: {
+      type: String,
+    },
+    people: {
+      type: String,
+    },
+    place: {
+      type: String,
+    },
+    wafer: {
+      type: String,
+    },
+    figure: {
+      type: String,
+    },
+    bottom: {
+      type: String,
+    },
+    border: {
+      type: String,
+    },
+    details: {
+      type: String,
+    },
+    ribbon: {
+      type: String,
+    },
+    sabor1: {
+      type: String,
+    },
+    sabor2: {
+      type: String,
+    },
+    artificial: {
+      type: String,
+    },
+    natural: {
+      type: String,
+    },
+    color: {
+      type: String,
+    },
+    doll: {
+      type: String,
+    },
+    candle: {
+      type: String,
+    },
+    cake: {
+      type: String,
+    },
+    cakebundle: {
+      type: String,
+    },
+    basebundle: {
+      type: String,
+    },
+    dollOrCandle: {
+      type: String,
+    },
+    total: {
       type: Number,
     },
-    productId: {
-      type: String,
-      ref: 'Products',
+    status: {
+      type: Number,
     },
-    salesperson: {
-      type: String,
-      ref: 'Products',
-    },
-    quantity: { type: Number },
-    status: { type: String },
   },
   {
-    timestamps: true,
+    timestamps: true, // This will automatically add createdAt and updatedAt
   }
 );
 
-// OrdersSchema.virtual('serviceObjects', {
-//   ref: 'Services',
-//   localField: 'servicesList',
-//   foreignField: 'id',
-//   justOne: false,
-//   options: { sort: { name: 1 }, limit: 100 },
-// });
-
-export const OrdersModel = model<Orders>('Orders', OrdersSchema);
+// Create and export the Orders model
+export const OrdersModel = model<OrderDocument>('Orders', OrdersSchema);

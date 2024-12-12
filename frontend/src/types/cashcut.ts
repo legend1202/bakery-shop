@@ -19,8 +19,8 @@ export type ICashcutData = {
 };
 
 export type ICashcutList = {
-  id: string;
-  saleDate: string;
-  cashcutTotal: number;
-  salesTotal: number;
+  _id: string;
+  totalOrder: number;
+  totalSale: number;
+  branchDetails: IBranch[];
 };

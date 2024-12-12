@@ -8,6 +8,8 @@ import {
   handleCashcutCreation,
   handleGetCashcut,
   handleGetTotalCashcut,
+  handleGetCashcutOfToday,
+  handleGenerateCashcut
 } from '../services/cashcut.services';
 
 import { DecodedToken } from '../types/req.type';
@@ -42,9 +44,34 @@ export const getCashcut = async (req: Request, res: Response) => {
   }
 };
 
+export const getCashcutOfToday = async (req: Request, res: Response) => {
+  const { saleDate } = req.params;
+  try {
+    const cashcut = await handleGetCashcutOfToday(saleDate);
+    return sendResponse(res, 200, 'Get handleGetCashcut', {
+      cashcut,
+    });
+  } catch (error) {
+    throw new RequestError(`${error}`, 500);
+  }
+};
+
 export const getTotalCashcut = async (req: Request, res: Response) => {
   try {
     const cashcut = await handleGetTotalCashcut();
+    return sendResponse(res, 200, 'Get handleGetCashcut', {
+      cashcut,
+    });
+  } catch (error) {
+    throw new RequestError(`${error}`, 500);
+  }
+};
+
+
+export const generateCashcut = async (req: Request, res: Response) => {
+  const { saleDate } = req.params;
+  try {
+    const cashcut = await handleGenerateCashcut(saleDate);
     return sendResponse(res, 200, 'Get handleGetCashcut', {
       cashcut,
     });

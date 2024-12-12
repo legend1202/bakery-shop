@@ -19,6 +19,7 @@ const SupplyInventoryPage = lazy(() => import('src/pages/totalinventory/supply')
 const ReportCashCutPage = lazy(() => import('src/pages/Report/cashcut'));
 const ReportCashCutListPage = lazy(() => import('src/pages/Report/cashcutlist'));
 const ReportCashCutDetailPage = lazy(() => import('src/pages/Report/cashcutlist/detail'));
+const ReportCashcutGeneratePage = lazy(() => import('src/pages/Report/cashcutlist/generate'));
 
 export const reportRoutes = [
   {
@@ -42,6 +43,10 @@ export const reportRoutes = [
       { path: paths.report.cashcut, element: <ReportCashCutPage /> },
       { path: paths.report.cashcutlist, element: <ReportCashCutListPage /> },
       { path: `${paths.report.cashcutlist}/:saleDate`, element: <ReportCashCutDetailPage /> },
+      {
+        path: `${paths.report.cashcutlist}/generate/:saleDate`,
+        element: <ReportCashcutGeneratePage />,
+      },
     ],
   },
 ];

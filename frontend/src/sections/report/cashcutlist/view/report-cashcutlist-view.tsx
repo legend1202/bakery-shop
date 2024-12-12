@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
+import { Button } from '@mui/material';
 import Container from '@mui/material/Container';
 import { DataGrid, GridColDef, GridColumnVisibilityModel } from '@mui/x-data-grid';
+
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 import { useGetTotalCashcut } from 'src/api/checkcut';
 
@@ -14,8 +18,9 @@ import { ICashcutList } from 'src/types/cashcut';
 
 import {
   RenderCellTotal,
-  RenderCellCashcut,
   RenderCellSaleDate,
+  RenderCellTotalSale,
+  RenderCellTotaloRder,
 } from '../report-cashcut-list-item';
 
 // ----------------------------------------------------------------------
@@ -31,6 +36,8 @@ const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
 export default function ReportCashCutListView() {
   const settings = useSettingsContext();
 
+  const router = useRouter();
+
   const [tableData, setTableData] = useState<ICashcutList[]>([]);
 
   const { cashcuts, cashcutsLoading } = useGetTotalCashcut();
@@ -45,7 +52,7 @@ export default function ReportCashCutListView() {
   }, [cashcuts]);
   const columns: GridColDef[] = [
     {
-      field: 'saleDate',
+      field: '_id',
       headerName: 'Fecha',
       flex: 1,
       minWidth: 180,
@@ -54,22 +61,32 @@ export default function ReportCashCutListView() {
       renderCell: (params) => <RenderCellSaleDate params={params} />,
     },
     {
-      field: 'count',
+      field: 'totalSale',
       headerName: 'Ventas',
       flex: 1,
       minWidth: 180,
       hideable: false,
       disableColumnMenu: true,
-      renderCell: (params) => <RenderCellTotal params={params} />,
+      renderCell: (params) => <RenderCellTotalSale params={params} />,
     },
     {
-      field: 'cashcutData.total',
-      headerName: 'Corte de caja',
+      field: 'totalOrder',
+      headerName: 'Pedidos',
       flex: 1,
       minWidth: 180,
       hideable: false,
       disableColumnMenu: true,
-      renderCell: (params) => <RenderCellCashcut params={params} />,
+      renderCell: (params) => <RenderCellTotaloRder params={params} />,
+    },
+    {
+      field: 'total',
+      headerName: 'Total',
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      disableColumnMenu: true,
+      sortable: false,
+      renderCell: (params) => <RenderCellTotal params={params} />,
     },
   ];
 
@@ -77,6 +94,11 @@ export default function ReportCashCutListView() {
     columns
       .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
       .map((column) => column.field);
+
+  const handleGenerateCashcut = () => {
+    const currentMonth = new Date().toISOString().slice(0, 10);
+    router.push(paths.report.generate_cashcut(currentMonth));
+  };
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -87,6 +109,11 @@ export default function ReportCashCutListView() {
             name: '',
           },
         ]}
+        action={
+          <Button variant="contained" onClick={handleGenerateCashcut}>
+            generar corte
+          </Button>
+        }
         sx={{
           mb: { xs: 3, md: 5 },
         }}

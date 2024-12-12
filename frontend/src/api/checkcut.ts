@@ -10,6 +10,17 @@ export const GetCashcut = async (saleDate: string) => {
   return res.data;
 };
 
+export const GetCashcutOfToday = async (saleDate: string) => {
+  const res = await axiosInstance.get(`${endpoints.checkcut.getCheckcutOfToday}/${saleDate}`);
+  return res.data;
+};
+
+export const GenerateCashcut = async (saleDate: string) => {
+  const res = await axiosInstance.get(`${endpoints.checkcut.generateCashcut}/${saleDate}`);
+  return res.data;
+};
+
+
 export const useGetTotalCashcut = () => {
   const URL = endpoints.checkcut.getTotalCheckcut;
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);

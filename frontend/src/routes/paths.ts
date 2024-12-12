@@ -112,6 +112,7 @@ export const paths = {
     cashcut: `${ROOTS.REPORT}/cashcut`,
     cashcutlist: `${ROOTS.REPORT}/cashcutlist`,
     cashcutlist_details: (saleDate: string) => `${ROOTS.REPORT}/cashcutlist/${saleDate}`,
+    generate_cashcut: (saleDate: string) => `${ROOTS.REPORT}/cashcutlist/generate/${saleDate}`,
   },
   shift: {
     root: `${ROOTS.SHIFT}`,
