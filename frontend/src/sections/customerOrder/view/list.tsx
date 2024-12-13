@@ -13,7 +13,7 @@ import {
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { isSuperAdminFn } from 'src/utils/role-check';
+import { isSalePersonFn } from 'src/utils/role-check';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
@@ -55,7 +55,7 @@ export default function CustomerOrderListView() {
 
   const { orders, ordersLoading } = useGetOrderLists();
 
-  const isSuperAdmin = isSuperAdminFn(user?.role);
+  const isSalesPerson = isSalePersonFn(user?.role);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -101,7 +101,7 @@ export default function CustomerOrderListView() {
   };
 
   const actions = (params: any) => {
-    if (isSuperAdmin) {
+    if (!isSalesPerson) {
       return [
         <GridActionsCellItem
           showInMenu
@@ -127,7 +127,7 @@ export default function CustomerOrderListView() {
     ];
   };
 
-  const columns: GridColDef[] = isSuperAdmin
+  const columns: GridColDef[] = !isSalesPerson
     ? [
         {
           field: 'id',
@@ -258,9 +258,13 @@ export default function CustomerOrderListView() {
         heading="ÓRDENES DE PEDIDOS"
         links={[{ name: '' }]}
         action={
-          <Button variant="contained" onClick={handleGenerateCashcut}>
-            Create Order
-          </Button>
+          isSalesPerson ? (
+            <Button variant="contained" onClick={handleGenerateCashcut}>
+              Create Order
+            </Button>
+          ) : (
+            ''
+          )
         }
         sx={{
           mb: {

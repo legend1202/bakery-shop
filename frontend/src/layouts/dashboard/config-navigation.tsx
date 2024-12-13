@@ -176,7 +176,7 @@ export function useNavData() {
             /* title: t('Order'), */
             path: paths.mng.customOrder.list,
             icon: ICONS.user,
-            roles: ['SUPERADMIN'],
+            roles: ['SUPERADMIN','ADMIN'],
             color: '#008f39',
           },
         ],

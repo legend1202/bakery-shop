@@ -49,6 +49,22 @@ export const handleGetOrders = async (
       { $unwind: '$branchDetails' },
     ]);
     return orders;
+  } else if (existingUser?.role === 'ADMIN') {
+    const orders = await OrdersModel.aggregate([
+      {
+        $match: { branchId: existingUser.branchId },
+      },
+      {
+        $lookup: {
+          from: BranchesModel.collection.name,
+          localField: 'branchId',
+          foreignField: 'id',
+          as: 'branchDetails',
+        },
+      },
+      { $unwind: '$branchDetails' },
+    ]);
+    return orders;
   } else {
     throw new RequestError(`Can't find the pedidos`, 500);
   }
