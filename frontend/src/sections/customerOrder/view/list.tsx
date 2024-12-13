@@ -13,7 +13,7 @@ import {
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { isSalePersonFn } from 'src/utils/role-check';
+import { isSalePersonFn, isSuperAdminFn } from 'src/utils/role-check';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
@@ -56,6 +56,8 @@ export default function CustomerOrderListView() {
   const { orders, ordersLoading } = useGetOrderLists();
 
   const isSalesPerson = isSalePersonFn(user?.role);
+
+  const isSuperAdmin = isSuperAdminFn(user?.role);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -101,7 +103,7 @@ export default function CustomerOrderListView() {
   };
 
   const actions = (params: any) => {
-    if (!isSalesPerson) {
+    if (isSuperAdmin) {
       return [
         <GridActionsCellItem
           showInMenu
